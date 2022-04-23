@@ -39,6 +39,9 @@ variant_tags:  # variant tags in PacBio amplicon, or "null" if no tags
 # ----------------------------------------------------------------------------
 # Names of output directories / files
 # ----------------------------------------------------------------------------
+# directory with logs from running snakemake steps
+logdir: results/logs
+
 # gene sequence extracted from PacBio amplicon
 gene_sequence_codon: results/gene_sequence/codon.fasta
 gene_sequence_protein: results/gene_sequence/protein.fasta

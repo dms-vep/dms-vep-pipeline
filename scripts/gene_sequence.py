@@ -1,8 +1,12 @@
 """Implements ``snakemake`` rule to get gene sequence."""
 
 
+import sys
+
 import Bio.SeqIO
 
+
+sys.stderr = sys.stdout = log = open(snakemake.log[0], "w")
 
 print(f"Reading amplicon from {snakemake.input.gb=}")
 amplicon = Bio.SeqIO.read(snakemake.input.gb, "genbank")

@@ -23,6 +23,7 @@ assert pacbio_runs.index.nunique() == len(pacbio_runs)
 
 # Rules ---------------------------------------------------------------------
 
+
 rule gene_sequence:
     """Get sequence of gene from PacBio amplicon."""
     input:
@@ -32,6 +33,8 @@ rule gene_sequence:
         prot=config["gene_sequence_protein"],
     conda:
         "environment.yml"
+    log:
+        os.path.join(config["logdir"], "gene_sequence.txt"),
     script:
         "scripts/gene_sequence.py"
 
@@ -46,6 +49,8 @@ rule align_parse_PacBio_ccs:
         outdir=directory(os.path.join(config["process_ccs_dir"], "{pacbioRun}")),
     conda:
         "environment.yml"
+    log:
+        os.path.join(config["logdir"], "align_parse_PacBio_ccs_{pacbioRun}.txt"),
     script:
         "scripts/align_parse_PacBio_ccs.py"
 
@@ -62,5 +67,7 @@ rule analyze_pacbio_ccs:
         nb="results/notebooks/analyze_pacbio_ccs.ipynb",
     conda:
         "environment.yml"
+    log:
+        os.path.join(config["logdir"], "analyze_pacbio_ccs.txt"),
     shell:
-        "papermill {input.nb} {output.nb}"
+        "papermill {input.nb} {output.nb} &> {log}"
