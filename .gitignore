@@ -4,4 +4,5 @@ _*
 
 !.gitignore
 !.gitattributes
+!.travis.yml
 !docs/.nojekyll
