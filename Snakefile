@@ -71,3 +71,22 @@ rule analyze_pacbio_ccs:
         os.path.join(config["logdir"], "analyze_pacbio_ccs.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
+
+
+rule build_pacbio_consensus:
+    """Build PacBio consensus sequences for barcodes."""
+    input:
+        config["aligned_ccs_file"],
+        config["gene_sequence_codon"],
+        nb=os.path.join(
+            config["pipeline_path"], "notebooks/build_pacbio_consensus.ipynb"
+        ),
+    output:
+        config["nt_variants"],
+        nb="results/notebooks/build_pacbio_consensus.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "build_pacbio_consensus.txt"),
+    shell:
+        "papermill {input.nb} {output.nb} &> {log}"

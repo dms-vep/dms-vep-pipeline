@@ -26,4 +26,5 @@ dependencies:
   - snakemake=7.3
   - pip:
     - alignparse==0.4.1
+    - dms_variants=1.4.0
     - git+https://github.com/altair-viz/altair@0217b2e73703d3b7b529b73b4dec9c17e7fb09bb

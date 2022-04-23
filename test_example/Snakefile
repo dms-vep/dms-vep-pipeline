@@ -13,6 +13,4 @@ include: os.path.join(config["pipeline_path"], "Snakefile")
 
 rule all:
     input:
-        config["aligned_ccs_file"],
-        config["gene_sequence_codon"],
-        config["gene_sequence_protein"],
+        config["nt_variants"],

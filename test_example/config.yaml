@@ -20,6 +20,18 @@ year: 2022
 authors: Jesse Bloom
 
 # ----------------------------------------------------------------------------
+# Parameters for analysis
+# ----------------------------------------------------------------------------
+# Parameters for building PacBio CCS consensuses
+max_ccs_error_rate: 1.0e-4  # only keep CCS if gene/barcode error rate <= this
+consensus_params:  # parameters for building PacBio consensus sequences
+  max_sub_diffs: null
+  max_indel_diffs: null
+  max_minor_sub_frac: 0.2
+  max_minor_indel_frac: 0.2
+  min_support: 2
+
+# ----------------------------------------------------------------------------
 # Input data
 # ----------------------------------------------------------------------------
 # PacBio sequencing
@@ -49,3 +61,4 @@ gene_sequence_protein: results/gene_sequence/protein.fasta
 # processing of PacBio CCSs to create codon-variant table
 process_ccs_dir: results/process_ccs
 aligned_ccs_file: results/process_ccs/CCSs_aligned_to_amplicon.csv
+nt_variants: results/variants/nt_variants.csv
