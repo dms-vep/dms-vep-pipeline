@@ -1,0 +1,9 @@
+.*
+_*
+*.out
+
+!.gitignore
+!.gitattributes
+!docs/.nojekyll
+
+results/*

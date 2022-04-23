@@ -1,0 +1,44 @@
+# Config for analysis
+
+# ----------------------------------------------------------------------------
+# Relative paths from your top-level Snakefile to where you have the pipeline
+# submodule cloned, and where you build the docs. Typically your top-level
+# Snakefile will be in the root directory and paths will be `dms-vep-pipeline`
+# and `./`, but in this example they are upstream from this subdirectory.
+# ----------------------------------------------------------------------------
+pipeline_path: ../  # typically will be `dms-vep-pipeline`
+docs_path: ../  # typically will be `./`
+
+# ----------------------------------------------------------------------------
+# Details on repo, used for docs. Change this to details for your project.
+# ----------------------------------------------------------------------------
+github_repo: dms-vep-pipeline
+github_user: jbloomlab
+github_branch: main
+description: Deep mutational scanning (DMS) pipeline for a viral entry protein (VEP)
+year: 2022
+authors: Jesse Bloom
+
+# ----------------------------------------------------------------------------
+# Input data
+# ----------------------------------------------------------------------------
+# PacBio sequencing
+pacbio_runs: data/PacBio_runs.csv  # PacBio sequencing data
+pacbio_amplicon: data/PacBio_amplicon.gb  # Genbank file with PacBio amplicon
+pacbio_amplicon_specs: data/PacBio_feature_parse_specs.yaml  # alignparse feature parsing
+variant_tags:  # variant tags in PacBio amplicon, or "null" if no tags
+  variant_tag5:
+    variant_1: G
+    variant_2: C
+    wildtype: A
+  variant_tag3:
+    variant_1: G
+    variant_2: C
+    wildtype: A
+
+# ----------------------------------------------------------------------------
+# Names of output directories / files
+# ----------------------------------------------------------------------------
+# processing of PacBio CCSs to create codon-variant table
+process_ccs_dir: results/process_ccs
+aligned_ccs_file: results/process_ccs/CCSs_aligned_to_amplicon.csv
