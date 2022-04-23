@@ -7,6 +7,12 @@ channels:
 dependencies:
   - biopython=1.79
   - black-jupyter
+  - flake8
+  - flake8-bugbear
+  - flake8-builtins
+  - flake8-comprehensions
+  - flake8-import-order
+  - flake8-nb
   - jupyterlab
   - mamba
   - minimap2=2.24
@@ -16,6 +22,7 @@ dependencies:
   - papermill=2.3
   - pip
   - python=3.9
+  - snakefmt
   - snakemake=7.3
   - pip:
     - alignparse==0.4.1

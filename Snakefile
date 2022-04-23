@@ -23,15 +23,20 @@ assert pacbio_runs.index.nunique() == len(pacbio_runs)
 
 # Rules ---------------------------------------------------------------------
 
+
 rule align_parse_PacBio_ccs:
     """Align and parse PacBio CCS FASTQ file."""
     input:
         fastq=lambda wc: pacbio_runs.at[wc.pacbioRun, "fastq"],
         amplicon=config["pacbio_amplicon"],
         specs=config["pacbio_amplicon_specs"],
-    output: outdir=directory(os.path.join(config["process_ccs_dir"], "{pacbioRun}"))
-    conda: "environment.yml"
-    script: "scripts/align_parse_PacBio_ccs.py"
+    output:
+        outdir=directory(os.path.join(config["process_ccs_dir"], "{pacbioRun}")),
+    conda:
+        "environment.yml"
+    script:
+        "scripts/align_parse_PacBio_ccs.py"
+
 
 rule analyze_pacbio_ccs:
     """Analyze PacBio CCSs and get ones that align to amplicons of interest."""
@@ -42,6 +47,8 @@ rule analyze_pacbio_ccs:
         nb=os.path.join(config["pipeline_path"], "notebooks/analyze_pacbio_ccs.ipynb"),
     output:
         config["aligned_ccs_file"],
-        nb="results/notebooks/analyze_pacbio_ccs.ipynb"
-    conda: "environment.yml"
-    shell: "papermill {input.nb} {output.nb}"
+        nb="results/notebooks/analyze_pacbio_ccs.ipynb",
+    conda:
+        "environment.yml"
+    shell:
+        "papermill {input.nb} {output.nb}"

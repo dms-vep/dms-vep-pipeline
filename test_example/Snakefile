@@ -6,9 +6,11 @@ import os
 
 configfile: "config.yaml"
 
+
 # include `dms-vep-pipeline` Snakefile
 include: os.path.join(config["pipeline_path"], "Snakefile")
 
+
 rule all:
     input:
-        config["aligned_ccs_file"]
+        config["aligned_ccs_file"],
