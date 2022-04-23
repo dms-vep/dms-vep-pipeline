@@ -6,6 +6,7 @@ channels:
 
 dependencies:
   - biopython=1.79
+  - black-jupyter
   - jupyterlab
   - mamba
   - minimap2=2.24
