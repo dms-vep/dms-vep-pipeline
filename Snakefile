@@ -23,6 +23,18 @@ assert pacbio_runs.index.nunique() == len(pacbio_runs)
 
 # Rules ---------------------------------------------------------------------
 
+rule gene_sequence:
+    """Get sequence of gene from PacBio amplicon."""
+    input:
+        gb=config["pacbio_amplicon"],
+    output:
+        codon=config["gene_sequence_codon"],
+        prot=config["gene_sequence_protein"],
+    conda:
+        "environment.yml"
+    script:
+        "scripts/gene_sequence.py"
+
 
 rule align_parse_PacBio_ccs:
     """Align and parse PacBio CCS FASTQ file."""
