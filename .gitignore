@@ -5,4 +5,5 @@ _*
 !.gitignore
 !.gitattributes
 !.travis.yml
+!.flake8_nb
 !docs/.nojekyll

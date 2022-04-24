@@ -1,0 +1,5 @@
+[flake8_nb]
+builtins = snakemake, display
+exclude = test_example/results/*, .*
+ignore = E121,E123,E126,E203,E226,E24,E704,W503,W504,D205,D400,RST210,RST303,RST304
+max-line-length = 89
