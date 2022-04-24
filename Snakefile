@@ -84,8 +84,8 @@ rule build_pacbio_consensus:
     output:
         config["nt_variants"],
         nb="results/notebooks/build_pacbio_consensus.ipynb",
-    conda:
-        "environment.yml"
+#    conda:
+#        "environment.yml"
     log:
         os.path.join(config["logdir"], "build_pacbio_consensus.txt"),
     shell:

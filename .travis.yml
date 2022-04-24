@@ -16,8 +16,8 @@ script:
   - black --check .
   - snakefmt --check .
   - flake8_nb
-  - cd test_example; snakemake --lint; cd ..
-  - cd test_example; snakemake -j 2 --use-conda; cd ..
+  - cd test_example && snakemake --lint && cd ..
+  - cd test_example && snakemake -j 2 --use-conda && cd ..
 
 branches:
   only:
