@@ -13,6 +13,7 @@ dependencies:
   - flake8-comprehensions
   - flake8-import-order
   - flake8-nb
+  - git-lfs
   - jupyterlab
   - mamba
   - minimap2=2.24
