@@ -21,3 +21,6 @@ script:
 branches:
   only:
     - main
+
+notifications:
+  slack: jbloomlab:rlXXNgn58YCzkeb5zLXVghpj
