@@ -25,6 +25,7 @@ dependencies:
   - python=3.9
   - snakefmt
   - snakemake=7.3
+  - upsetplot=0.6
   - pip:
     - alignparse==0.4.1
     - dms_variants==1.4.0
