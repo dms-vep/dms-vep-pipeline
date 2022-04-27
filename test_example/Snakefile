@@ -13,4 +13,4 @@ include: os.path.join(config["pipeline_path"], "Snakefile")
 
 rule all:
     input:
-        config["nt_variants"],
+        config["codon_variants"],

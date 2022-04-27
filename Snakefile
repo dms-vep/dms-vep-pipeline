@@ -90,3 +90,23 @@ rule build_pacbio_consensus:
         os.path.join(config["logdir"], "build_pacbio_consensus.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
+
+
+rule build_codon_variants:
+    """Build codon-variant table."""
+    input:
+        config["nt_variants"],
+        config["gene_sequence_codon"],
+        config["site_numbering_map"],
+        config["mutation_design_classification"],
+        config["neut_standard_barcodes"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/build_codon_variants.ipynb"),
+    output:
+        config["codon_variants"],
+        nb="results/notebooks/build_codon_variants.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "build_codon_variants.txt"),
+    shell:
+        "papermill {input.nb} {output.nb} &> {log}"
