@@ -60,8 +60,10 @@ fastqs = (
 )
 if not fastqs["found_file"].all():
     raise ValueError(f"Failed to find some fastqs:\n{fastqs.query('not found_file')}")
+dup_fastqs = fastqs.query("n_occurrences != 1")
 if any(fastqs["n_occurrences"] != 1):
-    raise ValueError(f"FASTQs repeated:\n{fastqs.query('n_occurrences != 1')}")
+    pd.set_option("display.max_colwidth", None)
+    raise ValueError(f"FASTQs repeated:\n{dup_fastqs[['fastq', 'n_occurrences']]}")
 
 print(f"Writing barcode runs with samples to {output_csv}")
 barcode_runs.to_csv(output_csv, index=False)
