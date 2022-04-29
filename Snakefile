@@ -112,7 +112,7 @@ rule build_codon_variants:
         "papermill {input.nb} {output.nb} &> {log}"
 
 
-rule process_barcode_runs:
+checkpoint process_barcode_runs:
     """Check barcode runs and write CSV with sample names and other information."""
     input:
         csv=config["barcode_runs"],
@@ -126,3 +126,45 @@ rule process_barcode_runs:
         os.path.join(config["logdir"], "process_barcode_runs.txt"),
     script:
         "scripts/process_barcode_runs.py"
+
+
+def barcode_count_fate_csvs(wildcards):
+    """Get list of all barcode count CSVs."""
+    fname = checkpoints.process_barcode_runs.get(**wildcards).output.csv
+    library_samples = pd.read_csv(fname)["library_sample"]
+    return [
+        os.path.join(config[f"barcode_{ftype}_dir"], f"{f.csv}")
+        for f in library_samples
+        for ftype in ["counts", "counts_invalid", "fates"]
+    ]
+
+
+def barcode_fastq_R1(wildcards):
+    """Get R1 FASTQs for a specific library-sample."""
+    fname = checkpoints.process_barcode_runs.get(**wildcards).output.csv
+    return [
+        f.strip()
+        for f in pd.read_csv(fname)
+        .set_index("library_sample")
+        .at[wildcards.library_sample, "fastq_R1"]
+        .split(";")
+    ]
+
+
+rule count_barcodes:
+    """Count barcodes for a specific library-sample."""
+    input:
+        fastq_R1=barcode_fastq_R1,
+        variants=config["codon_variants"],
+    output:
+        counts=os.path.join(config["barcode_counts_dir"], "{library_sample}.csv"),
+        counts_invalid=os.path.join(
+            config["barcode_counts_invalid_dir"], "{library_sample}.csv"
+        ),
+        fates=os.path.join(config["barcode_fates_dir"], "{library_sample}.csv"),
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "count_barcodes_{library_sample}.txt"),
+    script:
+        "scripts/count_barcodes.py"

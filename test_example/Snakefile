@@ -14,4 +14,4 @@ include: os.path.join(config["pipeline_path"], "Snakefile")
 rule all:
     input:
         config["codon_variants"],
-        config["processed_barcode_runs"],
+        barcode_count_fate_csvs,

@@ -31,6 +31,13 @@ consensus_params:  # parameters for building PacBio consensus sequences
   max_minor_indel_frac: 0.2
   min_support: 2
 
+# Parameters for processing Illumina barcodes
+illumina_barcode_parser_params:
+  upstream: AACTCCACTAGGAACATTTCTCTCTCGAATCTAGA
+  downstream: ''
+  minq: 20
+  upstream_mismatch: 2
+
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
 # ----------------------------------------------------------------------------
@@ -80,3 +87,6 @@ codon_variants: results/variants/codon_variants.csv
 
 # barcode sequencing
 processed_barcode_runs: results/barcode_runs/processed_barcode_runs.csv
+barcode_counts_dir: results/barcode_runs/counts_by_sample
+barcode_counts_invalid_dir: results/barcode_runs/counts_invalid_by_sample
+barcode_fates_dir: results/barcode_runs/fates_by_sample
