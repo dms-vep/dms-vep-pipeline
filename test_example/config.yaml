@@ -59,6 +59,9 @@ mutation_design_classification: data/mutation_design_classification.csv
 # Neutralization standard barcodes
 neut_standard_barcodes: data/neutralization_standard_barcodes.csv
 
+# Illumina barcode sequencing
+barcode_runs: data/barcode_runs.csv
+
 # ----------------------------------------------------------------------------
 # Names of output directories / files
 # ----------------------------------------------------------------------------
@@ -74,3 +77,6 @@ process_ccs_dir: results/process_ccs
 aligned_ccs_file: results/process_ccs/CCSs_aligned_to_amplicon.csv
 nt_variants: results/variants/nt_variants.csv
 codon_variants: results/variants/codon_variants.csv
+
+# barcode sequencing
+processed_barcode_runs: results/barcode_runs/processed_barcode_runs.csv

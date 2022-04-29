@@ -110,3 +110,19 @@ rule build_codon_variants:
         os.path.join(config["logdir"], "build_codon_variants.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
+
+
+rule process_barcode_runs:
+    """Check barcode runs and write CSV with sample names and other information."""
+    input:
+        csv=config["barcode_runs"],
+    output:
+        csv=config["processed_barcode_runs"],
+    params:
+        pacbio_libraries=pacbio_runs["library"].tolist(),
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "process_barcode_runs.txt"),
+    script:
+        "scripts/process_barcode_runs.py"
