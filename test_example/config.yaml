@@ -90,3 +90,6 @@ processed_barcode_runs: results/barcode_runs/processed_barcode_runs.csv
 barcode_counts_dir: results/barcode_runs/counts_by_sample
 barcode_counts_invalid_dir: results/barcode_runs/counts_invalid_by_sample
 barcode_fates_dir: results/barcode_runs/fates_by_sample
+
+# variant counts
+variant_counts: results/variant_counts/variant_counts.csv
