@@ -21,6 +21,7 @@ barcode_runs = helper_funcs.barcode_runs_from_config(
     config["barcode_runs"],
     valid_libraries=set(pacbio_runs["library"]),
 )
+os.makedirs(os.path.dirname(config["processed_barcode_runs"]), exist_ok=True)
 barcode_runs.to_csv(config["processed_barcode_runs"], index=False)
 
 

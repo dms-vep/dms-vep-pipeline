@@ -1,6 +1,7 @@
 """Count variants from Illumina barcodes."""
 
 
+import ast
 import os
 import sys
 
@@ -22,8 +23,10 @@ library_sample = snakemake.wildcards.library_sample
 parser_params = snakemake.config["illumina_barcode_parser_params"]
 
 # get library and sample
-barcode_runs = pd.read_csv(barcode_runs_csv).set_index("library_sample")
-assert fastq_R1 == barcode_runs.at[library_sample, "fastq_R1"].split(";")
+barcode_runs = pd.read_csv(
+    barcode_runs_csv, converters={"fastq_R1": ast.literal_eval}
+).set_index("library_sample")
+assert fastq_R1 == barcode_runs.at[library_sample, "fastq_R1"]
 library = barcode_runs.at[library_sample, "library"]
 sample = barcode_runs.at[library_sample, "sample"]
 
