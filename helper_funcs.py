@@ -37,12 +37,20 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
             sample.append(row[col])
         return "_".join(map(str, sample))
 
+    def process_exclude(s):
+        """Process a string specifing whether to exclude."""
+        if pd.isnull(s) or s.lower() in {"no", "false"}:
+            return "no"
+        elif s.lower() in {"yes", "true"}:
+            return "yes"
+
     barcode_runs = pd.read_csv(barcode_runs_csv).assign(
         sample=lambda x: x.apply(process_sample, axis=1),
         library_sample=lambda x: x["library"] + "_" + x["sample"],
         fastq_R1=lambda x: x["fastq_R1"].map(
             lambda fs: [f.strip() for f in fs.split(";")]
         ),
+        exclude_after_counts=lambda x: x["exclude_after_counts"].map(process_exclude),
     )
 
     # check no duplicate samples

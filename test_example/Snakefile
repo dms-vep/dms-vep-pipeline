@@ -13,4 +13,7 @@ include: os.path.join(config["pipeline_path"], "Snakefile")
 
 rule all:
     input:
-        config["variant_counts"],
+        expand(
+            os.path.join(config["variant_counts_dir"], "{library_sample}.csv"),
+            library_sample=barcode_runs["library_sample"],
+        ),

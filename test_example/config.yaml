@@ -38,6 +38,11 @@ illumina_barcode_parser_params:
   minq: 20
   upstream_mismatch: 2
 
+# Require samples to have an average of >= this many counts per variant.
+# Error raised for any sample with < this many counts unless it is specified
+# for `exclude_after_counts` in `barcode_runs`
+min_avg_counts: 5
+
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
 # ----------------------------------------------------------------------------
@@ -92,4 +97,4 @@ barcode_counts_invalid_dir: results/barcode_runs/counts_invalid_by_sample
 barcode_fates_dir: results/barcode_runs/fates_by_sample
 
 # variant counts
-variant_counts: results/variant_counts/variant_counts.csv
+variant_counts_dir: results/variant_counts

@@ -145,8 +145,8 @@ rule variant_counts:
     """Analyze counts of different variants in each sample."""
     input:
         [
-            os.path.join(config[f"barcode_{ftype}_dir"], f"{f}.csv")
-            for f in barcode_runs["library_sample"]
+            os.path.join(config[f"barcode_{ftype}_dir"], f"{library_sample}.csv")
+            for library_sample in barcode_runs["library_sample"]
             for ftype in ["counts", "counts_invalid", "fates"]
         ],
         config["gene_sequence_codon"],
@@ -154,7 +154,10 @@ rule variant_counts:
         config["site_numbering_map"],
         nb=os.path.join(config["pipeline_path"], "notebooks/variant_counts.ipynb"),
     output:
-        config["variant_counts"],
+        [
+            os.path.join(config["variant_counts_dir"], f"{library_sample}.csv")
+            for library_sample in barcode_runs["library_sample"]
+        ],
         nb="results/notebooks/variant_counts.ipynb",
     conda:
         "environment.yml"
