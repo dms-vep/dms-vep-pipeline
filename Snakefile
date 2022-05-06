@@ -142,7 +142,7 @@ rule count_barcodes:
 
 
 rule variant_counts:
-    """Analyze counts of different variants in each sample."""
+    """Get and analyze counts of different variants in each sample."""
     input:
         [
             os.path.join(config[f"barcode_{ftype}_dir"], f"{library_sample}.csv")
@@ -156,7 +156,9 @@ rule variant_counts:
     output:
         [
             os.path.join(config["variant_counts_dir"], f"{library_sample}.csv")
-            for library_sample in barcode_runs["library_sample"]
+            for library_sample in barcode_runs.query("exclude_after_counts == 'no'")[
+                "library_sample"
+            ]
         ],
         nb="results/notebooks/variant_counts.ipynb",
     conda:

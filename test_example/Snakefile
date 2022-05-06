@@ -15,5 +15,7 @@ rule all:
     input:
         expand(
             os.path.join(config["variant_counts_dir"], "{library_sample}.csv"),
-            library_sample=barcode_runs["library_sample"],
+            library_sample=barcode_runs.query("exclude_after_counts == 'no'")[
+                "library_sample"
+            ],
         ),
