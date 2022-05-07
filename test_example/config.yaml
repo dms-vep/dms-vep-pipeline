@@ -6,8 +6,8 @@
 # Snakefile will be in the root directory and paths will be `dms-vep-pipeline`
 # and `./`, but in this example they are upstream from this subdirectory.
 # ----------------------------------------------------------------------------
-pipeline_path: ../  # typically will be `dms-vep-pipeline`
-docs_path: ../  # typically will be `./`
+pipeline_path: ../  # typically will be `dms-vep-pipeline` for real pipelines
+docs_path: ../  # typically will be `./` for real pipelines
 
 # ----------------------------------------------------------------------------
 # Details on repo, used for docs. Change this to details for your project.
@@ -41,7 +41,7 @@ illumina_barcode_parser_params:
 # Require samples to have an average of >= this many counts per variant.
 # Error raised for any sample with < this many counts unless it is specified
 # for `exclude_after_counts` in `barcode_runs`
-min_avg_counts: 5
+min_avg_counts: 6  # consider value more like ~20 for real pipelines
 
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
