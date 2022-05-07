@@ -6,5 +6,8 @@
 
 [PacBio_feature_parse_specs.yaml](PacBio_feature_parse_specs.yaml): How to parse the PacBio amplicon using [alignparse](https://jbloomlab.github.io/alignparse/).
 
-[PacBio_runs.csv](PacBio_runs.csv): List of PacBio CCS FASTQs.
+[PacBio_runs.csv](PacBio_runs.csv): List of PacBio CCS FASTQs used to link barcodes to variants.
 
+## Illumina barcode sequencing
+
+[barcode_runs.csv](barcode_runs.csv): List of Illumina barcode runs.

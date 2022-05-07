@@ -11,14 +11,18 @@ import textwrap
 
 import pandas as pd
 
+import helper_funcs
+
 # Global variables extracted from config --------------------------------------
-# Data frame of PacBio runs
-pacbio_runs = (
-    pd.read_csv(config["pacbio_runs"], dtype=str)
-    .assign(pacbioRun=lambda x: x["library"] + "_" + x["run"].astype(str))
-    .set_index("pacbioRun")
+
+pacbio_runs = helper_funcs.pacbio_runs_from_config(config["pacbio_runs"])
+
+barcode_runs = helper_funcs.barcode_runs_from_config(
+    config["barcode_runs"],
+    valid_libraries=set(pacbio_runs["library"]),
 )
-assert pacbio_runs.index.nunique() == len(pacbio_runs)
+os.makedirs(os.path.dirname(config["processed_barcode_runs"]), exist_ok=True)
+barcode_runs.to_csv(config["processed_barcode_runs"], index=False)
 
 
 # Rules ---------------------------------------------------------------------
@@ -108,5 +112,58 @@ rule build_codon_variants:
         "environment.yml"
     log:
         os.path.join(config["logdir"], "build_codon_variants.txt"),
+    shell:
+        "papermill {input.nb} {output.nb} &> {log}"
+
+
+rule count_barcodes:
+    """Count barcodes for a specific library-sample."""
+    input:
+        fastq_R1=(
+            lambda wc: (
+                barcode_runs.set_index("library_sample").at[
+                    wc.library_sample, "fastq_R1"
+                ]
+            )
+        ),
+        variants=config["codon_variants"],
+    output:
+        counts=os.path.join(config["barcode_counts_dir"], "{library_sample}.csv"),
+        counts_invalid=os.path.join(
+            config["barcode_counts_invalid_dir"], "{library_sample}.csv"
+        ),
+        fates=os.path.join(config["barcode_fates_dir"], "{library_sample}.csv"),
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "count_barcodes_{library_sample}.txt"),
+    script:
+        "scripts/count_barcodes.py"
+
+
+rule variant_counts:
+    """Get and analyze counts of different variants in each sample."""
+    input:
+        [
+            os.path.join(config[f"barcode_{ftype}_dir"], f"{library_sample}.csv")
+            for library_sample in barcode_runs["library_sample"]
+            for ftype in ["counts", "counts_invalid", "fates"]
+        ],
+        config["gene_sequence_codon"],
+        config["codon_variants"],
+        config["site_numbering_map"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/variant_counts.ipynb"),
+    output:
+        [
+            os.path.join(config["variant_counts_dir"], f"{library_sample}.csv")
+            for library_sample in barcode_runs.query("exclude_after_counts == 'no'")[
+                "library_sample"
+            ]
+        ],
+        nb="results/notebooks/variant_counts.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "variant_counts.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"

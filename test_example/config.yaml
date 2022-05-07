@@ -6,8 +6,8 @@
 # Snakefile will be in the root directory and paths will be `dms-vep-pipeline`
 # and `./`, but in this example they are upstream from this subdirectory.
 # ----------------------------------------------------------------------------
-pipeline_path: ../  # typically will be `dms-vep-pipeline`
-docs_path: ../  # typically will be `./`
+pipeline_path: ../  # typically will be `dms-vep-pipeline` for real pipelines
+docs_path: ../  # typically will be `./` for real pipelines
 
 # ----------------------------------------------------------------------------
 # Details on repo, used for docs. Change this to details for your project.
@@ -30,6 +30,18 @@ consensus_params:  # parameters for building PacBio consensus sequences
   max_minor_sub_frac: 0.2
   max_minor_indel_frac: 0.2
   min_support: 2
+
+# Parameters for processing Illumina barcodes
+illumina_barcode_parser_params:
+  upstream: AACTCCACTAGGAACATTTCTCTCTCGAATCTAGA
+  downstream: ''
+  minq: 20
+  upstream_mismatch: 2
+
+# Require samples to have an average of >= this many counts per variant.
+# Error raised for any sample with < this many counts unless it is specified
+# for `exclude_after_counts` in `barcode_runs`
+min_avg_counts: 6  # consider value more like ~20 for real pipelines
 
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
@@ -59,6 +71,9 @@ mutation_design_classification: data/mutation_design_classification.csv
 # Neutralization standard barcodes
 neut_standard_barcodes: data/neutralization_standard_barcodes.csv
 
+# Illumina barcode sequencing
+barcode_runs: data/barcode_runs.csv
+
 # ----------------------------------------------------------------------------
 # Names of output directories / files
 # ----------------------------------------------------------------------------
@@ -74,3 +89,12 @@ process_ccs_dir: results/process_ccs
 aligned_ccs_file: results/process_ccs/CCSs_aligned_to_amplicon.csv
 nt_variants: results/variants/nt_variants.csv
 codon_variants: results/variants/codon_variants.csv
+
+# barcode sequencing
+processed_barcode_runs: results/barcode_runs/processed_barcode_runs.csv
+barcode_counts_dir: results/barcode_runs/counts_by_sample
+barcode_counts_invalid_dir: results/barcode_runs/counts_invalid_by_sample
+barcode_fates_dir: results/barcode_runs/fates_by_sample
+
+# variant counts
+variant_counts_dir: results/variant_counts
