@@ -80,6 +80,9 @@ barcode_runs: data/barcode_runs.csv
 # directory with logs from running snakemake steps
 logdir: results/logs
 
+# timestamps and checksums of all CSVs in results at start of pipeline
+csv_timestamps_checksums: results/csv_timestamps_checksums.csv
+
 # gene sequence extracted from PacBio amplicon
 gene_sequence_codon: results/gene_sequence/codon.fasta
 gene_sequence_protein: results/gene_sequence/protein.fasta

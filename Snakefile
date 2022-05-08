@@ -6,6 +6,8 @@ in the upstream file that includes this one.
 """
 
 # Imports ---------------------------------------------------------------------
+import glob
+import hashlib
 import os
 import textwrap
 
@@ -13,10 +15,10 @@ import pandas as pd
 
 import helper_funcs
 
-# Global variables extracted from config --------------------------------------
-#
+# Global variables and processing before pipeline -----------------------------
+
 # Data frames for PacBio runs, Illumina barcode runs, antibody selections, etc.
-# As needed there are written to CSV files if they have changed.
+# Some of these are written to CSV files, but only if they have changed.
 
 pacbio_runs = helper_funcs.pacbio_runs_from_config(config["pacbio_runs"])
 
@@ -36,6 +38,33 @@ os.makedirs(os.path.dirname(config["antibody_selections"]), exist_ok=True)
 helper_funcs.to_csv_if_changed(
     antibody_selections,
     config["antibody_selections"],
+    index=False,
+)
+
+# Get BLAKE2b checksums and timestamps of all *.csv files in `results`. used
+# by some of the notebooks that write multiple output files where we only want
+# to update the timestamp if the file has changed. This is sort of a hack to
+# get around fact that `snakemake` uses timestamps, and we have some rules that
+# aggregate samples and write multiple CSVs only some of which may change.
+csv_timestamps_checksums = []
+for csv_file in glob.iglob("results/**/*.csv", recursive=True):
+    with open(csv_file, "rb") as f:
+        csv_data = f.read()
+    csv_timestamps_checksums.append(
+        (
+            csv_file,
+            os.stat(csv_file).st_atime_ns,
+            os.stat(csv_file).st_mtime_ns,
+            hashlib.blake2b(csv_data).hexdigest(),
+        )
+    )
+csv_timestamps_checksums = pd.DataFrame(
+    csv_timestamps_checksums,
+    columns=["csv_file", "atime_ns", "mtime_ns", "BLAKE2b"],
+)
+helper_funcs.to_csv_if_changed(
+    csv_timestamps_checksums,
+    config["csv_timestamps_checksums"],
     index=False,
 )
 
