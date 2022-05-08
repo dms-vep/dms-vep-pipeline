@@ -144,3 +144,26 @@ def get_antibody_selections(
     )
 
     return antibody_selections
+
+
+def to_csv_if_changed(df, csv_name, **kwargs):
+    """Write data frame to CSV only if it has changed.
+
+    Useful because it only updates timestamp if something changed.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+    csv_name : str
+    **kwargs
+        Other keyword arguments for ``pandas.DataFrame.to_csv``
+
+    """
+    new = df.to_csv(**kwargs)
+    if os.path.isfile(csv_name):
+        with open(csv_name) as f:
+            old = f.read()
+        if old == new:
+            return
+    with open(csv_name, "w") as f_out:
+        f_out.write(new)
