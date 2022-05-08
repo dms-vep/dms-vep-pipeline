@@ -1,6 +1,7 @@
 """Helper functions for the ``snakemake`` pipeline."""
 
 
+import hashlib
 import os
 
 import pandas as pd
@@ -167,3 +168,10 @@ def to_csv_if_changed(df, csv_name, **kwargs):
             return
     with open(csv_name, "w") as f_out:
         f_out.write(new)
+
+
+def blake2b_checksum(fname):
+    """Returns BLAKE2b checksum of a file."""
+    with open(fname, "rb") as f:
+        data = f.read()
+    return hashlib.blake2b(data).hexdigest()

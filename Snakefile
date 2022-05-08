@@ -7,7 +7,6 @@ in the upstream file that includes this one.
 
 # Imports ---------------------------------------------------------------------
 import glob
-import hashlib
 import os
 import textwrap
 
@@ -41,32 +40,17 @@ helper_funcs.to_csv_if_changed(
     index=False,
 )
 
-# Get BLAKE2b checksums and timestamps of all *.csv files in `results`. used
-# by some of the notebooks that write multiple output files where we only want
-# to update the timestamp if the file has changed. This is sort of a hack to
-# get around fact that `snakemake` uses timestamps, and we have some rules that
-# aggregate samples and write multiple CSVs only some of which may change.
-csv_timestamps_checksums = []
-for csv_file in glob.iglob("results/**/*.csv", recursive=True):
-    with open(csv_file, "rb") as f:
-        csv_data = f.read()
-    csv_timestamps_checksums.append(
-        (
-            csv_file,
-            os.stat(csv_file).st_atime_ns,
-            os.stat(csv_file).st_mtime_ns,
-            hashlib.blake2b(csv_data).hexdigest(),
-        )
-    )
-csv_timestamps_checksums = pd.DataFrame(
-    csv_timestamps_checksums,
-    columns=["csv_file", "atime_ns", "mtime_ns", "BLAKE2b"],
-)
-helper_funcs.to_csv_if_changed(
-    csv_timestamps_checksums,
-    config["csv_timestamps_checksums"],
-    index=False,
-)
+# Get BLAKE2b checksums and timestamps of *.csv files in `results`. Used
+# below to re-adjust timestamps of some output files that haven't changed.
+# Useful because some notebooks write output files for multiple samples
+# only some of which may be changed from prior runs.
+csv_times_checksums = {
+    os.path.abspath(csv_file): {
+        "checksum": helper_funcs.blake2b_checksum(csv_file),
+        "ns": (os.stat(csv_file).st_atime_ns, os.stat(csv_file).st_mtime_ns),
+    }
+    for csv_file in glob.iglob("results/**/*.csv", recursive=True)
+}
 
 # Rules ---------------------------------------------------------------------
 
@@ -184,7 +168,7 @@ rule count_barcodes:
         "scripts/count_barcodes.py"
 
 
-rule variant_counts:
+checkpoint variant_counts:
     """Get and analyze counts of different variants in each sample."""
     input:
         [
@@ -197,12 +181,7 @@ rule variant_counts:
         config["site_numbering_map"],
         nb=os.path.join(config["pipeline_path"], "notebooks/variant_counts.ipynb"),
     output:
-        [
-            os.path.join(config["variant_counts_dir"], f"{library_sample}.csv")
-            for library_sample in barcode_runs.query("exclude_after_counts == 'no'")[
-                "library_sample"
-            ]
-        ],
+        directory(config["variant_counts_dir"]),
         nb="results/notebooks/variant_counts.ipynb",
     conda:
         "environment.yml"
@@ -210,3 +189,23 @@ rule variant_counts:
         os.path.join(config["logdir"], "variant_counts.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
+
+
+def variant_count_files(wildcards):
+    """Get variant count output files, and adjust timestamps of any not modified.
+
+    Main goal is to back-modify timestamps of files created by `variant_counts` that were
+    were not modified relative to start of pipeline. Somewhat hacky use of checkpointing.
+    """
+    subdir = checkpoints.variant_counts.get(**wildcards).output[0]
+    count_files = {os.path.abspath(f) for f in glob.glob(f"{subdir}/*.csv")}
+    expected_files = {
+        os.path.abspath(f"{config['variant_counts_dir']}/{f}.csv")
+        for f in barcode_runs.query("exclude_after_counts == 'no'")["library_sample"]
+    }
+    assert count_files == expected_files
+    for f in count_files:
+        if f in csv_times_checksums:
+            if helper_funcs.blake2b_checksum(f) == csv_times_checksums[f]["checksum"]:
+                os.utime(f, ns=csv_times_checksums[f]["ns"])
+    return sorted(count_files)

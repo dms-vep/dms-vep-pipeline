@@ -13,9 +13,4 @@ include: os.path.join(config["pipeline_path"], "Snakefile")
 
 rule all:
     input:
-        expand(
-            os.path.join(config["variant_counts_dir"], "{library_sample}.csv"),
-            library_sample=barcode_runs.query("exclude_after_counts == 'no'")[
-                "library_sample"
-            ],
-        ),
+        variant_count_files,
