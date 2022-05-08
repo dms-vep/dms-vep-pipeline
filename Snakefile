@@ -24,6 +24,9 @@ barcode_runs = helper_funcs.barcode_runs_from_config(
 os.makedirs(os.path.dirname(config["processed_barcode_runs"]), exist_ok=True)
 barcode_runs.to_csv(config["processed_barcode_runs"], index=False)
 
+antibody_selections = helper_funcs.get_antibody_selections(barcode_runs)
+os.makedirs(os.path.dirname(config["antibody_selections"]), exist_ok=True)
+antibody_selections.to_csv(config["antibody_selections"], index=False)
 
 # Rules ---------------------------------------------------------------------
 
