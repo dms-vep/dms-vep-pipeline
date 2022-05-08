@@ -25,3 +25,5 @@ date,virus_batch,library,sample_type,antibody,antibody_concentration,replicate,f
 2022-03-02,thaw-3,LibA,antibody,S2M11,4.9314,2,sequencing_data/A51_S2M11_3_Rep2_IC99_S30_R1_001.fastq.gz,,
 2022-03-02,thaw-3,LibA,no-antibody_control,,,2,sequencing_data/A51_S2M11_NA_Rep1_NA_S23_R1_001.fastq.gz,,
 2022-03-02,thaw-3,LibA,no-antibody_control,,,1,sequencing_data/A51_S2M11_NA_Rep2_NA_S24_R1_001.fastq.gz,,
+2022-03-02,thaw-3,LibB,no-antibody_control,,,1,sequencing_data/B1_267C_NA_Rep1_NA_S1_R1_001.fastq.gz,,
+2022-03-02,thaw-3,LibB,no-antibody_control,,,2,sequencing_data/B1_267C_NA_Rep2_NA_S2_R1_001.fastq.gz,,
