@@ -1,6 +1,7 @@
 """Helper functions for the ``snakemake`` pipeline."""
 
 
+import hashlib
 import os
 
 import pandas as pd
@@ -81,3 +82,96 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
         )
 
     return barcode_runs
+
+
+def get_antibody_selections(
+    barcode_runs,
+    pair_on=("library", "virus_batch", "date", "replicate"),
+):
+    """Data frame of antibody selections from data frame of barcode runs.
+
+    Pairs each antibody selection with the corresponding no-antibody control
+    that is the same in all of the properties specified in `pair_on`.
+
+    """
+    barcode_runs = barcode_runs.query("exclude_after_counts == 'no'")
+
+    antibodies = barcode_runs.query("sample_type == 'antibody'").rename(
+        columns={"sample": "antibody_sample"}
+    )[["antibody_sample", "antibody_concentration", *pair_on]]
+    assert len(antibodies) == len(antibodies.drop_duplicates())
+
+    controls = barcode_runs.query("sample_type == 'no-antibody_control'").rename(
+        columns={"sample": "no-antibody_sample"}
+    )[["no-antibody_sample", *pair_on]]
+    assert len(controls) == len(controls.drop_duplicates())
+
+    antibody_selections = (
+        antibodies.merge(controls, how="left", validate="many_to_one", on=pair_on)
+        .merge(
+            barcode_runs[["library", "sample", "library_sample"]].rename(
+                columns={
+                    "sample": "antibody_sample",
+                    "library_sample": "antibody_library_sample",
+                },
+            ),
+            how="left",
+            validate="many_to_one",
+            on=["library", "antibody_sample"],
+        )
+        .merge(
+            barcode_runs[["library", "sample", "library_sample"]].rename(
+                columns={
+                    "sample": "no-antibody_sample",
+                    "library_sample": "no-antibody_library_sample",
+                },
+            ),
+            how="left",
+            validate="many_to_one",
+            on=["library", "no-antibody_sample"],
+        )
+    )
+
+    if antibody_selections.isnull().any().any():
+        raise ValueError(
+            "null antibody selections:\n"
+            + str(antibody_selections[antibody_selections.isnull().any(axis=1)])
+        )
+
+    assert (
+        len(antibody_selections)
+        == len(antibody_selections.groupby(["library", "antibody_sample"]))
+        == antibody_selections["antibody_library_sample"].nunique()
+    )
+
+    return antibody_selections
+
+
+def to_csv_if_changed(df, csv_name, **kwargs):
+    """Write data frame to CSV only if it has changed.
+
+    Useful because it only updates timestamp if something changed.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+    csv_name : str
+    **kwargs
+        Other keyword arguments for ``pandas.DataFrame.to_csv``
+
+    """
+    new = df.to_csv(**kwargs)
+    if os.path.isfile(csv_name):
+        with open(csv_name) as f:
+            old = f.read()
+        if old == new:
+            return
+    with open(csv_name, "w") as f_out:
+        f_out.write(new)
+
+
+def blake2b_checksum(fname):
+    """Returns BLAKE2b checksum of a file."""
+    with open(fname, "rb") as f:
+        data = f.read()
+    return hashlib.blake2b(data).hexdigest()
