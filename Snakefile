@@ -12,33 +12,27 @@ import textwrap
 
 import pandas as pd
 
-import helper_funcs
+
+include: "funcs.smk"  # import functions
+
 
 # Global variables and processing before pipeline -----------------------------
 
 # Data frames for PacBio runs, Illumina barcode runs, antibody selections, etc.
 # Some of these are written to CSV files, but only if they have changed.
 
-pacbio_runs = helper_funcs.pacbio_runs_from_config(config["pacbio_runs"])
+pacbio_runs = pacbio_runs_from_config(config["pacbio_runs"])
 
-barcode_runs = helper_funcs.barcode_runs_from_config(
+barcode_runs = barcode_runs_from_config(
     config["barcode_runs"],
     valid_libraries=set(pacbio_runs["library"]),
 )
 os.makedirs(os.path.dirname(config["processed_barcode_runs"]), exist_ok=True)
-helper_funcs.to_csv_if_changed(
-    barcode_runs,
-    config["processed_barcode_runs"],
-    index=False,
-)
+to_csv_if_changed(barcode_runs, config["processed_barcode_runs"], index=False)
 
-antibody_selections = helper_funcs.get_antibody_selections(barcode_runs)
+antibody_selections = get_antibody_selections(barcode_runs)
 os.makedirs(os.path.dirname(config["antibody_selections"]), exist_ok=True)
-helper_funcs.to_csv_if_changed(
-    antibody_selections,
-    config["antibody_selections"],
-    index=False,
-)
+to_csv_if_changed(antibody_selections, config["antibody_selections"], index=False)
 
 # Get BLAKE2b checksums and timestamps of *.csv files in `results`. Used
 # below to re-adjust timestamps of some output files that haven't changed.
@@ -46,7 +40,7 @@ helper_funcs.to_csv_if_changed(
 # only some of which may be changed from prior runs.
 csv_times_checksums = {
     os.path.abspath(csv_file): {
-        "checksum": helper_funcs.blake2b_checksum(csv_file),
+        "checksum": blake2b_checksum(csv_file),
         "ns": (os.stat(csv_file).st_atime_ns, os.stat(csv_file).st_mtime_ns),
     }
     for csv_file in glob.iglob("results/**/*.csv", recursive=True)
@@ -191,21 +185,20 @@ checkpoint variant_counts:
         "papermill {input.nb} {output.nb} &> {log}"
 
 
-def variant_count_files(wildcards):
-    """Get variant count output files, and adjust timestamps of any not modified.
-
-    Main goal is to back-modify timestamps of files created by `variant_counts` that were
-    were not modified relative to start of pipeline. Somewhat hacky use of checkpointing.
-    """
-    subdir = checkpoints.variant_counts.get(**wildcards).output[0]
-    count_files = {os.path.abspath(f) for f in glob.glob(f"{subdir}/*.csv")}
-    expected_files = {
-        os.path.abspath(f"{config['variant_counts_dir']}/{f}.csv")
-        for f in barcode_runs.query("exclude_after_counts == 'no'")["library_sample"]
-    }
-    assert count_files == expected_files
-    for f in count_files:
-        if f in csv_times_checksums:
-            if helper_funcs.blake2b_checksum(f) == csv_times_checksums[f]["checksum"]:
-                os.utime(f, ns=csv_times_checksums[f]["ns"])
-    return sorted(count_files)
+checkpoint prob_escape:
+    """Compute probabilities escape for variants."""
+    input:
+        variant_count_files,
+        config["antibody_selections"],
+        config["site_numbering_map"],
+        config["codon_variants"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/variant_counts.ipynb"),
+    output:
+        directory(config["prob_escape_dir"]),
+        nb="results/notebooks/prob_escape.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "prob_escape.txt"),
+    shell:
+        "papermill {input.nb} {output.nb} &> {log}"

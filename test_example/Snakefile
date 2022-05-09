@@ -14,3 +14,4 @@ include: os.path.join(config["pipeline_path"], "Snakefile")
 rule all:
     input:
         variant_count_files,
+        prob_escape_files,
