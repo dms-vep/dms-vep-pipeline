@@ -98,7 +98,7 @@ def get_antibody_selections(
 
     antibodies = barcode_runs.query("sample_type == 'antibody'").rename(
         columns={"sample": "antibody_sample"}
-    )[["antibody_sample", "antibody_concentration", *pair_on]]
+    )[["antibody_sample", "antibody", "antibody_concentration", *pair_on]]
     assert len(antibodies) == len(antibodies.drop_duplicates())
 
     controls = barcode_runs.query("sample_type == 'no-antibody_control'").rename(
