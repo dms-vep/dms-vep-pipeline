@@ -147,6 +147,28 @@ def get_antibody_selections(
     return antibody_selections
 
 
+def get_antibody_selection_groups(antibody_selections):
+    """Group selections with same antibody and experiment just different concentrations."""
+    selection_cols = ["library", "date", "virus_batch", "antibody", "replicate"]
+
+    selection_groups = antibody_selections.assign(
+        selection_group=lambda x: x[selection_cols].apply(
+            lambda r: "_".join(r.values.astype(str)), axis=1
+        ),
+        prob_escape_csv=lambda x: config["prob_escape_dir"]
+        + "/"
+        + x["selection_group"]
+        + ".csv",
+    )
+
+    assert len(selection_groups) == len(antibody_selections)
+    assert len(selection_groups) == len(
+        selection_groups.groupby([*selection_cols, "antibody_concentration"])
+    )
+
+    return selection_groups
+
+
 def to_csv_if_changed(df, csv_name, **kwargs):
     """Write data frame to CSV only if it has changed.
 
@@ -206,8 +228,8 @@ def prob_escape_files(wildcards):
     subdir = checkpoints.prob_escape.get(**wildcards).output[0]
     files = {os.path.abspath(f) for f in glob.glob(f"{subdir}/*.csv")}
     expected_files = {
-        os.path.abspath(f"{config['prob_escape_dir']}/{f}.csv")
-        for f in barcode_runs.query("exclude_after_counts == 'no'")["library_sample"]
+        os.path.abspath(f)
+        for f in antibody_selection_groups["prob_escape_csv"].unique()
     }
     assert files == expected_files
     for f in files:

@@ -34,6 +34,12 @@ antibody_selections = get_antibody_selections(barcode_runs)
 os.makedirs(os.path.dirname(config["antibody_selections"]), exist_ok=True)
 to_csv_if_changed(antibody_selections, config["antibody_selections"], index=False)
 
+antibody_selection_groups = get_antibody_selection_groups(antibody_selections)
+os.makedirs(os.path.dirname(config["antibody_selection_groups"]), exist_ok=True)
+to_csv_if_changed(
+    antibody_selection_groups, config["antibody_selection_groups"], index=False
+)
+
 # Get BLAKE2b checksums and timestamps of *.csv files in `results`. Used
 # below to re-adjust timestamps of some output files that haven't changed.
 # Useful because some notebooks write output files for multiple samples
@@ -192,7 +198,8 @@ checkpoint prob_escape:
         config["antibody_selections"],
         config["site_numbering_map"],
         config["codon_variants"],
-        nb=os.path.join(config["pipeline_path"], "notebooks/variant_counts.ipynb"),
+        config["antibody_selection_groups"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/prob_escape.ipynb"),
     output:
         directory(config["prob_escape_dir"]),
         nb="results/notebooks/prob_escape.ipynb",

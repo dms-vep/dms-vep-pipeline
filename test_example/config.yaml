@@ -110,5 +110,6 @@ barcode_fates_dir: results/barcode_runs/fates_by_sample
 variant_counts_dir: results/variant_counts
 
 # escape probabilities for antibody selections
-antibody_selections: results/prob_escape/antibody_selections.csv
-prob_escape_dir: results/prob_escape/variant_prob_escapes
+antibody_selections: results/antibody_selections/antibody_selections.csv
+antibody_selection_groups: results/antibody_selections/antibody_selection_groups.csv
+prob_escape_dir: results/prob_escape
