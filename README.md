@@ -6,11 +6,12 @@
 The Python code should be formatted with [black](https://black.readthedocs.io/) by running `black .`
 
 Comparable formatting is done for the `Snakefile` with [snakefmt](https://github.com/snakemake/snakefmt) by running `snakefmt .`.
+The `snakemake` files are linted by going to [./test_example](test_example) and running `snakemake --lint`.
 
 The code and Jupyter notebooks are linted with [flake8_nb](https://flake8-nb.readthedocs.io/) by running `flake8_nb`.
 
 ### Testing of pipeline on Travis CI
-The pipeline is tested on Travis CI by checking all the formatting and linting above, and then also runing the pipeline on the example in [./test_example](test_example).
+The pipeline is tested on Travis CI by checking all the formatting and linting above, and then also running the pipeline on the example in [./test_example](test_example).
 
 ### Stripping of Jupyter notebook output
 The repo was configured to strip output from Jupyter notebooks as described [here](http://mateos.io/blog/jupyter-notebook-in-git/) by running:

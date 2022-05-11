@@ -43,6 +43,16 @@ illumina_barcode_parser_params:
 # for `exclude_after_counts` in `barcode_runs`
 min_avg_counts: 6  # consider value more like ~20 for real pipelines
 
+# Parameters for antibody escape-probability calculation.
+# Require neut standard to have at least this many counts
+# and this much fraction of total counts or raise error:
+prob_escape_min_neut_standard_count: 1000
+prob_escape_min_neut_standard_frac: 0.001
+# Only compute escape probabilities for variants with at least this many
+# counts and this fraction of total counts in no-antibody sample:
+prob_escape_min_no_antibody_counts: 5  # maybe make bigger for real expts
+prob_escape_min_no_antibody_frac: 0.00001  # maybe make smaller for large libraries
+
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
 # ----------------------------------------------------------------------------
@@ -100,5 +110,6 @@ barcode_fates_dir: results/barcode_runs/fates_by_sample
 variant_counts_dir: results/variant_counts
 
 # escape probabilities for antibody selections
-antibody_selections: results/prob_escape/antibody_selections.csv
-prob_escape_dir: results/prob_escape/variant_prob_escapes
+antibody_selections: results/antibody_selections/antibody_selections.csv
+antibody_selection_groups: results/antibody_selections/antibody_selection_groups.csv
+prob_escape_dir: results/prob_escape
