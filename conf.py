@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "dms-vep-pipeline"
-copyright = "2022, Jesse D. Bloom"
+copyright = "2022, Jesse D. Bloom"  # noqa: A001
 author = "Jesse D. Bloom"
 github_repo = "dms-vep-pipeline"
 github_user = "jbloomlab"
@@ -35,7 +35,7 @@ extensions = [
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-#templates_path = ['_templates']
+# templates_path = ['_templates']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

@@ -23,10 +23,12 @@ nblinks = snakemake.input.nblinks
 analysis_nbs = "\n   ".join(os.path.basename(os.path.splitext(f)[0]) for f in nblinks)
 
 results_relpath = snakemake.params.results_relpath
-data_file_links = "\n".join([
-    f"- `{label} <{blob_path}/{results_relpath}/{link}>`_"
-    for label, link in snakemake.params.data_files.items()
-])
+data_file_links = "\n".join(
+    [
+        f"- `{label} <{blob_path}/{results_relpath}/{link}>`_"
+        for label, link in snakemake.params.data_files.items()
+    ]
+)
 
 with open(snakemake.output.index, "w") as f_obj:
     f_obj.write(

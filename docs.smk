@@ -72,7 +72,9 @@ rule make_nblink:
     output:
         nblink=os.path.join(config["docs_source_dir"], "{nb}.nblink"),
     params:
-        nb_relpath=lambda _, input: os.path.relpath(input.nb, start=config["docs_source_dir"])
+        nb_relpath=lambda _, input: os.path.relpath(
+            input.nb, start=config["docs_source_dir"]
+        ),
     log:
         os.path.join(config["logdir"], "make_nblink_{nb}.txt"),
     conda:
