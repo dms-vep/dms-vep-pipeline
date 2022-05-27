@@ -18,11 +18,11 @@ for name, ruleproxy in rules.__dict__.items():
         nbs_by_name[name] = ruleproxy.output.get(
             "nb"
         )  # later expand with glob_wildcards
-all_nbs = list(nbs_by_name.values())
-assert len(all_nbs) == len(set(all_nbs))
-all_nblinks = {
-    os.path.join(config["docs_source_dir"], os.path.basename(nb) + ".nblink"): nb
-    for nb in all_nbs
+nbs = list(nbs_by_name.values())
+assert len(nbs) == len(set(nbs))
+nblinks = {
+    os.path.join(config["docs_source_dir"], f"{name}.nblink"): nb
+    for name, nb in nbs_by_name.items()
 }
 
 data_files = {
@@ -66,7 +66,7 @@ rule make_graphs:
 rule make_nblink:
     """Make sphinx ``*.nblink`` file."""
     input:
-        nb=lambda wc: all_nblinks[
+        nb=lambda wc: nblinks[
             os.path.join(config["docs_source_dir"], f"{wc.nb}.nblink")
         ],
     output:
@@ -86,8 +86,9 @@ rule make_nblink:
 rule docs_index:
     """Make ``index.rst`` file for sphinx docs."""
     input:
-        all_nbs,
-        all_nblinks,
+        nbs,
+        data_files.values(),
+        nblinks=nblinks,
         rulegraph=rules.make_graphs.output.rulegraph,
         filegraph=rules.make_graphs.output.filegraph,
         dag=rules.make_graphs.output.dag,
@@ -95,6 +96,8 @@ rule docs_index:
         index=os.path.join(config["docs_source_dir"], "index.rst"),
     params:
         docs_source_relpath=os.path.relpath(".", start=config["docs_source_dir"]),
+        results_relpath=os.path.relpath(".", start=f"{config['docs']}/.."),
+        data_files=data_files,
     log:
         os.path.join(config["logdir"], "docs_index.txt"),
     conda:

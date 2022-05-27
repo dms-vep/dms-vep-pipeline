@@ -7,3 +7,5 @@ _*
 !.travis.yml
 !.flake8_nb
 !docs/.nojekyll
+
+docs/*.ipynb
