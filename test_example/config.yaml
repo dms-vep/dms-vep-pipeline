@@ -7,14 +7,14 @@
 # and `./`, but in this example they are upstream from this subdirectory.
 # ----------------------------------------------------------------------------
 pipeline_path: ../  # typically will be `dms-vep-pipeline` for real pipelines
-docs_path: ../  # typically will be `./` for real pipelines
+docs: ../docs  # typically will be `./docs` for real pipelines
 
 # ----------------------------------------------------------------------------
 # Details on repo, used for docs. Change this to details for your project.
 # ----------------------------------------------------------------------------
 github_repo: dms-vep-pipeline
 github_user: jbloomlab
-github_branch: main
+github_branch: main  # main branch for repo, assume renamed from master -> main
 description: Deep mutational scanning (DMS) pipeline for a viral entry protein (VEP)
 year: 2022
 authors: Jesse Bloom
@@ -113,3 +113,6 @@ variant_counts_dir: results/variant_counts
 antibody_selections: results/antibody_selections/antibody_selections.csv
 antibody_selection_groups: results/antibody_selections/antibody_selection_groups.csv
 prob_escape_dir: results/prob_escape
+
+# html documentation
+docs_source_dir: results/docs_source

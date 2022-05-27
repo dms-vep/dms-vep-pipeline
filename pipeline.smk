@@ -1,4 +1,4 @@
-"""``snakemake`` file that runs the pipeline.
+"""``snakemake`` file that includes the pipeline code.
 
 It doesn't include the `configfile`, which is designed to be contained
 in the upstream file that includes this one.
@@ -8,9 +8,6 @@ in the upstream file that includes this one.
 # Imports ---------------------------------------------------------------------
 import glob
 import os
-import textwrap
-
-import pandas as pd
 
 
 include: "funcs.smk"  # import functions

@@ -2,11 +2,12 @@
 
 ## Details on setup of this repository
 
+
 ### Code formatting and linting
 The Python code should be formatted with [black](https://black.readthedocs.io/) by running `black .`
 
-Comparable formatting is done for the `Snakefile` with [snakefmt](https://github.com/snakemake/snakefmt) by running `snakefmt .`.
-The `snakemake` files are linted by going to [./test_example](test_example) and running `snakemake --lint`.
+Comparable formatting is done for the `snakemake` file (`*.smk` files) with [snakefmt](https://github.com/snakemake/snakefmt) by running `snakefmt .`.
+The overall `snakemake` pipeline is linted by going to [./test_example](test_example) and running `snakemake --lint`.
 
 The code and Jupyter notebooks are linted with [flake8_nb](https://flake8-nb.readthedocs.io/) by running `flake8_nb`.
 
