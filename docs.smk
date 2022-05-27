@@ -12,10 +12,18 @@ import os
 # Variables and processing before building docs -------------------------------
 
 # Get outputs of rules with `nb` as output (assumed Jupyter notebook) for docs.
-nb_outputs = {}
+nbs_by_name = {}
 for name, ruleproxy in rules.__dict__.items():
     if ruleproxy.output.get("nb"):
-        nb_outputs[name] = ruleproxy.output.get("nb")  # later expand with glob_wildcards
+        nbs_by_name[name] = ruleproxy.output.get(
+            "nb"
+        )  # later expand with glob_wildcards
+all_nbs = list(nbs_by_name.values())
+assert len(all_nbs) == len(set(all_nbs))
+all_nblinks = {
+    os.path.join(config["docs_source_dir"], os.path.basename(nb) + ".nblink"): nb
+    for nb in all_nbs
+}
 
 data_files = {
     "parental gene sequence": config["gene_sequence_codon"],
@@ -55,9 +63,31 @@ rule make_graphs:
         """
 
 
+rule make_nblink:
+    """Make sphinx ``*.nblink`` file."""
+    input:
+        nb=lambda wc: all_nblinks[
+            os.path.join(config["docs_source_dir"], f"{wc.nb}.nblink")
+        ],
+    output:
+        nblink=os.path.join(config["docs_source_dir"], "{nb}.nblink"),
+    params:
+        nb_relpath=lambda _, input: os.path.relpath(input.nb, start=config["docs_source_dir"])
+    log:
+        os.path.join(config["logdir"], "make_nblink_{nb}.txt"),
+    conda:
+        "environment.yml"
+    shell:
+        """
+        printf '{{\n    "path": "{params.nb_relpath}"\n}}' > {output.nblink} 2> {log}
+        """
+
+
 rule docs_index:
     """Make ``index.rst`` file for sphinx docs."""
     input:
+        all_nbs,
+        all_nblinks,
         rulegraph=rules.make_graphs.output.rulegraph,
         filegraph=rules.make_graphs.output.filegraph,
         dag=rules.make_graphs.output.dag,
@@ -76,7 +106,7 @@ rule docs_index:
 rule sphinx_build:
     """Build sphinx docs."""
     input:
-        rules.make_graphs.output,
+        rules.docs_index.input,
         index=rules.docs_index.output.index,
         conf=os.path.join(config["pipeline_path"], "conf.py"),
     output:
@@ -86,10 +116,11 @@ rule sphinx_build:
         conf_path=lambda _, input: os.path.dirname(input.conf),
         project=config["description"],
         author=config["authors"],
-        copyright=f"{config['authors']} ({config['year']})"
+        copyright=f"{config['authors']} ({config['year']})",
     log:
         os.path.join(config["logdir"], "sphinx_build.txt"),
-    conda: "environment.yml"
+    conda:
+        "environment.yml"
     shell:
         """
         sphinx-build \
