@@ -1,0 +1,43 @@
+Deep mutational scanning (DMS) pipeline for a viral entry protein (VEP)
+=======================================================================
+
+This page documents the data analysis.
+For the actual code, see https://github.com/jbloomlab/dms-vep-pipeline
+
+Study by Jesse Bloom.
+
+Workflow
+--------
+Below is the rulegraph for the `snakemake <https://snakemake.readthedocs.io/>`_ workflow.
+Click :download:`here <../../results/docs_source/filegraph.svg>` for the more detailed filegraph,
+and :download:`here <../../results/docs_source/dag.svg>` for the even more detailed DAG (directed acyclic graph).
+
+.. image:: ../../results/docs_source/rulegraph.svg
+
+Analysis notebooks
+------------------
+Many of the plots in these notebooks are interactive, so try mousing over points for
+details, using dropdowns, etc.
+
+.. toctree::
+   :maxdepth: 1
+
+   analyze_pacbio_ccs
+   build_pacbio_consensus
+   build_codon_variants
+   variant_counts
+   prob_escape
+
+Data files
+----------
+- `parental gene sequence <https://github.com/jbloomlab/dms-vep-pipeline/blob/main/test_example/results/gene_sequence/codon.fasta>`_
+- `parental protein sequence <https://github.com/jbloomlab/dms-vep-pipeline/blob/main/test_example/results/gene_sequence/protein.fasta>`_
+- `sequential-to-reference site numbers <https://github.com/jbloomlab/dms-vep-pipeline/blob/main/test_example/data/site_numbering_map.csv>`_
+- `codon-variant table <https://github.com/jbloomlab/dms-vep-pipeline/blob/main/test_example/results/variants/codon_variants.csv>`_
+- `processed barcode sequencing runs <https://github.com/jbloomlab/dms-vep-pipeline/blob/main/test_example/results/barcode_runs/processed_barcode_runs.csv>`_
+- `variant counts <https://github.com/jbloomlab/dms-vep-pipeline/blob/main/test_example/results/variant_counts>`_
+- `antibody selection experiments (grouped) <https://github.com/jbloomlab/dms-vep-pipeline/blob/main/test_example/results/antibody_selections/antibody_selection_groups.csv>`_
+- `prob escapes for antibody selections <https://github.com/jbloomlab/dms-vep-pipeline/blob/main/test_example/results/prob_escape>`_
+
+
+

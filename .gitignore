@@ -9,3 +9,4 @@ _*
 !docs/.nojekyll
 
 docs/*.ipynb
+!docs/**/_*

@@ -8,6 +8,9 @@ _*
 !.flake8_nb
 !docs/.nojekyll
 
+docs/*.ipynb
+!docs/**/_*
+
 results/*
 !results/gene_sequence
 results/gene_sequence/*
