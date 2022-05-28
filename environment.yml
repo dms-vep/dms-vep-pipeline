@@ -1,8 +1,8 @@
 name: dms-vep-pipeline
 channels:
-  - bioconda
   - conda-forge
   - defaults
+  - bioconda
 
 dependencies:
   - biopython=1.79
