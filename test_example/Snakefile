@@ -7,11 +7,22 @@ import os
 configfile: "config.yaml"
 
 
-# include `dms-vep-pipeline` Snakefile
-include: os.path.join(config["pipeline_path"], "Snakefile")
+# include `dms-vep-pipeline` pipeline Snakemake file
+include: os.path.join(config["pipeline_path"], "pipeline.smk")
 
 
 rule all:
     input:
         variant_count_files,
         prob_escape_files,
+        config["docs"],
+
+
+# Arbitrary other rules should be added here
+
+# Add any extra data/results files for docs with name: file
+extra_data_files = {}
+
+
+# include `dms-vep-pipeline` docs building Snakemake file
+include: os.path.join(config["pipeline_path"], "docs.smk")

@@ -6,7 +6,7 @@ install:
   - bash miniconda.sh -b -p $HOME/miniconda
   - source "$HOME/miniconda/etc/profile.d/conda.sh"
   - hash -r
-  - conda config --set always_yes yes --set changeps1 no
+  - conda config --set always_yes yes --set changeps1 no --set channel_priority strict
   - conda update -q conda
   - conda info -a
   - conda env create -f environment.yml
@@ -17,7 +17,7 @@ script:
   - snakefmt --check .
   - flake8_nb
   - cd test_example && snakemake --lint && cd ..
-  - cd test_example && snakemake -j 2 --use-conda && cd ..
+  - cd test_example && snakemake -j 2 --use-conda -F && cd ..
 
 branches:
   only:

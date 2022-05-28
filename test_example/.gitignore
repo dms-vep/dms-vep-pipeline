@@ -7,3 +7,21 @@ _*
 !docs/.nojekyll
 
 results/*
+!results/gene_sequence
+results/gene_sequence/*
+!results/gene_sequence/*.fasta
+!results/variants
+results/variants/*
+!results/variants/codon_variants.csv
+!results/barcode_runs
+results/barcode_runs/*
+!results/barcode_runs/processed_barcode_runs.csv
+!results/variant_counts
+results/variant_counts/*
+!results/variant_counts/*.csv
+!results/antibody_selections
+results/antibody_selections/*
+!results/antibody_selections/antibody_selection_groups.csv
+!results/prob_escape
+results/prob_escape/*
+!results/prob_escape/*.csv
