@@ -138,4 +138,5 @@ rule sphinx_build:
             {params.docs_source} \
             {output.docs} \
             &> {log}
+        touch {output.docs}/.nojekyll
         """
