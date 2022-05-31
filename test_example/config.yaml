@@ -84,6 +84,9 @@ neut_standard_barcodes: data/neutralization_standard_barcodes.csv
 # Illumina barcode sequencing
 barcode_runs: data/barcode_runs.csv
 
+# configuration for polyclonal fitting
+polyclonal_config: data/polyclonal_config.yaml
+
 # ----------------------------------------------------------------------------
 # Names of output directories / files
 # ----------------------------------------------------------------------------
@@ -113,6 +116,9 @@ variant_counts_dir: results/variant_counts
 antibody_selections: results/antibody_selections/antibody_selections.csv
 antibody_selection_groups: results/antibody_selections/antibody_selection_groups.csv
 prob_escape_dir: results/prob_escape
+
+# polyclonal fitting directory
+polyclonal_dir: results/polyclonal_fits
 
 # html documentation
 docs_source_dir: results/docs_source

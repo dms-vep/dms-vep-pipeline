@@ -14,7 +14,7 @@ import os
 # Get outputs of rules with `nb` as output (assumed Jupyter notebook) for docs.
 nbs_by_name = {}
 for name, ruleproxy in rules.__dict__.items():
-    if ruleproxy.output.get("nb"):
+    if ruleproxy.output.get("nb") and name != "fit_polyclonal":
         nbs_by_name[name] = ruleproxy.output.get(
             "nb"
         )  # later expand with glob_wildcards

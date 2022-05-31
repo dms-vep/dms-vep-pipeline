@@ -1,0 +1,27 @@
+# How to do `polyclonal` fitting for antibodies / sera.
+
+# default configuration for monoclonal antibodies (mAbs)
+mAb_default: &mAb_default
+  max_epitopes: 1
+  n_bootstrap_samples: 25
+  reg_escape_weight: 0.1
+  reg_spread_weight: 0.25
+  reg_activity_weight: 1.0
+  times_seen: 3
+  min_epitope_activity_to_include: 0.2
+
+# default configuration of polyclonal sera
+sera_default: &sera_default
+  max_epitopes: 4
+  n_bootstrap_samples: 25
+  reg_escape_weight: 0.1
+  reg_spread_weight: 0.25
+  reg_activity_weight: 1.0
+  times_seen: 3
+  min_epitope_activity_to_include: 0.2
+
+# define configuration for specific monoclonal antibodies, merging above defaults
+REGN10933:
+  <<: *mAb_default
+S2M11:
+  <<: *mAb_default

@@ -11,3 +11,15 @@
 ## Illumina barcode sequencing
 
 [barcode_runs.csv](barcode_runs.csv): List of Illumina barcode runs.
+
+## Configuration for `polyclonal` fitting
+[polyclonal_config.yaml](polyclonal_config.yaml) specifies how the analysis with [polyclonal](https://jbloomlab.github.io/polyclonal/) is done.
+For each antibody listed in [barcode_runs.csv](barcode_runs.csv), specify:
+
+ - *max_epitopes*: the maximum number of epitopes to test. The fitting keeps testing more epitopes up to this max until additional epitopes don't improve fitting anymore.
+ - *n_bootstrap_samples*: number of bootstrap samples to use.
+ - *reg_escape_weight*: regularization weight for mutation-escape values.
+ - *reg_spread_weight*: regularization weight for spread of escape values at each site.
+ - *reg_activity_weight*: regularization weight for epitope activities.
+ - *times_seen*: the `times_seen` value used for plotting the results (number of variants a mutation must be found in).
+ - *min_epitope_activity_to_include*: keep adding epitopes until activity <= this.

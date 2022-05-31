@@ -206,3 +206,34 @@ checkpoint prob_escape:
         os.path.join(config["logdir"], "prob_escape.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
+
+
+rule fit_polyclonal:
+    """Fit ``polyclonal`` models."""
+    input:
+        config["polyclonal_config"],
+        prob_escape_csv=os.path.join(
+            config["prob_escape_dir"], "{antibody_selection_group}.csv"
+        ),
+        nb=os.path.join(config["pipeline_path"], "notebooks/fit_polyclonal.ipynb"),
+    output:
+        pickle=os.path.join(
+            config["polyclonal_dir"], "{antibody_selection_group}.pickle"
+        ),
+        nb=os.path.join(
+            config["polyclonal_dir"],
+            "fit_polyclonal_{antibody_selection_group}.ipynb",
+        ),
+    threads: 2
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "fit_polyclonal_{antibody_selection_group}.txt"),
+    shell:
+        """
+        papermill {input.nb} {output.nb} \
+            -p prob_escape_csv {input.prob_escape_csv} \
+            -p pickle_file {output.pickle} \
+            -p n_threads {threads}
+            &> {log}
+        """
