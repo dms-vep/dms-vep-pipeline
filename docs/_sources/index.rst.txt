@@ -28,6 +28,7 @@ details, using dropdowns, etc.
    build_codon_variants
    variant_counts
    prob_escape
+   fit_polyclonal
 
 Data files
 ----------
