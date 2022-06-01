@@ -1,4 +1,5 @@
 # Pipeline for analyzing deep mutational scanning (DMS) of viral entry proteins (VEPs)
+[![Build Status](https://app.travis-ci.com/dms-vep/dms-vep-pipeline.svg?token=b5RuRE5XisC9B9t9EFqB&branch=main)](https://app.travis-ci.com/dms-vep/dms-vep-pipeline) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## Details on setup of this repository
 
