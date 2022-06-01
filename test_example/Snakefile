@@ -15,6 +15,10 @@ rule all:
     input:
         variant_count_files,
         prob_escape_files,
+        expand(
+            rules.fit_polyclonal.output.pickle,
+            antibody_selection_group=antibody_selection_groups["selection_group"],
+        ),
         config["docs"],
 
 

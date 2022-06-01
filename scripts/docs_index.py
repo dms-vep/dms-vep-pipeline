@@ -19,8 +19,8 @@ rulegraph = os.path.join(docs_source_relpath, snakemake.input.rulegraph)
 filegraph = os.path.join(docs_source_relpath, snakemake.input.filegraph)
 dag = os.path.join(docs_source_relpath, snakemake.input.dag)
 
-nblinks = snakemake.input.nblinks
-analysis_nbs = "\n   ".join(os.path.basename(os.path.splitext(f)[0]) for f in nblinks)
+nbs_for_index = snakemake.params.nbs_for_index
+analysis_nbs = "\n   ".join(nbs_for_index)
 
 results_relpath = snakemake.params.results_relpath
 data_file_links = "\n".join(

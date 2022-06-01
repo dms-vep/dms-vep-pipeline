@@ -1,0 +1,13 @@
+
+Fit ``polyclonal`` models
+-------------------------
+
+- :doc:`LibA_2022-02-10a_thaw-3_REGN10933_1 <fit_polyclonal_LibA_2022-02-10a_thaw-3_REGN10933_1>`
+- :doc:`LibA_2022-02-10a_thaw-3_REGN10933_2 <fit_polyclonal_LibA_2022-02-10a_thaw-3_REGN10933_2>`
+- :doc:`LibB_2022-03-02_thaw-3_REGN10933_1 <fit_polyclonal_LibB_2022-03-02_thaw-3_REGN10933_1>`
+- :doc:`LibB_2022-03-02_thaw-3_REGN10933_2 <fit_polyclonal_LibB_2022-03-02_thaw-3_REGN10933_2>`
+- :doc:`LibB_2022-03-02_thaw-3_S2M11_1 <fit_polyclonal_LibB_2022-03-02_thaw-3_S2M11_1>`
+- :doc:`LibB_2022-03-02_thaw-3_S2M11_2 <fit_polyclonal_LibB_2022-03-02_thaw-3_S2M11_2>`
+- :doc:`LibA_2022-03-02_thaw-3_S2M11_1 <fit_polyclonal_LibA_2022-03-02_thaw-3_S2M11_1>`
+- :doc:`LibA_2022-03-02_thaw-3_S2M11_2 <fit_polyclonal_LibA_2022-03-02_thaw-3_S2M11_2>`
+

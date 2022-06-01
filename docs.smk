@@ -8,22 +8,47 @@ in the upstream file that includes this one.
 # Imports ---------------------------------------------------------------------
 import glob
 import os
+import re
 
 # Variables and processing before building docs -------------------------------
 
 # Get outputs of rules with `nb` as output (assumed Jupyter notebook) for docs.
-nbs_by_name = {}
-for name, ruleproxy in rules.__dict__.items():
-    if ruleproxy.output.get("nb"):
-        nbs_by_name[name] = ruleproxy.output.get(
-            "nb"
-        )  # later expand with glob_wildcards
-nbs = list(nbs_by_name.values())
-assert len(nbs) == len(set(nbs))
-nblinks = {
-    os.path.join(config["docs_source_dir"], f"{name}.nblink"): nb
-    for name, nb in nbs_by_name.items()
+rule_wildcards = {
+    # for each rule with wildcards in nb output, define wildcards
+    "fit_polyclonal": {
+        "antibody_selection_group": antibody_selection_groups[
+            "selection_group"
+        ].unique(),
+    },
 }
+subindex_titles = {
+    # name for each rule outputting wildcard notebooks
+    "fit_polyclonal": "Fit ``polyclonal`` models",
+}
+nbs = []
+nblinks = {}
+nbs_for_index = []
+nb_subindices = {}
+for name, ruleproxy in rules.__dict__.items():
+    rule_nb = ruleproxy.output.get("nb")
+    if rule_nb:
+        nbs_for_index.append(name)
+        if ruleproxy.rule.has_wildcards():
+            assert set(rule_wildcards[name]) == set(ruleproxy.rule.wildcard_names)
+            if len(rule_wildcards[name]) != 1:
+                raise ValueError("currently only handles one wildcard per rule")
+            else:
+                wcs = list(rule_wildcards[name].values())[0]
+            subindex = os.path.join(config["docs_source_dir"], f"{name}.rst")
+            nb_subindices[subindex] = []
+            for wc, nb in zip(wcs, expand(rule_nb, **rule_wildcards[name])):
+                nbs.append(nb)
+                nblink = os.path.join(config["docs_source_dir"], f"{name}_{wc}.nblink")
+                nblinks[nblink] = nb
+                nb_subindices[subindex].append(nblink)
+        else:
+            nbs.append(rule_nb)
+            nblinks[os.path.join(config["docs_source_dir"], f"{name}.nblink")] = rule_nb
 
 data_files = {
     "parental gene sequence": config["gene_sequence_codon"],
@@ -85,12 +110,33 @@ rule make_nblink:
         """
 
 
+rule subindex:
+    """Make ``*.rst`` subindex."""
+    wildcard_constraints:
+        subindex="|".join(re.escape(subindex) for subindex in nb_subindices),
+    input:
+        lambda wc: nb_subindices[wc.subindex],
+    output:
+        subindex="{subindex}",
+    params:
+        title=lambda _, output: subindex_titles[
+            os.path.splitext(os.path.basename(output.subindex))[0]
+        ],
+    log:
+        os.path.join(config["logdir"], os.path.basename("{subindex}") + ".txt"),
+    conda:
+        "environment.yml"
+    script:
+        "scripts/subindex.py"
+
+
 rule docs_index:
     """Make ``index.rst`` file for sphinx docs."""
     input:
-        nbs,
         data_files.values(),
-        nblinks=nblinks,
+        nbs,
+        nb_subindices,
+        nblinks,
         rulegraph=rules.make_graphs.output.rulegraph,
         filegraph=rules.make_graphs.output.filegraph,
         dag=rules.make_graphs.output.dag,
@@ -100,6 +146,7 @@ rule docs_index:
         docs_source_relpath=os.path.relpath(".", start=config["docs_source_dir"]),
         results_relpath=os.path.relpath(".", start=f"{config['docs']}/.."),
         data_files=data_files,
+        nbs_for_index=nbs_for_index,
     log:
         os.path.join(config["logdir"], "docs_index.txt"),
     conda:
@@ -127,10 +174,12 @@ rule sphinx_build:
     conda:
         "environment.yml"
     shell:
+        # The `-W` option means notebooks with wildcards that are in subindices must
+        # have the "orphan" tag: https://nbsphinx.readthedocs.io/en/0.8.8/orphan.html
         """
         sphinx-build \
-            -b html \
             -W \
+            -b html \
             -c {params.conf_path} \
             -D project="{params.project}" \
             -D author="{params.author}" \
