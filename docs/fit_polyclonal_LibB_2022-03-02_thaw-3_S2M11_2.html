@@ -331,8 +331,8 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters</span>
 <span class="n">prob_escape_csv</span> <span class="o">=</span> <span class="s2">&quot;results/prob_escape/LibB_2022-03-02_thaw-3_S2M11_2.csv&quot;</span>
 <span class="n">pickle_file</span> <span class="o">=</span> <span class="s2">&quot;results/polyclonal_fits/LibB_2022-03-02_thaw-3_S2M11_2.pickle&quot;</span>
-<span class="n">n_threads</span> <span class="o">=</span> <span class="mi">1</span>
-</pre></div>
+<span class="n">n_threads</span> <span class="o">=</span> <span class="mi">2</span>
+<br/></pre></div>
 </div>
 </div>
 <p>Read the rest of the configuration and input data:</p>
@@ -376,7 +376,7 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 antibody=&#39;S2M11&#39;
 prob_escape_csv=&#39;results/prob_escape/LibB_2022-03-02_thaw-3_S2M11_2.csv&#39;
-n_threads=1
+n_threads=2
 pickle_file=&#39;results/polyclonal_fits/LibB_2022-03-02_thaw-3_S2M11_2.pickle&#39;
 antibody_config={&#39;max_epitopes&#39;: 1, &#39;n_bootstrap_samples&#39;: 25, &#39;reg_escape_weight&#39;: 0.1, &#39;reg_spread_weight&#39;: 0.25, &#39;reg_activity_weight&#39;: 1.0, &#39;times_seen&#39;: 3, &#39;min_epitope_activity_to_include&#39;: 0.2}
 </pre></div></div>
@@ -521,13 +521,13 @@ Reading probabilities of escape from results/prob_escape/LibB_2022-03-02_thaw-3_
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-7e2b35c2e58f48e59c77c971f993deed"></div>
+<div id="altair-viz-e593e74ff2fd42bbaf5bb5349defa15b"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-7e2b35c2e58f48e59c77c971f993deed") {
-      outputDiv = document.getElementById("altair-viz-7e2b35c2e58f48e59c77c971f993deed");
+    if (outputDiv.id !== "altair-viz-e593e74ff2fd42bbaf5bb5349defa15b") {
+      outputDiv = document.getElementById("altair-viz-e593e74ff2fd42bbaf5bb5349defa15b");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -677,16 +677,16 @@ min_epitope_activity_to_include=0.2
 
 Fitting model with n_epitopes=1
 # First fitting site-level model.
-# Starting optimization of 995 parameters at Tue May 31 22:14:59 2022.
+# Starting optimization of 995 parameters at Wed Jun  1 08:23:12 2022.
          step     time_sec         loss     fit_loss   reg_escape   reg_spread reg_activity
-            0     0.034335       727.18       726.28            0            0      0.90499
-          100       3.4232       61.479       51.019       6.9401            0       3.5193
-# Successfully finished at Tue May 31 22:15:03 2022.
-# Starting optimization of 3549 parameters at Tue May 31 22:15:03 2022.
+            0      0.02954       727.18       726.28            0            0      0.90499
+          100       3.2658       61.479       51.019       6.9401            0       3.5193
+# Successfully finished at Wed Jun  1 08:23:15 2022.
+# Starting optimization of 3549 parameters at Wed Jun  1 08:23:15 2022.
          step     time_sec         loss     fit_loss   reg_escape   reg_spread reg_activity
-            0     0.026165       111.64       66.874       41.244   4.7991e-32       3.5193
-           75       2.3477       85.511        62.64       17.363       2.1789       3.3296
-# Successfully finished at Tue May 31 22:15:05 2022.
+            0     0.026126       111.64       66.874       41.244   4.7991e-32       3.5193
+           75        2.349       85.511        62.64       17.363       2.1789       3.3296
+# Successfully finished at Wed Jun  1 08:23:18 2022.
 Activities of epitopes:
 </pre></div></div>
 </div>
@@ -827,13 +827,13 @@ Successfully fit n_fit=25 models with 0
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-e13c1586874442d7ae7986293ed381b2"></div>
+<div id="altair-viz-fcafa157e8af4fadb19ca2adbaa35592"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-e13c1586874442d7ae7986293ed381b2") {
-      outputDiv = document.getElementById("altair-viz-e13c1586874442d7ae7986293ed381b2");
+    if (outputDiv.id !== "altair-viz-fcafa157e8af4fadb19ca2adbaa35592") {
+      outputDiv = document.getElementById("altair-viz-fcafa157e8af4fadb19ca2adbaa35592");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -898,13 +898,13 @@ Successfully fit n_fit=25 models with 0
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-20d377d7262e4b6986e2d0b003513563"></div>
+<div id="altair-viz-6f1bfceb44354c459a619a459758fccf"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-20d377d7262e4b6986e2d0b003513563") {
-      outputDiv = document.getElementById("altair-viz-20d377d7262e4b6986e2d0b003513563");
+    if (outputDiv.id !== "altair-viz-6f1bfceb44354c459a619a459758fccf") {
+      outputDiv = document.getElementById("altair-viz-6f1bfceb44354c459a619a459758fccf");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -967,13 +967,13 @@ Successfully fit n_fit=25 models with 0
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-7b564883efcb4d67b0b9ca7d824988fe"></div>
+<div id="altair-viz-223ebf10d0344504a421e231f3db5f18"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-7b564883efcb4d67b0b9ca7d824988fe") {
-      outputDiv = document.getElementById("altair-viz-7b564883efcb4d67b0b9ca7d824988fe");
+    if (outputDiv.id !== "altair-viz-223ebf10d0344504a421e231f3db5f18") {
+      outputDiv = document.getElementById("altair-viz-223ebf10d0344504a421e231f3db5f18");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",

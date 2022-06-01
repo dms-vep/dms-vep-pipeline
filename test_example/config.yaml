@@ -13,7 +13,7 @@ docs: ../docs  # typically will be `./docs` for real pipelines
 # Details on repo, used for docs. Change this to details for your project.
 # ----------------------------------------------------------------------------
 github_repo: dms-vep-pipeline
-github_user: jbloomlab
+github_user: dms-vep
 github_branch: main  # main branch for repo, assume renamed from master -> main
 description: Deep mutational scanning (DMS) pipeline for a viral entry protein (VEP)
 year: 2022
