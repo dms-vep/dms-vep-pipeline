@@ -27,6 +27,13 @@ barcode_runs = barcode_runs_from_config(
 os.makedirs(os.path.dirname(config["processed_barcode_runs"]), exist_ok=True)
 to_csv_if_changed(barcode_runs, config["processed_barcode_runs"], index=False)
 
+variant_count_files = [
+    os.path.join(config["variant_counts_dir"], f"{library_sample}.csv")
+    for library_sample in barcode_runs.query("exclude_after_counts == 'no'")[
+        "library_sample"
+    ]
+]
+
 antibody_selections = get_antibody_selections(barcode_runs)
 os.makedirs(os.path.dirname(config["antibody_selections"]), exist_ok=True)
 to_csv_if_changed(antibody_selections, config["antibody_selections"], index=False)
@@ -165,25 +172,46 @@ rule count_barcodes:
         "scripts/count_barcodes.py"
 
 
-checkpoint variant_counts:
-    """Get and analyze counts of different variants in each sample."""
+rule variant_counts:
+    """Get counts of variants for each sample."""
+    input:
+        barcode_counts=rules.count_barcodes.output.counts,
+        codon_variants=config["codon_variants"],
+        gene_sequence_codon=config["gene_sequence_codon"],
+    output:
+        counts=os.path.join(config["variant_counts_dir"], "{library_sample}.csv"),
+    params:
+        library=lambda wc: barcode_runs.set_index("library_sample").at[wc.library_sample, "library"],
+        sample=lambda wc: barcode_runs.set_index("library_sample").at[wc.library_sample, "sample"],
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "variant_counts_{library_sample}.txt"),
+    script:
+        "scripts/variant_counts.py"
+
+
+rule analyze_variant_counts:
+    """Analyze counts of different variants in each sample."""
     input:
         [
             os.path.join(config[f"barcode_{ftype}_dir"], f"{library_sample}.csv")
             for library_sample in barcode_runs["library_sample"]
             for ftype in ["counts", "counts_invalid", "fates"]
         ],
+        variant_count_files,
         config["gene_sequence_codon"],
         config["codon_variants"],
         config["site_numbering_map"],
-        nb=os.path.join(config["pipeline_path"], "notebooks/variant_counts.ipynb"),
+        nb=os.path.join(
+            config["pipeline_path"], "notebooks/analyze_variant_counts.ipynb"
+        ),
     output:
-        directory(config["variant_counts_dir"]),
-        nb="results/notebooks/variant_counts.ipynb",
+        nb="results/notebooks/analyze_variant_counts.ipynb",
     conda:
         "environment.yml"
     log:
-        os.path.join(config["logdir"], "variant_counts.txt"),
+        os.path.join(config["logdir"], "analyze_variant_counts.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
 
@@ -220,10 +248,10 @@ rule fit_polyclonal:
         pickle=os.path.join(
             config["polyclonal_dir"], "{antibody_selection_group}.pickle"
         ),
-        nb=os.path.join(
-            config["polyclonal_dir"],
-            "fit_polyclonal_{antibody_selection_group}.ipynb",
-        ),
+#        nb=os.path.join(
+#            config["polyclonal_dir"],
+#            "fit_polyclonal_{antibody_selection_group}.ipynb",
+#        ),
     threads: 2
     conda:
         "environment.yml"

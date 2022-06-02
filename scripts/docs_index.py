@@ -23,12 +23,16 @@ nbs_for_index = snakemake.params.nbs_for_index
 analysis_nbs = "\n   ".join(nbs_for_index)
 
 results_relpath = snakemake.params.results_relpath
-data_file_links = "\n".join(
-    [
+data_file_links = []
+for label, link in snakemake.params.data_files.items():
+    if isinstance(link, tuple):
+        assert len(link) == 2
+        link = link[1]
+    assert isinstance(link, str)
+    data_file_links.append(
         f"- `{label} <{blob_path}/{results_relpath}/{link}>`_"
-        for label, link in snakemake.params.data_files.items()
-    ]
-)
+    )
+data_file_links = "\n".join(data_file_links)
 
 with open(snakemake.output.index, "w") as f_obj:
     f_obj.write(

@@ -50,13 +50,15 @@ for name, ruleproxy in rules.__dict__.items():
             nbs.append(rule_nb)
             nblinks[os.path.join(config["docs_source_dir"], f"{name}.nblink")] = rule_nb
 
+# If file should be linked, just specify file as value. If directory should be linked,
+# specify value (files_in_directory, directory)
 data_files = {
     "parental gene sequence": config["gene_sequence_codon"],
     "parental protein sequence": config["gene_sequence_protein"],
     "sequential-to-reference site numbers": config["site_numbering_map"],
     "codon-variant table": config["codon_variants"],
     "processed barcode sequencing runs": config["processed_barcode_runs"],
-    "variant counts": config["variant_counts_dir"],
+    "variant counts": (variant_count_files, config["variant_counts_dir"]),
     "antibody selection experiments (grouped)": config["antibody_selection_groups"],
     "prob escapes for antibody selections": config["prob_escape_dir"],
     **extra_data_files,
@@ -113,7 +115,11 @@ rule make_nblink:
 rule subindex:
     """Make ``*.rst`` subindex."""
     wildcard_constraints:
-        subindex="|".join(re.escape(subindex) for subindex in nb_subindices),
+        subindex=(
+            "|".join(re.escape(subindex) for subindex in nb_subindices)
+            if nb_subindices else
+            "a^"  # never matches: https://stackoverflow.com/a/940840
+        ),
     input:
         lambda wc: nb_subindices[wc.subindex],
     output:
@@ -133,7 +139,7 @@ rule subindex:
 rule docs_index:
     """Make ``index.rst`` file for sphinx docs."""
     input:
-        data_files.values(),
+        [(f[0] if isinstance(f, tuple) else f) for f in data_files.values()],
         nbs,
         nb_subindices,
         nblinks,

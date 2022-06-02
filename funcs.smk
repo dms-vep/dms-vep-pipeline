@@ -199,26 +199,6 @@ def blake2b_checksum(fname):
     return hashlib.blake2b(data).hexdigest()
 
 
-def variant_count_files(wildcards):
-    """Get variant count output files, and adjust timestamps of any not modified.
-
-    Main goal is to back-modify timestamps of files created by `variant_counts` that were
-    were not modified relative to start of pipeline. Somewhat hacky use of checkpointing.
-    """
-    subdir = checkpoints.variant_counts.get(**wildcards).output[0]
-    files = {os.path.abspath(f) for f in glob.glob(f"{subdir}/*.csv")}
-    expected_files = {
-        os.path.abspath(f"{config['variant_counts_dir']}/{f}.csv")
-        for f in barcode_runs.query("exclude_after_counts == 'no'")["library_sample"]
-    }
-    assert files == expected_files
-    for f in files:
-        if f in csv_times_checksums:
-            if blake2b_checksum(f) == csv_times_checksums[f]["checksum"]:
-                os.utime(f, ns=csv_times_checksums[f]["ns"])
-    return sorted(files)
-
-
 def prob_escape_files(wildcards):
     """Get prob_escape output files, and adjust timestamps of any not modified.
 
