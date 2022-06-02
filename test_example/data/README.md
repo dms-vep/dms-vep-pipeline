@@ -1,4 +1,5 @@
 # Input data
+This subdirectory contains input data used by the pipeline.
 
 ## PacBio full-length variant sequencing to link barcodes
 
@@ -11,6 +12,12 @@
 ## Illumina barcode sequencing
 
 [barcode_runs.csv](barcode_runs.csv): List of Illumina barcode runs.
+
+## Site numbering
+[site_numbering_map.csv](site_numbering_map.csv): Maps sequential 1, 2, ... numbering of the gene to a "reference" numbering scheme that represents the standard naming of sites for this gene.
+
+## Neutralization standard barcodes
+[neutralization_standard_barcodes.csv](neutralization_standard_barcodes.csv) barcodes for the neutralization standard.
 
 ## Configuration for `polyclonal` fitting
 [polyclonal_config.yaml](polyclonal_config.yaml) specifies how the analysis with [polyclonal](https://jbloomlab.github.io/polyclonal/) is done.
