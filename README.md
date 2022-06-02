@@ -41,6 +41,11 @@ You then run the pipeline with:
 
     snakemake -j <n_jobs> --use-conda
 
+Or if you are only using the `dms-vep-pipeline` [conda](https://docs.conda.io/) environment in [environment.yml](environment.yml) and have already built that, you can also just do:
+
+    conda activate dms-vep-pipeline
+    snakemake -j <n_jobs>
+
 If the `./docs` output directory has already been built and you want to force a re-run, just delete it and then run above.
 
 This will create the results in `./results/` and the HTML documentation in `./docs/`.

@@ -19,6 +19,9 @@ You can run the pipeline with:
 
     snakemake --use-conda -j <n_jobs>
 
-It uses the `conda` environment in [../environment.yml](../environment.yml).
+Note the pipeline uses the `conda` environment in [../environment.yml](../environment.yml), so if you have already built that environment (named `dms-vep-pipeline`), you can also just run:
+
+    conda activate dms-vep-pipeline
+    snakemake -j <n_jobs>
 
 The sphinx HTML documentation is rendered to [https://dms-vep.github.io/dms-vep-pipeline/](https://dms-vep.github.io/dms-vep-pipeline/).
