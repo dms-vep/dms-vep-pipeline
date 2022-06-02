@@ -51,7 +51,7 @@ Note that [dms-vep-pipeline](https://github.com/dms-vep/dms-vep-pipeline) has it
 Hopefully you can just use this environment for your top-level `Snakefile` too, but if not you can specify rule-specific environments for any additional rules you use.
 
 ## Setting up the pipeline as a submodule
-To add (([dms-vep-pipeline](https://github.com/dms-vep/dms-vep-pipeline)) as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in your repo (`<my_dms_repo>`), do as follows.
+To add [dms-vep-pipeline](https://github.com/dms-vep/dms-vep-pipeline) as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in your repo (`<my_dms_repo>`), do as follows.
 
         git submodule add https://github.com/dms-vep/dms-vep-pipeline
 
