@@ -1,0 +1,6 @@
+library,antibody_sample,no-antibody_sample,n_aa_substitutions,antibody_neut_standard_count,no-antibody_neut_standard_count,antibody_count,no-antibody_count,prob_escape_uncensored,prob_escape
+LibB,2022-03-02_thaw-3_antibody_S2M11_4.9314_1,2022-03-02_thaw-3_no-antibody_control_1,0,45616,1515,11282,31025,0.01208,0.01208
+LibB,2022-03-02_thaw-3_antibody_S2M11_4.9314_1,2022-03-02_thaw-3_no-antibody_control_1,1,45616,1515,27968,44334,0.02095,0.02095
+LibB,2022-03-02_thaw-3_antibody_S2M11_4.9314_1,2022-03-02_thaw-3_no-antibody_control_1,2,45616,1515,28366,38882,0.02423,0.02423
+LibB,2022-03-02_thaw-3_antibody_S2M11_4.9314_1,2022-03-02_thaw-3_no-antibody_control_1,3,45616,1515,27679,21104,0.04356,0.04356
+LibB,2022-03-02_thaw-3_antibody_S2M11_4.9314_1,2022-03-02_thaw-3_no-antibody_control_1,4,45616,1515,19448,14124,0.04573,0.04573

@@ -1,0 +1,16 @@
+library,antibody_sample,no-antibody_sample,n_aa_substitutions,antibody_neut_standard_count,no-antibody_neut_standard_count,antibody_count,no-antibody_count,prob_escape_uncensored,prob_escape
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_0.15_1,2022-02-10a_thaw-3_no-antibody_control_1,0,14638,3560,11398,20225,0.1371,0.1371
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_0.15_1,2022-02-10a_thaw-3_no-antibody_control_1,1,14638,3560,23182,40747,0.1384,0.1384
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_0.15_1,2022-02-10a_thaw-3_no-antibody_control_1,2,14638,3560,25798,39468,0.159,0.159
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_0.15_1,2022-02-10a_thaw-3_no-antibody_control_1,3,14638,3560,20571,31264,0.16,0.16
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_0.15_1,2022-02-10a_thaw-3_no-antibody_control_1,4,14638,3560,18066,24626,0.1784,0.1784
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_1.39_1,2022-02-10a_thaw-3_no-antibody_control_1,0,96043,3560,2007,20225,0.003678,0.003678
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_1.39_1,2022-02-10a_thaw-3_no-antibody_control_1,1,96043,3560,4515,40747,0.004107,0.004107
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_1.39_1,2022-02-10a_thaw-3_no-antibody_control_1,2,96043,3560,11640,39468,0.01093,0.01093
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_1.39_1,2022-02-10a_thaw-3_no-antibody_control_1,3,96043,3560,5429,31264,0.006437,0.006437
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_1.39_1,2022-02-10a_thaw-3_no-antibody_control_1,4,96043,3560,13833,24626,0.02082,0.02082
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_5.58_1,2022-02-10a_thaw-3_no-antibody_control_1,0,164404,3560,2396,20225,0.002565,0.002565
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_5.58_1,2022-02-10a_thaw-3_no-antibody_control_1,1,164404,3560,5380,40747,0.002859,0.002859
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_5.58_1,2022-02-10a_thaw-3_no-antibody_control_1,2,164404,3560,10776,39468,0.005912,0.005912
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_5.58_1,2022-02-10a_thaw-3_no-antibody_control_1,3,164404,3560,6408,31264,0.004438,0.004438
+LibA,2022-02-10a_thaw-3_antibody_REGN10933_5.58_1,2022-02-10a_thaw-3_no-antibody_control_1,4,164404,3560,12918,24626,0.01136,0.01136

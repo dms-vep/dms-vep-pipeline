@@ -16,9 +16,7 @@ import re
 rule_wildcards = {
     # for each rule with wildcards in nb output, define wildcards
     "fit_polyclonal": {
-        "antibody_selection_group": antibody_selection_groups[
-            "selection_group"
-        ].unique(),
+        "antibody_selection_group": antibody_selections["selection_group"].unique(),
     },
 }
 subindex_titles = {
@@ -59,8 +57,8 @@ data_files = {
     "codon-variant table": config["codon_variants"],
     "processed barcode sequencing runs": config["processed_barcode_runs"],
     "variant counts": (variant_count_files, config["variant_counts_dir"]),
-    "antibody selection experiments (grouped)": config["antibody_selection_groups"],
-    "prob escapes for antibody selections": config["prob_escape_dir"],
+    "antibody selection experiments": config["antibody_selections"],
+    "prob escapes for antibody selections": (prob_escape_files, config["prob_escape_dir"]),
     **extra_data_files,
 }
 

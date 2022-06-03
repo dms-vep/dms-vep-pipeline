@@ -144,29 +144,19 @@ def get_antibody_selections(
         == antibody_selections["antibody_library_sample"].nunique()
     )
 
-    return antibody_selections
-
-
-def get_antibody_selection_groups(antibody_selections):
-    """Group selections with same antibody and experiment just different concentrations."""
+    # group selections with same antibody and experiment, just different concentrations
     selection_cols = ["library", "date", "virus_batch", "antibody", "replicate"]
-
-    selection_groups = antibody_selections.assign(
+    antibody_selections = antibody_selections.assign(
         selection_group=lambda x: x[selection_cols].apply(
             lambda r: "_".join(r.values.astype(str)), axis=1
         ),
-        prob_escape_csv=lambda x: config["prob_escape_dir"]
-        + "/"
-        + x["selection_group"]
-        + ".csv",
     )
 
-    assert len(selection_groups) == len(antibody_selections)
-    assert len(selection_groups) == len(
-        selection_groups.groupby([*selection_cols, "antibody_concentration"])
+    assert len(antibody_selections) == len(
+        antibody_selections.groupby([*selection_cols, "antibody_concentration"])
     )
 
-    return selection_groups
+    return antibody_selections
 
 
 def to_csv_if_changed(df, csv_name, **kwargs):
@@ -190,30 +180,3 @@ def to_csv_if_changed(df, csv_name, **kwargs):
             return
     with open(csv_name, "w") as f_out:
         f_out.write(new)
-
-
-def blake2b_checksum(fname):
-    """Returns BLAKE2b checksum of a file."""
-    with open(fname, "rb") as f:
-        data = f.read()
-    return hashlib.blake2b(data).hexdigest()
-
-
-def prob_escape_files(wildcards):
-    """Get prob_escape output files, and adjust timestamps of any not modified.
-
-    Main goal is to back-modify timestamps of files created by `prob_escape` that were
-    were not modified relative to start of pipeline. Somewhat hacky use of checkpointing.
-    """
-    subdir = checkpoints.prob_escape.get(**wildcards).output[0]
-    files = {os.path.abspath(f) for f in glob.glob(f"{subdir}/*.csv")}
-    expected_files = {
-        os.path.abspath(f)
-        for f in antibody_selection_groups["prob_escape_csv"].unique()
-    }
-    assert files == expected_files
-    for f in files:
-        if f in csv_times_checksums:
-            if blake2b_checksum(f) == csv_times_checksums[f]["checksum"]:
-                os.utime(f, ns=csv_times_checksums[f]["ns"])
-    return sorted(files)
