@@ -36,6 +36,10 @@ It has the following columns:
 ## Site numbering
 [site_numbering_map.csv](site_numbering_map.csv): Maps sequential 1, 2, ... numbering of the gene to a "reference" numbering scheme that represents the standard naming of sites for this gene.
 
+## Mutation-type classification
+[data/mutation_design_classification.csv](data/mutation_design_classification.csv) classifies mutations into the different categories of designed mutations.
+Should have columns *sequential_site*, *amino_acid*, and *mutation_type*.
+
 ## Neutralization standard barcodes
 [neutralization_standard_barcodes.csv](neutralization_standard_barcodes.csv) barcodes for the neutralization standard.
 
