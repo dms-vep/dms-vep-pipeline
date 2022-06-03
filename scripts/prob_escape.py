@@ -52,8 +52,8 @@ antibody_selections = pd.read_csv(snakemake.input.antibody_selections).query(
 
 prob_escape, neut_standard_fracs, neutralization = variants.prob_escape(
     selections_df=antibody_selections,
-    min_neut_standard_frac=snakemake.config["prob_escape_min_neut_standard_frac"],
-    min_neut_standard_count=snakemake.config["prob_escape_min_neut_standard_count"],
+    min_neut_standard_frac=snakemake.params.min_neut_standard_frac,
+    min_neut_standard_count=snakemake.params.min_neut_standard_count,
 )
 
 # get the no-antibody count threshold and flag which prob_escape values meet it
@@ -64,10 +64,9 @@ threshold = (
     .aggregate(total_no_antibody_count=pd.NamedAgg("no-antibody_count", "sum"))
     .assign(
         no_antibody_count_threshold=lambda x: (
-            x["total_no_antibody_count"]
-            * snakemake.config["prob_escape_min_no_antibody_frac"]
+            x["total_no_antibody_count"]  * snakemake.params.min_no_antibody_frac
         )
-        .clip(lower=snakemake.config["prob_escape_min_no_antibody_counts"])
+        .clip(lower=snakemake.params.min_no_antibody_counts)
         .round()
         .astype(int)
     )
