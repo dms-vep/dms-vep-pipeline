@@ -27,27 +27,34 @@ barcode_runs = barcode_runs_from_config(
 os.makedirs(os.path.dirname(config["processed_barcode_runs"]), exist_ok=True)
 to_csv_if_changed(barcode_runs, config["processed_barcode_runs"], index=False)
 
+variant_count_files = [
+    os.path.join(config["variant_counts_dir"], f"{library_sample}.csv")
+    for library_sample in barcode_runs.query("exclude_after_counts == 'no'")[
+        "library_sample"
+    ]
+]
+
 antibody_selections = get_antibody_selections(barcode_runs)
 os.makedirs(os.path.dirname(config["antibody_selections"]), exist_ok=True)
 to_csv_if_changed(antibody_selections, config["antibody_selections"], index=False)
 
-antibody_selection_groups = get_antibody_selection_groups(antibody_selections)
-os.makedirs(os.path.dirname(config["antibody_selection_groups"]), exist_ok=True)
-to_csv_if_changed(
-    antibody_selection_groups, config["antibody_selection_groups"], index=False
-)
-
-# Get BLAKE2b checksums and timestamps of *.csv files in `results`. Used
-# below to re-adjust timestamps of some output files that haven't changed.
-# Useful because some notebooks write output files for multiple samples
-# only some of which may be changed from prior runs.
-csv_times_checksums = {
-    os.path.abspath(csv_file): {
-        "checksum": blake2b_checksum(csv_file),
-        "ns": (os.stat(csv_file).st_atime_ns, os.stat(csv_file).st_mtime_ns),
-    }
-    for csv_file in glob.iglob("results/**/*.csv", recursive=True)
+antibody_selection_group_samples = {
+    selection_group: sorted(
+        set(
+            antibody_selections.query("selection_group == @selection_group")[
+                ["antibody_library_sample", "no-antibody_library_sample"]
+            ].values.ravel()
+        )
+    )
+    for selection_group in antibody_selections["selection_group"].unique()
 }
+
+prob_escape_files = [
+    os.path.join(config["prob_escape_dir"], f"{selection_group}_{suffix}.csv")
+    for selection_group in antibody_selections["selection_group"].unique()
+    for suffix in ["prob_escape", "neut_standard_fracs", "neutralization"]
+]
+
 
 # Rules ---------------------------------------------------------------------
 
@@ -165,45 +172,111 @@ rule count_barcodes:
         "scripts/count_barcodes.py"
 
 
-checkpoint variant_counts:
-    """Get and analyze counts of different variants in each sample."""
+rule variant_counts:
+    """Get counts of variants for each sample."""
     input:
-        [
-            os.path.join(config[f"barcode_{ftype}_dir"], f"{library_sample}.csv")
-            for library_sample in barcode_runs["library_sample"]
-            for ftype in ["counts", "counts_invalid", "fates"]
-        ],
-        config["gene_sequence_codon"],
-        config["codon_variants"],
-        config["site_numbering_map"],
-        nb=os.path.join(config["pipeline_path"], "notebooks/variant_counts.ipynb"),
+        barcode_counts=rules.count_barcodes.output.counts,
+        codon_variants=config["codon_variants"],
+        gene_sequence_codon=config["gene_sequence_codon"],
     output:
-        directory(config["variant_counts_dir"]),
-        nb="results/notebooks/variant_counts.ipynb",
+        counts=os.path.join(config["variant_counts_dir"], "{library_sample}.csv"),
+    params:
+        library=lambda wc: barcode_runs.set_index("library_sample").at[
+            wc.library_sample, "library"
+        ],
+        sample=lambda wc: barcode_runs.set_index("library_sample").at[
+            wc.library_sample, "sample"
+        ],
     conda:
         "environment.yml"
     log:
-        os.path.join(config["logdir"], "variant_counts.txt"),
+        os.path.join(config["logdir"], "variant_counts_{library_sample}.txt"),
+    script:
+        "scripts/variant_counts.py"
+
+
+rule analyze_variant_counts:
+    """Analyze counts of different variants in each sample."""
+    input:
+        expand(
+            rules.count_barcodes.output.counts,
+            library_sample=barcode_runs["library_sample"],
+        ),
+        expand(
+            rules.count_barcodes.output.counts_invalid,
+            library_sample=barcode_runs["library_sample"],
+        ),
+        expand(
+            rules.count_barcodes.output.fates,
+            library_sample=barcode_runs["library_sample"],
+        ),
+        variant_count_files,
+        config["gene_sequence_codon"],
+        config["codon_variants"],
+        config["site_numbering_map"],
+        config["processed_barcode_runs"],
+        nb=os.path.join(
+            config["pipeline_path"], "notebooks/analyze_variant_counts.ipynb"
+        ),
+    output:
+        nb="results/notebooks/analyze_variant_counts.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "analyze_variant_counts.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
 
 
-checkpoint prob_escape:
-    """Compute probabilities escape for variants."""
+rule prob_escape:
+    """Compute probabilities of escape for variants."""
     input:
-        variant_count_files,
-        config["antibody_selections"],
-        config["site_numbering_map"],
-        config["codon_variants"],
-        config["antibody_selection_groups"],
-        nb=os.path.join(config["pipeline_path"], "notebooks/prob_escape.ipynb"),
+        gene_sequence_codon=config["gene_sequence_codon"],
+        codon_variants=config["codon_variants"],
+        antibody_selections=config["antibody_selections"],
+        barcode_runs=config["processed_barcode_runs"],
+        site_numbering_map=config["site_numbering_map"],
+        variant_counts=lambda wc: expand(
+            rules.variant_counts.output.counts,
+            library_sample=antibody_selection_group_samples[
+                wc.antibody_selection_group
+            ],
+        ),
     output:
-        directory(config["prob_escape_dir"]),
-        nb="results/notebooks/prob_escape.ipynb",
+        prob_escape=os.path.join(
+            config["prob_escape_dir"], "{antibody_selection_group}_prob_escape.csv"
+        ),
+        neut_standard_fracs=os.path.join(
+            config["prob_escape_dir"],
+            "{antibody_selection_group}_neut_standard_fracs.csv",
+        ),
+        neutralization=os.path.join(
+            config["prob_escape_dir"], "{antibody_selection_group}_neutralization.csv"
+        ),
+    params:
+        library_samples=lambda wc: antibody_selection_group_samples[
+            wc.antibody_selection_group
+        ],
     conda:
         "environment.yml"
     log:
-        os.path.join(config["logdir"], "prob_escape.txt"),
+        os.path.join(config["logdir"], "prob_escape_{antibody_selection_group}.txt"),
+    script:
+        "scripts/prob_escape.py"
+
+
+rule analyze_prob_escape:
+    """Compute probabilities escape for variants."""
+    input:
+        prob_escape_files,
+        config["antibody_selections"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/analyze_prob_escape.ipynb"),
+    output:
+        nb="results/notebooks/analyze_prob_escape.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "analyze_prob_escape.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
 
@@ -212,18 +285,13 @@ rule fit_polyclonal:
     """Fit ``polyclonal`` models."""
     input:
         config["polyclonal_config"],
-        prob_escape_csv=os.path.join(
-            config["prob_escape_dir"], "{antibody_selection_group}.csv"
-        ),
+        prob_escape_csv=rules.prob_escape.output.prob_escape,
         nb=os.path.join(config["pipeline_path"], "notebooks/fit_polyclonal.ipynb"),
     output:
         pickle=os.path.join(
             config["polyclonal_dir"], "{antibody_selection_group}.pickle"
         ),
-        nb=os.path.join(
-            config["polyclonal_dir"],
-            "fit_polyclonal_{antibody_selection_group}.ipynb",
-        ),
+        nb="results/notebooks/fit_polyclonal_{antibody_selection_group}.ipynb",
     threads: 2
     conda:
         "environment.yml"
@@ -234,6 +302,6 @@ rule fit_polyclonal:
         papermill {input.nb} {output.nb} \
             -p prob_escape_csv {input.prob_escape_csv} \
             -p pickle_file {output.pickle} \
-            -p n_threads {threads}
+            -p n_threads {threads} \
             &> {log}
         """

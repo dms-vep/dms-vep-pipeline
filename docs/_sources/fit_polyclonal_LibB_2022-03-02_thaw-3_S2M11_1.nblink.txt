@@ -1,3 +1,3 @@
 {
-    "path": "../polyclonal_fits/fit_polyclonal_LibB_2022-03-02_thaw-3_S2M11_1.ipynb"
+    "path": "../notebooks/fit_polyclonal_LibB_2022-03-02_thaw-3_S2M11_1.ipynb"
 }

@@ -18,7 +18,7 @@
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Compute probabilities of escape for variants in antibody selections" href="prob_escape.html" />
+    <link rel="next" title="Probabilities of escape and neutralization in antibody selections" href="analyze_prob_escape.html" />
     <link rel="prev" title="Build the codon variants" href="build_codon_variants.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -285,7 +285,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Counts-of-variants">
 <h1>Counts of variants<a class="headerlink" href="#Counts-of-variants" title="Permalink to this headline">¶</a></h1>
-<p>This notebook analyzes the counts of the different variants and outputs variant-count files.</p>
+<p>This notebook analyzes the counts of the different variants.</p>
 <p>Import Python modules:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -424,13 +424,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-4453f581bfc743089a447813a494970d"></div>
+<div id="altair-viz-d87df3ad859f4434bd16409d8210da0d"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-4453f581bfc743089a447813a494970d") {
-      outputDiv = document.getElementById("altair-viz-4453f581bfc743089a447813a494970d");
+    if (outputDiv.id !== "altair-viz-d87df3ad859f4434bd16409d8210da0d") {
+      outputDiv = document.getElementById("altair-viz-d87df3ad859f4434bd16409d8210da0d");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -566,13 +566,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-af9e9a1cd12b4bf98f6173b0dead1f0e"></div>
+<div id="altair-viz-a16f7772411e44e4ab98c756cb6f9105"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-af9e9a1cd12b4bf98f6173b0dead1f0e") {
-      outputDiv = document.getElementById("altair-viz-af9e9a1cd12b4bf98f6173b0dead1f0e");
+    if (outputDiv.id !== "altair-viz-a16f7772411e44e4ab98c756cb6f9105") {
+      outputDiv = document.getElementById("altair-viz-a16f7772411e44e4ab98c756cb6f9105");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -709,13 +709,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-0fc275d79d224d508a00d426d58183d3"></div>
+<div id="altair-viz-d79c299c55cb4cf6b3c28d8cef86f5d4"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-0fc275d79d224d508a00d426d58183d3") {
-      outputDiv = document.getElementById("altair-viz-0fc275d79d224d508a00d426d58183d3");
+    if (outputDiv.id !== "altair-viz-d79c299c55cb4cf6b3c28d8cef86f5d4") {
+      outputDiv = document.getElementById("altair-viz-d79c299c55cb4cf6b3c28d8cef86f5d4");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -962,13 +962,13 @@ Top barcode for samples with an invalid barcode in top 10:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-5e90a3291a5741cca63d5084d1d10529"></div>
+<div id="altair-viz-3ebadb4c15774f3dbde714945f4a11cd"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-5e90a3291a5741cca63d5084d1d10529") {
-      outputDiv = document.getElementById("altair-viz-5e90a3291a5741cca63d5084d1d10529");
+    if (outputDiv.id !== "altair-viz-3ebadb4c15774f3dbde714945f4a11cd") {
+      outputDiv = document.getElementById("altair-viz-3ebadb4c15774f3dbde714945f4a11cd");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1082,13 +1082,13 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-de6b3a4d65314e5dad127a3828512979"></div>
+<div id="altair-viz-807a1b903b4941979e9af1f62e30cfaa"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-de6b3a4d65314e5dad127a3828512979") {
-      outputDiv = document.getElementById("altair-viz-de6b3a4d65314e5dad127a3828512979");
+    if (outputDiv.id !== "altair-viz-807a1b903b4941979e9af1f62e30cfaa") {
+      outputDiv = document.getElementById("altair-viz-807a1b903b4941979e9af1f62e30cfaa");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1251,13 +1251,13 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-80ff918640de4a7dba081d392f4714a3"></div>
+<div id="altair-viz-7c07e2e4686d48988779afc266b7934d"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-80ff918640de4a7dba081d392f4714a3") {
-      outputDiv = document.getElementById("altair-viz-80ff918640de4a7dba081d392f4714a3");
+    if (outputDiv.id !== "altair-viz-7c07e2e4686d48988779afc266b7934d") {
+      outputDiv = document.getElementById("altair-viz-7c07e2e4686d48988779afc266b7934d");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1462,13 +1462,13 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-981a7bdf157246b48625e70d30d43271"></div>
+<div id="altair-viz-eb343127ae004194986579fd36f22d0c"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-981a7bdf157246b48625e70d30d43271") {
-      outputDiv = document.getElementById("altair-viz-981a7bdf157246b48625e70d30d43271");
+    if (outputDiv.id !== "altair-viz-eb343127ae004194986579fd36f22d0c") {
+      outputDiv = document.getElementById("altair-viz-eb343127ae004194986579fd36f22d0c");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1802,13 +1802,13 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-e133aae995614490b48b1ac912605bc1"></div>
+<div id="altair-viz-45cbec6bcb744291aa5ecc98de01aa14"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-e133aae995614490b48b1ac912605bc1") {
-      outputDiv = document.getElementById("altair-viz-e133aae995614490b48b1ac912605bc1");
+    if (outputDiv.id !== "altair-viz-45cbec6bcb744291aa5ecc98de01aa14") {
+      outputDiv = document.getElementById("altair-viz-45cbec6bcb744291aa5ecc98de01aa14");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1858,24 +1858,24 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
 </script></div>
 </div>
 </section>
-<section id="Write-variant-counts-to-file">
-<h2>Write variant counts to file<a class="headerlink" href="#Write-variant-counts-to-file" title="Permalink to this headline">¶</a></h2>
-<p>We write a separate variant-counts file for each library/sample pair.</p>
+<section id="Check-counts-are-consistent-with-variant-count-files">
+<h2>Check counts are consistent with variant count files<a class="headerlink" href="#Check-counts-are-consistent-with-variant-count-files" title="Permalink to this headline">¶</a></h2>
+<p>Make sure the variant counts analyzed here are the same ones written to CSV files by the pipeline for each library/sample:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;variant_counts_dir&quot;</span><span class="p">],</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">library_sample</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">variants</span><span class="o">.</span><span class="n">variant_count_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">library_sample</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">variants</span><span class="o">.</span><span class="n">variant_count_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
     <span class="n">barcode_runs</span><span class="p">,</span>
     <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">],</span>
     <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
     <span class="n">validate</span><span class="o">=</span><span class="s2">&quot;many_to_one&quot;</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;library_sample&quot;</span><span class="p">):</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;variant_counts_dir&quot;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">library_sample</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> counts to </span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="p">(</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Checking counts in </span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;cannot find </span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_frame_equal</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">na_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
         <span class="n">df</span><span class="p">[</span>
             <span class="p">[</span>
                 <span class="s2">&quot;barcode&quot;</span><span class="p">,</span>
@@ -1886,7 +1886,7 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
             <span class="p">]</span>
         <span class="p">]</span>
         <span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;barcode&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
-        <span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -1896,40 +1896,32 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Writing 6726 counts to results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_1.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_2.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_1.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_2.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_1.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_2.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-02-10a_thaw-3_no-antibody_control_1.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-02-10a_thaw-3_no-antibody_control_2.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_1.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_2.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_1.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_2.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_1.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_2.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-03-02_thaw-3_no-antibody_control_1.csv
-Writing 6726 counts to results/variant_counts/LibA_2022-03-02_thaw-3_no-antibody_control_2.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_antibody_REGN10933_0.15_1.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_antibody_REGN10933_0.15_2.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_antibody_REGN10933_5.58_1.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_antibody_REGN10933_5.58_2.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_antibody_S2M11_1.2328_2.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_antibody_S2M11_4.9314_1.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_antibody_S2M11_4.9314_2.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_no-antibody_control_1.csv
-Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_no-antibody_control_2.csv
+Checking counts in results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_1.csv
+Checking counts in results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_2.csv
+Checking counts in results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_1.csv
+Checking counts in results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_2.csv
+Checking counts in results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_1.csv
+Checking counts in results/variant_counts/LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_2.csv
+Checking counts in results/variant_counts/LibA_2022-02-10a_thaw-3_no-antibody_control_1.csv
+Checking counts in results/variant_counts/LibA_2022-02-10a_thaw-3_no-antibody_control_2.csv
+Checking counts in results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_1.csv
+Checking counts in results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_2.csv
+Checking counts in results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_1.csv
+Checking counts in results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_2.csv
+Checking counts in results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_1.csv
+Checking counts in results/variant_counts/LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_2.csv
+Checking counts in results/variant_counts/LibA_2022-03-02_thaw-3_no-antibody_control_1.csv
+Checking counts in results/variant_counts/LibA_2022-03-02_thaw-3_no-antibody_control_2.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_antibody_REGN10933_0.15_1.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_antibody_REGN10933_0.15_2.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_antibody_REGN10933_5.58_1.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_antibody_REGN10933_5.58_2.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_antibody_S2M11_1.2328_2.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_antibody_S2M11_4.9314_1.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_antibody_S2M11_4.9314_2.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_no-antibody_control_1.csv
+Checking counts in results/variant_counts/LibB_2022-03-02_thaw-3_no-antibody_control_2.csv
 </pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>
@@ -1948,7 +1940,7 @@ Writing 7366 counts to results/variant_counts/LibB_2022-03-02_thaw-3_no-antibody
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/variant_counts.nblink.txt"
+      <a href="_sources/analyze_variant_counts.nblink.txt"
           rel="nofollow">Page source</a>
     </div>
 
