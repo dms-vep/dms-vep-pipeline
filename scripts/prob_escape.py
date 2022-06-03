@@ -64,7 +64,7 @@ threshold = (
     .aggregate(total_no_antibody_count=pd.NamedAgg("no-antibody_count", "sum"))
     .assign(
         no_antibody_count_threshold=lambda x: (
-            x["total_no_antibody_count"]  * snakemake.params.min_no_antibody_frac
+            x["total_no_antibody_count"] * snakemake.params.min_no_antibody_frac
         )
         .clip(lower=snakemake.params.min_no_antibody_counts)
         .round()
