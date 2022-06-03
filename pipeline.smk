@@ -158,12 +158,15 @@ rule count_barcodes:
             )
         ),
         variants=config["codon_variants"],
+        barcode_runs=config["processed_barcode_runs"],
     output:
         counts=os.path.join(config["barcode_counts_dir"], "{library_sample}.csv"),
         counts_invalid=os.path.join(
             config["barcode_counts_invalid_dir"], "{library_sample}.csv"
         ),
         fates=os.path.join(config["barcode_fates_dir"], "{library_sample}.csv"),
+    params:
+        parser_params=config["illumina_barcode_parser_params"],
     conda:
         "environment.yml"
     log:
@@ -257,6 +260,10 @@ rule prob_escape:
         library_samples=lambda wc: antibody_selection_group_samples[
             wc.antibody_selection_group
         ],
+        min_neut_standard_frac=config["prob_escape_min_neut_standard_frac"],
+        min_neut_standard_count=config["prob_escape_min_neut_standard_count"],
+        min_no_antibody_frac=config["prob_escape_min_no_antibody_frac"],
+        min_no_antibody_counts=config["prob_escape_min_no_antibody_counts"],
     conda:
         "environment.yml"
     log:

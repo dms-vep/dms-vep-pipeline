@@ -10,7 +10,7 @@ import pandas as pd
 def pacbio_runs_from_config(pacbio_runs_csv):
     """Data frame of PacBio runs from input CSV."""
     pacbio_runs = (
-        pd.read_csv(pacbio_runs_csv, dtype=str)
+        pd.read_csv(pacbio_runs_csv, dtype=str, index_col=False)
         .assign(pacbioRun=lambda x: x["library"] + "_" + x["run"].astype(str))
         .set_index("pacbioRun")
     )
@@ -24,7 +24,7 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
     def process_sample(row):
         """Internal function that processes rows in data frame."""
         if row["library"] not in valid_libraries:
-            raise ValueError(f"library {row['library']} not in {valid_libraries=}")
+            raise ValueError(f"{row['library']=} not in {valid_libraries=}\n{row=}")
         label_cols = ["date", "virus_batch", "sample_type"]
         if row["sample_type"] == "antibody":
             label_cols += ["antibody", "antibody_concentration"]
@@ -45,7 +45,7 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
         elif s.lower() in {"yes", "true"}:
             return "yes"
 
-    barcode_runs = pd.read_csv(barcode_runs_csv).assign(
+    barcode_runs = pd.read_csv(barcode_runs_csv, index_col=False).assign(
         sample=lambda x: x.apply(process_sample, axis=1),
         library_sample=lambda x: x["library"] + "_" + x["sample"],
         fastq_R1=lambda x: x["fastq_R1"].map(
