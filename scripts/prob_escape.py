@@ -85,6 +85,7 @@ prob_escape = (
             )
         ),
     )
+    .merge(antibody_selections[["library", "antibody_sample", "no-antibody_sample", "antibody", "antibody_concentration"]], how="left", validate="many_to_one")
 )
 
 prob_escape.to_csv(snakemake.output.prob_escape, index=False, float_format="%.4f", na_rep="nan")

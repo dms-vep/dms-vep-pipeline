@@ -266,10 +266,7 @@ rule fit_polyclonal:
         pickle=os.path.join(
             config["polyclonal_dir"], "{antibody_selection_group}.pickle"
         ),
-#        nb=os.path.join(
-#            config["polyclonal_dir"],
-#            "fit_polyclonal_{antibody_selection_group}.ipynb",
-#        ),
+        nb="results/notebooks/fit_polyclonal_{antibody_selection_group}.ipynb",
     threads: 2
     conda:
         "environment.yml"
@@ -280,6 +277,6 @@ rule fit_polyclonal:
         papermill {input.nb} {output.nb} \
             -p prob_escape_csv {input.prob_escape_csv} \
             -p pickle_file {output.pickle} \
-            -p n_threads {threads}
+            -p n_threads {threads} \
             &> {log}
         """
