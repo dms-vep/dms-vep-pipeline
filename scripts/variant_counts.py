@@ -30,8 +30,15 @@ variants.addSampleCounts(
 )
 
 (
-    variants.variant_count_df
-    [["barcode", "count", "codon_substitutions", "aa_substitutions", "variant_call_support"]]
+    variants.variant_count_df[
+        [
+            "barcode",
+            "count",
+            "codon_substitutions",
+            "aa_substitutions",
+            "variant_call_support",
+        ]
+    ]
     .sort_values(["count", "barcode"], ascending=[False, True])
     .to_csv(snakemake.output.counts, index=False)
 )

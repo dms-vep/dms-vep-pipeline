@@ -29,9 +29,7 @@ for label, link in snakemake.params.data_files.items():
         assert len(link) == 2
         link = link[1]
     assert isinstance(link, str)
-    data_file_links.append(
-        f"- `{label} <{blob_path}/{results_relpath}/{link}>`_"
-    )
+    data_file_links.append(f"- `{label} <{blob_path}/{results_relpath}/{link}>`_")
 data_file_links = "\n".join(data_file_links)
 
 with open(snakemake.output.index, "w") as f_obj:

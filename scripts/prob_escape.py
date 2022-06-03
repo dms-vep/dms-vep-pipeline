@@ -3,9 +3,9 @@
 
 import sys
 
-import alignparse.utils
-
 import Bio.SeqIO
+
+import alignparse.utils
 
 import dms_variants.codonvarianttable
 
@@ -27,19 +27,27 @@ variants = dms_variants.codonvarianttable.CodonVariantTable(
 
 barcode_runs = pd.read_csv(snakemake.input.barcode_runs)
 
-variant_counts = pd.concat([
-    pd.read_csv(variant_counts, na_filter=None).assign(library_sample=library_sample)
-    for variant_counts, library_sample in
-    zip(snakemake.input.variant_counts, snakemake.params.library_samples)
-]).merge(barcode_runs[["library", "sample", "library_sample"]],
-         on="library_sample", validate="many_to_one", how="left")
+variant_counts = pd.concat(
+    [
+        pd.read_csv(variant_counts, na_filter=None).assign(
+            library_sample=library_sample
+        )
+        for variant_counts, library_sample in zip(
+            snakemake.input.variant_counts, snakemake.params.library_samples
+        )
+    ]
+).merge(
+    barcode_runs[["library", "sample", "library_sample"]],
+    on="library_sample",
+    validate="many_to_one",
+    how="left",
+)
 assert variant_counts.notnull().all().all()
 
 variants.add_sample_counts_df(variant_counts)
 
-antibody_selections = (
-    pd.read_csv(snakemake.input.antibody_selections)
-    .query("selection_group == @snakemake.wildcards.antibody_selection_group")
+antibody_selections = pd.read_csv(snakemake.input.antibody_selections).query(
+    "selection_group == @snakemake.wildcards.antibody_selection_group"
 )
 
 prob_escape, neut_standard_fracs, neutralization = variants.prob_escape(
@@ -50,16 +58,25 @@ prob_escape, neut_standard_fracs, neutralization = variants.prob_escape(
 
 # get the no-antibody count threshold and flag which prob_escape values meet it
 threshold = (
-    prob_escape.groupby(["library", "antibody_sample", "no-antibody_sample"], as_index=False)
+    prob_escape.groupby(
+        ["library", "antibody_sample", "no-antibody_sample"], as_index=False
+    )
     .aggregate(total_no_antibody_count=pd.NamedAgg("no-antibody_count", "sum"))
     .assign(
         no_antibody_count_threshold=lambda x: (
-            x["total_no_antibody_count"] * snakemake.config["prob_escape_min_no_antibody_frac"]
-        ).clip(lower=snakemake.config["prob_escape_min_no_antibody_counts"]).round().astype(int)
+            x["total_no_antibody_count"]
+            * snakemake.config["prob_escape_min_no_antibody_frac"]
+        )
+        .clip(lower=snakemake.config["prob_escape_min_no_antibody_counts"])
+        .round()
+        .astype(int)
     )
 )
 prob_escape = prob_escape.merge(
-    threshold, on=["library", "antibody_sample", "no-antibody_sample"], how="left", validate="many_to_one",
+    threshold,
+    on=["library", "antibody_sample", "no-antibody_sample"],
+    how="left",
+    validate="many_to_one",
 )
 assert prob_escape["no_antibody_count_threshold"].notnull().all()
 
@@ -72,9 +89,7 @@ renumber = alignparse.utils.MutationRenumber(
     wt_nt_col=None,
 )
 prob_escape = (
-    prob_escape.drop(
-        columns=["codon_substitutions", "n_codon_substitutions"]
-    )
+    prob_escape.drop(columns=["codon_substitutions", "n_codon_substitutions"])
     .rename(columns={"aa_substitutions": "aa_substitutions_sequential"})
     .assign(
         aa_substitutions=lambda x: (
@@ -85,9 +100,25 @@ prob_escape = (
             )
         ),
     )
-    .merge(antibody_selections[["library", "antibody_sample", "no-antibody_sample", "antibody", "antibody_concentration"]], how="left", validate="many_to_one")
+    .merge(
+        antibody_selections[
+            [
+                "library",
+                "antibody_sample",
+                "no-antibody_sample",
+                "antibody",
+                "antibody_concentration",
+            ]
+        ],
+        how="left",
+        validate="many_to_one",
+    )
 )
 
-prob_escape.to_csv(snakemake.output.prob_escape, index=False, float_format="%.4f", na_rep="nan")
-neut_standard_fracs.to_csv(snakemake.output.neut_standard_fracs, index=False, float_format="%.4g")
+prob_escape.to_csv(
+    snakemake.output.prob_escape, index=False, float_format="%.4f", na_rep="nan"
+)
+neut_standard_fracs.to_csv(
+    snakemake.output.neut_standard_fracs, index=False, float_format="%.4g"
+)
 neutralization.to_csv(snakemake.output.neutralization, index=False, float_format="%.4g")

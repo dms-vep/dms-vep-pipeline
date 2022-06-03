@@ -39,12 +39,13 @@ os.makedirs(os.path.dirname(config["antibody_selections"]), exist_ok=True)
 to_csv_if_changed(antibody_selections, config["antibody_selections"], index=False)
 
 antibody_selection_group_samples = {
-    selection_group: sorted(set(
-        antibody_selections
-        .query("selection_group == @selection_group")
-        [["antibody_library_sample", "no-antibody_library_sample"]]
-        .values.ravel()
-    ))
+    selection_group: sorted(
+        set(
+            antibody_selections.query("selection_group == @selection_group")[
+                ["antibody_library_sample", "no-antibody_library_sample"]
+            ].values.ravel()
+        )
+    )
     for selection_group in antibody_selections["selection_group"].unique()
 }
 
@@ -180,8 +181,12 @@ rule variant_counts:
     output:
         counts=os.path.join(config["variant_counts_dir"], "{library_sample}.csv"),
     params:
-        library=lambda wc: barcode_runs.set_index("library_sample").at[wc.library_sample, "library"],
-        sample=lambda wc: barcode_runs.set_index("library_sample").at[wc.library_sample, "sample"],
+        library=lambda wc: barcode_runs.set_index("library_sample").at[
+            wc.library_sample, "library"
+        ],
+        sample=lambda wc: barcode_runs.set_index("library_sample").at[
+            wc.library_sample, "sample"
+        ],
     conda:
         "environment.yml"
     log:
@@ -193,9 +198,18 @@ rule variant_counts:
 rule analyze_variant_counts:
     """Analyze counts of different variants in each sample."""
     input:
-        expand(rules.count_barcodes.output.counts, library_sample=barcode_runs["library_sample"]),
-        expand(rules.count_barcodes.output.counts_invalid, library_sample=barcode_runs["library_sample"]),
-        expand(rules.count_barcodes.output.fates, library_sample=barcode_runs["library_sample"]),
+        expand(
+            rules.count_barcodes.output.counts,
+            library_sample=barcode_runs["library_sample"],
+        ),
+        expand(
+            rules.count_barcodes.output.counts_invalid,
+            library_sample=barcode_runs["library_sample"],
+        ),
+        expand(
+            rules.count_barcodes.output.fates,
+            library_sample=barcode_runs["library_sample"],
+        ),
         variant_count_files,
         config["gene_sequence_codon"],
         config["codon_variants"],
@@ -224,14 +238,25 @@ rule prob_escape:
         site_numbering_map=config["site_numbering_map"],
         variant_counts=lambda wc: expand(
             rules.variant_counts.output.counts,
-            library_sample=antibody_selection_group_samples[wc.antibody_selection_group],
+            library_sample=antibody_selection_group_samples[
+                wc.antibody_selection_group
+            ],
         ),
     output:
-        prob_escape=os.path.join(config["prob_escape_dir"], "{antibody_selection_group}_prob_escape.csv"),
-        neut_standard_fracs=os.path.join(config["prob_escape_dir"], "{antibody_selection_group}_neut_standard_fracs.csv"),
-        neutralization=os.path.join(config["prob_escape_dir"], "{antibody_selection_group}_neutralization.csv"),
+        prob_escape=os.path.join(
+            config["prob_escape_dir"], "{antibody_selection_group}_prob_escape.csv"
+        ),
+        neut_standard_fracs=os.path.join(
+            config["prob_escape_dir"],
+            "{antibody_selection_group}_neut_standard_fracs.csv",
+        ),
+        neutralization=os.path.join(
+            config["prob_escape_dir"], "{antibody_selection_group}_neutralization.csv"
+        ),
     params:
-        library_samples=lambda wc: antibody_selection_group_samples[wc.antibody_selection_group]
+        library_samples=lambda wc: antibody_selection_group_samples[
+            wc.antibody_selection_group
+        ],
     conda:
         "environment.yml"
     log:

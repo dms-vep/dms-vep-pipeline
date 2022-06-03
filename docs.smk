@@ -58,7 +58,10 @@ data_files = {
     "processed barcode sequencing runs": config["processed_barcode_runs"],
     "variant counts": (variant_count_files, config["variant_counts_dir"]),
     "antibody selection experiments": config["antibody_selections"],
-    "prob escapes for antibody selections": (prob_escape_files, config["prob_escape_dir"]),
+    "prob escapes for antibody selections": (
+        prob_escape_files,
+        config["prob_escape_dir"],
+    ),
     **extra_data_files,
 }
 
@@ -112,11 +115,12 @@ rule make_nblink:
 
 rule subindex:
     """Make ``*.rst`` subindex."""
+    # regex "a^" never matches: https://stackoverflow.com/a/940840
     wildcard_constraints:
         subindex=(
             "|".join(re.escape(subindex) for subindex in nb_subindices)
-            if nb_subindices else
-            "a^"  # never matches: https://stackoverflow.com/a/940840
+        if nb_subindices
+        else "a^"
         ),
     input:
         lambda wc: nb_subindices[wc.subindex],
