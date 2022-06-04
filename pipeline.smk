@@ -219,10 +219,15 @@ rule analyze_variant_counts:
         config["site_numbering_map"],
         config["processed_barcode_runs"],
         nb=os.path.join(
-            config["pipeline_path"], "notebooks/analyze_variant_counts.ipynb"
+            config["pipeline_path"],
+            "notebooks/analyze_variant_counts.ipynb",
         ),
     output:
         nb="results/notebooks/analyze_variant_counts.ipynb",
+        avg_counts_plot=config["variant_avg_counts_plot"],
+        avg_counts_csv=config["variant_avg_counts_csv"],
+    params:
+        config["min_avg_counts"],
     conda:
         "environment.yml"
     log:
@@ -231,9 +236,29 @@ rule analyze_variant_counts:
         "papermill {input.nb} {output.nb} &> {log}"
 
 
+rule check_adequate_variant_counts:
+    """Check samples not specified for `exclude_after_counts` have adequate counts."""
+    input:
+        avg_counts_csv=rules.analyze_variant_counts.output.avg_counts_csv,
+        avg_counts_plot=rules.analyze_variant_counts.output.avg_counts_plot,
+        nb=rules.analyze_variant_counts.output.nb,
+    output:
+        # create flag file if all counts adequate
+        passed=touch(os.path.join(config["variant_counts_dir"], "adequate_counts.flag")),
+    params:
+        min_avg_counts=config["min_avg_counts"],
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "check_adequate_variant_counts.txt"),
+    script:
+        "scripts/check_adequate_variant_counts.py"
+
+
 rule prob_escape:
     """Compute probabilities of escape for variants."""
     input:
+        rules.check_adequate_variant_counts.output.passed,
         gene_sequence_codon=config["gene_sequence_codon"],
         codon_variants=config["codon_variants"],
         antibody_selections=config["antibody_selections"],
