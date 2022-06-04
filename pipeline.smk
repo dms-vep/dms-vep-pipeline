@@ -299,7 +299,7 @@ rule fit_polyclonal:
             config["polyclonal_dir"], "{antibody_selection_group}.pickle"
         ),
         nb="results/notebooks/fit_polyclonal_{antibody_selection_group}.ipynb",
-    threads: 2
+    threads: config["fit_polyclonal_threads"]
     conda:
         "environment.yml"
     log:

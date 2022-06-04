@@ -3,7 +3,7 @@
 # default configuration for monoclonal antibodies (mAbs)
 mAb_default: &mAb_default
   max_epitopes: 1
-  n_bootstrap_samples: 25
+  n_bootstrap_samples: 10  # make larger (50-100) for non-test examples
   reg_escape_weight: 0.1
   reg_spread_weight: 0.25
   reg_activity_weight: 1.0
@@ -13,7 +13,7 @@ mAb_default: &mAb_default
 # default configuration of polyclonal sera
 sera_default: &sera_default
   max_epitopes: 4
-  n_bootstrap_samples: 25
+  n_bootstrap_samples: 10  # make larger (50-100) for non-test examples
   reg_escape_weight: 0.1
   reg_spread_weight: 0.25
   reg_activity_weight: 1.0
