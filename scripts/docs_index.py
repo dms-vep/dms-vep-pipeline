@@ -50,7 +50,7 @@ Click :download:`here <{filegraph}>` for the more detailed filegraph,
 and :download:`here <{dag}>` for the even more detailed DAG (directed acyclic graph).
 
 .. image:: {rulegraph}
-   :width: 600
+   :width: 800
 
 Analysis notebooks
 ------------------

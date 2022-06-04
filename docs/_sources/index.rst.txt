@@ -13,7 +13,7 @@ Click :download:`here <../../results/docs_source/filegraph.svg>` for the more de
 and :download:`here <../../results/docs_source/dag.svg>` for the even more detailed DAG (directed acyclic graph).
 
 .. image:: ../../results/docs_source/rulegraph.svg
-   :width: 600
+   :width: 800
 
 Analysis notebooks
 ------------------
