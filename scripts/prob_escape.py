@@ -79,19 +79,20 @@ prob_escape = prob_escape.merge(
 )
 assert prob_escape["no_antibody_count_threshold"].notnull().all()
 
-# renumber aa_substitutions from sequential to refernece numbering, also keep sequential
+# renumber aa_substitutions in reference numbering, also keep sequential
 # numbering in column `aa_substitutions_sequential`. Also drop a few unneeded columns.
 renumber = alignparse.utils.MutationRenumber(
     number_mapping=pd.read_csv(snakemake.input.site_numbering_map),
     old_num_col="sequential_site",
     new_num_col="reference_site",
     wt_nt_col=None,
+    allow_letter_suffixed_numbers=True,
 )
 prob_escape = (
     prob_escape.drop(columns=["codon_substitutions", "n_codon_substitutions"])
     .rename(columns={"aa_substitutions": "aa_substitutions_sequential"})
     .assign(
-        aa_substitutions=lambda x: (
+        aa_substitutions_reference=lambda x: (
             x["aa_substitutions_sequential"].apply(
                 renumber.renumber_muts,
                 allow_gaps=True,
