@@ -23,9 +23,9 @@ It has the following columns:
  - *virus_batch*: batch of virus used for the experiment.
  - *library*: which virus library was used.
  - *sample_type*: can be one of the following:
-   + *VSVG_control*: entry mediated by VSVG
+   + *no-VEP_control*: entry not mediated be VEP of interest. You can also use synonyms *plasmid* and *VSVG_control* to get same behaviour.
    + *no-antibody_control*: entry mediated by VEP of interest
-   + *antibody*: encompasses sera and antibodies
+   + *antibody*: encompasses sera and antibody selections on the VEP of interest
  - *antibody*: name of the antibody if this sample has *sample_type* of *antibody*
  - *antibody_concentration*: concentration of antibody if this sample has *sample_type* of antibody. For sera, should be a fraction < 1 giving dilution (**not** a dilution factor).
  - *replicate*: experimental replicate.
