@@ -363,69 +363,79 @@ Read gene of length 3753 nucleotides
 </div>
 <section id="Identify-strand-exchange-and-filter-CCSs-known-to-have-it">
 <h2>Identify strand exchange and filter CCSs known to have it<a class="headerlink" href="#Identify-strand-exchange-and-filter-CCSs-known-to-have-it" title="Permalink to this headline">¶</a></h2>
-<p>Assign each CCS by which variant it is:</p>
+<p>We may have variant tags at the end of eac read which allow us to quantify strand exchange and filter out some strand exchange (that between variants with different tags):</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variant_tags</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;variant_tags&quot;</span><span class="p">]</span>
-<span class="n">display</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">variant_tags</span><span class="p">))</span>
 
-<span class="c1"># invert dictionary so tag identities given by nucleotide identity</span>
-<span class="n">variant_tags_by_nt</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">tag</span><span class="p">:</span> <span class="p">{</span><span class="n">val</span><span class="p">:</span> <span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">vals</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span> <span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">vals</span> <span class="ow">in</span> <span class="n">variant_tags</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-<span class="p">}</span>
-<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
-    <span class="nb">len</span><span class="p">(</span><span class="n">d1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">variant_tags</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">variant_tags_by_nt</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-<span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">variant_tags</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No variant tags specified, so cannot look for strand exchange&quot;</span><span class="p">)</span>
 
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">variant_tags</span><span class="p">))</span>
 
-<span class="c1"># function to assign strand exchange status</span>
-<span class="k">def</span> <span class="nf">classify_strand_exchange</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-    <span class="n">tags</span> <span class="o">=</span> <span class="nb">list</span><span class="p">({</span><span class="n">row</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">variant_tags</span><span class="p">})</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">tags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="s2">&quot;wildtype&quot;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;partially wildtype&quot;</span>
-    <span class="k">elif</span> <span class="s2">&quot;invalid&quot;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;invalid nucleotide&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;strand exchange&quot;</span>
-
-
-<span class="c1"># assign strand exchange status</span>
-<span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">variant_tags_by_nt</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">aligned_ccs</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">aligned_ccs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">_sequence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;invalid&quot;</span><span class="p">)</span>
-<span class="n">aligned_ccs</span><span class="p">[</span><span class="s2">&quot;strand_exchange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aligned_ccs</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">classify_strand_exchange</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1"># get summary stats</span>
-<span class="n">strand_exchange_stats</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">aligned_ccs</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;pacbioRun&quot;</span><span class="p">,</span> <span class="s2">&quot;strand_exchange&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">n_CCSs</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;query_name&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">))</span>
-    <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
-        <span class="n">fraction</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;n_CCSs&quot;</span><span class="p">]</span>
-        <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;pacbioRun&quot;</span><span class="p">)[</span><span class="s2">&quot;n_CCSs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+    <span class="c1"># invert dictionary so tag identities given by nucleotide identity</span>
+    <span class="n">variant_tags_by_nt</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">tag</span><span class="p">:</span> <span class="p">{</span><span class="n">val</span><span class="p">:</span> <span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">vals</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">vals</span> <span class="ow">in</span> <span class="n">variant_tags</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">d1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">variant_tags</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">variant_tags_by_nt</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="p">)</span>
-<span class="p">)</span>
 
-<span class="c1"># plot summary stats</span>
-<span class="n">strand_exchange_chart</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">strand_exchange_stats</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="s2">&quot;n_CCSs:Q&quot;</span><span class="p">,</span>
-        <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span>
-            <span class="s2">&quot;strand_exchange:N&quot;</span><span class="p">,</span>
-            <span class="n">axis</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
-        <span class="p">),</span>
-        <span class="n">facet</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Facet</span><span class="p">(</span><span class="s2">&quot;pacbioRun&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
-        <span class="n">tooltip</span><span class="o">=</span><span class="n">strand_exchange_stats</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+    <span class="c1"># function to assign strand exchange status</span>
+    <span class="k">def</span> <span class="nf">classify_strand_exchange</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="nb">list</span><span class="p">({</span><span class="n">row</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">variant_tags</span><span class="p">})</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">&quot;wildtype&quot;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;partially wildtype&quot;</span>
+        <span class="k">elif</span> <span class="s2">&quot;invalid&quot;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;invalid nucleotide&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;strand exchange&quot;</span>
+
+    <span class="c1"># assign strand exchange status</span>
+    <span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">variant_tags_by_nt</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">aligned_ccs</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">aligned_ccs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">_sequence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;invalid&quot;</span><span class="p">)</span>
+    <span class="n">aligned_ccs</span><span class="p">[</span><span class="s2">&quot;strand_exchange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aligned_ccs</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">classify_strand_exchange</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># get summary stats</span>
+    <span class="n">strand_exchange_stats</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">aligned_ccs</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;pacbioRun&quot;</span><span class="p">,</span> <span class="s2">&quot;strand_exchange&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">n_CCSs</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;query_name&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+            <span class="n">fraction</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;n_CCSs&quot;</span><span class="p">]</span>
+            <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;pacbioRun&quot;</span><span class="p">)[</span><span class="s2">&quot;n_CCSs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="p">)</span>
-    <span class="o">.</span><span class="n">mark_bar</span><span class="p">()</span>
-    <span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">resolve_scale</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;independent&quot;</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">strand_exchange_chart</span><span class="p">)</span>
+
+    <span class="c1"># plot summary stats</span>
+    <span class="n">strand_exchange_chart</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">strand_exchange_stats</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="s2">&quot;n_CCSs:Q&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span>
+                <span class="s2">&quot;strand_exchange:N&quot;</span><span class="p">,</span>
+                <span class="n">axis</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+            <span class="p">),</span>
+            <span class="n">facet</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Facet</span><span class="p">(</span><span class="s2">&quot;pacbioRun&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+            <span class="n">tooltip</span><span class="o">=</span><span class="n">strand_exchange_stats</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">mark_bar</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">resolve_scale</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;independent&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">strand_exchange_chart</span><span class="p">)</span>
+
+    <span class="c1"># Filter out CCSs with strand exchange. Note that this approach is only</span>
+    <span class="c1"># expected to catch ~half of CCSs with strand exchange.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">aligned_ccs</span><span class="p">)</span><span class="si">}</span><span class="s2"> before filtering.&quot;</span><span class="p">)</span>
+    <span class="n">aligned_ccs</span> <span class="o">=</span> <span class="n">aligned_ccs</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;strand_exchange != &quot;strand exchange&quot;&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">aligned_ccs</span><span class="p">)</span><span class="si">}</span><span class="s2"> after filtering.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -475,17 +485,17 @@ Read gene of length 3753 nucleotides
 </table>
 </div></div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-33c282fcaded4b508553715ac442fc77"></div>
+<div id="altair-viz-a866db0b70d246b2ab0de27ea0e3380d"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-33c282fcaded4b508553715ac442fc77") {
-      outputDiv = document.getElementById("altair-viz-33c282fcaded4b508553715ac442fc77");
+    if (outputDiv.id !== "altair-viz-a866db0b70d246b2ab0de27ea0e3380d") {
+      outputDiv = document.getElementById("altair-viz-a866db0b70d246b2ab0de27ea0e3380d");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -534,17 +544,6 @@ Read gene of length 3753 nucleotides
   })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}}, "data": {"name": "data-d4d26e8e24a2ae1fd257b440a814fe59"}, "mark": "bar", "encoding": {"facet": {"columns": 2, "field": "pacbioRun", "title": null, "type": "nominal"}, "tooltip": [{"field": "pacbioRun", "type": "nominal"}, {"field": "strand_exchange", "type": "nominal"}, {"field": "n_CCSs", "type": "quantitative"}, {"field": "fraction", "type": "quantitative"}], "x": {"field": "n_CCSs", "type": "quantitative"}, "y": {"axis": {"title": null}, "field": "strand_exchange", "type": "nominal"}}, "height": 100, "resolve": {"scale": {"x": "independent"}}, "width": 250, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-d4d26e8e24a2ae1fd257b440a814fe59": [{"pacbioRun": "LibA_211105", "strand_exchange": "invalid nucleotide", "n_CCSs": 11, "fraction": 0.00040172376013439487}, {"pacbioRun": "LibA_211105", "strand_exchange": "partially wildtype", "n_CCSs": 899, "fraction": 0.03283178730552918}, {"pacbioRun": "LibA_211105", "strand_exchange": "strand exchange", "n_CCSs": 166, "fraction": 0.006062376743846323}, {"pacbioRun": "LibA_211105", "strand_exchange": "variant_1", "n_CCSs": 14906, "fraction": 0.5443722153239354}, {"pacbioRun": "LibA_211105", "strand_exchange": "variant_2", "n_CCSs": 11382, "fraction": 0.4156745307136075}, {"pacbioRun": "LibA_211105", "strand_exchange": "wildtype", "n_CCSs": 18, "fraction": 0.0006573661529471916}, {"pacbioRun": "LibA_220124", "strand_exchange": "invalid nucleotide", "n_CCSs": 22, "fraction": 0.0008175399479747306}, {"pacbioRun": "LibA_220124", "strand_exchange": "partially wildtype", "n_CCSs": 933, "fraction": 0.0346711259754738}, {"pacbioRun": "LibA_220124", "strand_exchange": "strand exchange", "n_CCSs": 157, "fraction": 0.005834262356001487}, {"pacbioRun": "LibA_220124", "strand_exchange": "variant_1", "n_CCSs": 14547, "fraction": 0.5405797101449276}, {"pacbioRun": "LibA_220124", "strand_exchange": "variant_2", "n_CCSs": 11236, "fraction": 0.4175399479747306}, {"pacbioRun": "LibA_220124", "strand_exchange": "wildtype", "n_CCSs": 15, "fraction": 0.0005574136008918618}, {"pacbioRun": "LibB_211105", "strand_exchange": "invalid nucleotide", "n_CCSs": 14, "fraction": 0.0004926975189160654}, {"pacbioRun": "LibB_211105", "strand_exchange": "partially wildtype", "n_CCSs": 1116, "fraction": 0.039275030793594935}, {"pacbioRun": "LibB_211105", "strand_exchange": "strand exchange", "n_CCSs": 152, "fraction": 0.005349287348231568}, {"pacbioRun": "LibB_211105", "strand_exchange": "variant_1", "n_CCSs": 16429, "fraction": 0.5781805384480028}, {"pacbioRun": "LibB_211105", "strand_exchange": "variant_2", "n_CCSs": 10688, "fraction": 0.3761393630124934}, {"pacbioRun": "LibB_211105", "strand_exchange": "wildtype", "n_CCSs": 16, "fraction": 0.0005630828787612177}, {"pacbioRun": "LibB_220124", "strand_exchange": "invalid nucleotide", "n_CCSs": 20, "fraction": 0.0007104795737122557}, {"pacbioRun": "LibB_220124", "strand_exchange": "partially wildtype", "n_CCSs": 1125, "fraction": 0.03996447602131439}, {"pacbioRun": "LibB_220124", "strand_exchange": "strand exchange", "n_CCSs": 137, "fraction": 0.004866785079928952}, {"pacbioRun": "LibB_220124", "strand_exchange": "variant_1", "n_CCSs": 16301, "fraction": 0.5790763765541741}, {"pacbioRun": "LibB_220124", "strand_exchange": "variant_2", "n_CCSs": 10560, "fraction": 0.37513321492007107}, {"pacbioRun": "LibB_220124", "strand_exchange": "wildtype", "n_CCSs": 7, "fraction": 0.0002486678507992895}]}}, {"mode": "vega-lite"});
 </script></div>
 </div>
-<p>Filter out CCSs with strand exchange. Note that this approach is only expected to catch ~half of CCSs with strand exchange.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">aligned_ccs</span><span class="p">)</span><span class="si">}</span><span class="s2"> before filtering.&quot;</span><span class="p">)</span>
-<span class="n">aligned_ccs</span> <span class="o">=</span> <span class="n">aligned_ccs</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;strand_exchange != &quot;strand exchange&quot;&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">aligned_ccs</span><span class="p">)</span><span class="si">}</span><span class="s2"> after filtering.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
@@ -559,7 +558,7 @@ There are 110245 after filtering.
 <h2>Filter CCSs for accuracy<a class="headerlink" href="#Filter-CCSs-for-accuracy" title="Permalink to this headline">¶</a></h2>
 <p>Plot the gene and barcode accuracy for each CCS, and only keep those above an accuracy threshold:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_error_rate</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;max_ccs_error_rate&quot;</span><span class="p">]</span>  <span class="c1"># require error rate &lt;= this to keep CCS</span>
@@ -633,13 +632,13 @@ There are 110245 after filtering.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-554bbc6078f1474fa1a1c656869363b0"></div>
+<div id="altair-viz-62d2b7c13f5447b7847443fcd6489477"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-554bbc6078f1474fa1a1c656869363b0") {
-      outputDiv = document.getElementById("altair-viz-554bbc6078f1474fa1a1c656869363b0");
+    if (outputDiv.id !== "altair-viz-62d2b7c13f5447b7847443fcd6489477") {
+      outputDiv = document.getElementById("altair-viz-62d2b7c13f5447b7847443fcd6489477");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -690,7 +689,7 @@ There are 110245 after filtering.
 </div>
 <p>Remove CCSs that do not meet accuracy threshold:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">aligned_ccs</span><span class="p">)</span><span class="si">}</span><span class="s2"> CCSs before accuracy filtering.&quot;</span><span class="p">)</span>
@@ -715,7 +714,7 @@ After filtering 69089 CCSs remain.
 <h2>Convert in-frame deletions to substitutions<a class="headerlink" href="#Convert-in-frame-deletions-to-substitutions" title="Permalink to this headline">¶</a></h2>
 <p>If a deletion is in-frame, convert to substitution format using <code class="docutils literal notranslate"><span class="pre">-</span></code> as the substitution character:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deltosubs</span> <span class="o">=</span> <span class="n">alignparse</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">InFrameDeletionsToSubs</span><span class="p">(</span><span class="n">geneseq</span><span class="p">)</span>
@@ -733,7 +732,7 @@ After filtering 69089 CCSs remain.
 </div>
 <p>How many CCSs have in-frame deletions?</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of CCSs with in-frame deletions:&quot;</span><span class="p">)</span>
@@ -806,7 +805,7 @@ Number of CCSs with in-frame deletions:
 <p>We can compute the empirical accuracy of individual CCSs by comparing mutations found in CCSs with the same barcode.</p>
 <p>First, annotate which CCSs have indels (not in frame):</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aligned_ccs</span> <span class="o">=</span> <span class="n">alignparse</span><span class="o">.</span><span class="n">consensus</span><span class="o">.</span><span class="n">add_mut_info_cols</span><span class="p">(</span>
@@ -820,7 +819,7 @@ Number of CCSs with in-frame deletions:
 </div>
 <p>Now compute empirical accuracy, for all sequences and only those without indels, and at the error-rate filter we chose to use and one 10-fold higher. Note that the in-frame codon deletions are not classified as deletions since we have re-classified as substitutions above. The empirical accuracy is the estimated accuracy of each <strong>individual</strong> CCS:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># compute empirical accuracies</span>
@@ -885,13 +884,13 @@ Empirical accuracies:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-1482ff652b37433e80bb9abde97c5026"></div>
+<div id="altair-viz-6959297356c94c0abad014efedf8c51c"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-1482ff652b37433e80bb9abde97c5026") {
-      outputDiv = document.getElementById("altair-viz-1482ff652b37433e80bb9abde97c5026");
+    if (outputDiv.id !== "altair-viz-6959297356c94c0abad014efedf8c51c") {
+      outputDiv = document.getElementById("altair-viz-6959297356c94c0abad014efedf8c51c");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -945,7 +944,7 @@ Empirical accuracies:
 <h2>Rarefaction and other estimates of library diversity<a class="headerlink" href="#Rarefaction-and-other-estimates-of-library-diversity" title="Permalink to this headline">¶</a></h2>
 <p>To help understand how many barcodes there are and how evenly the number of reads are distributed among these barcodes, we make rarefaction curves. We also compute a few other metrics of diversity: 1. number of barcodes observed &gt;<span class="math notranslate nohighlight">\(n\)</span> times up to the minimum number of CCSs required to call a consensus below. 2. <a class="reference external" href="https://en.wikipedia.org/wiki/Diversity_index#Simpson_index">inverse Simpson index</a>, which is reciprocal of probability two randomly drawn sequences have same barcode.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># required CCSs per barcode to call consensus below</span>
@@ -1025,13 +1024,13 @@ Empirical accuracies:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-e4d926a4e2b34ca79d6f00ba9ccaced8"></div>
+<div id="altair-viz-ef5740152cf142b5badf41a448ff02fe"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-e4d926a4e2b34ca79d6f00ba9ccaced8") {
-      outputDiv = document.getElementById("altair-viz-e4d926a4e2b34ca79d6f00ba9ccaced8");
+    if (outputDiv.id !== "altair-viz-ef5740152cf142b5badf41a448ff02fe") {
+      outputDiv = document.getElementById("altair-viz-ef5740152cf142b5badf41a448ff02fe");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1084,13 +1083,13 @@ Empirical accuracies:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-660f0791e9514a59aec6df34adcafc79"></div>
+<div id="altair-viz-23495d6e83fd4d94b47cf69e5217e367"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-660f0791e9514a59aec6df34adcafc79") {
-      outputDiv = document.getElementById("altair-viz-660f0791e9514a59aec6df34adcafc79");
+    if (outputDiv.id !== "altair-viz-23495d6e83fd4d94b47cf69e5217e367") {
+      outputDiv = document.getElementById("altair-viz-23495d6e83fd4d94b47cf69e5217e367");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1144,7 +1143,7 @@ Empirical accuracies:
 <h2>Build consensus sequences<a class="headerlink" href="#Build-consensus-sequences" title="Permalink to this headline">¶</a></h2>
 <p>Use the <a class="reference external" href="https://jbloomlab.github.io/alignparse/alignparse.consensus.html#alignparse.consensus.simple_mutconsensus">alignparse.consensus.simple_mutconsensus</a> method to build consensus sequences, and plot how many barcodes and CCSs contributed to valid consensuses or had to be dropped. Note the stats for barcodes and CCSs look different, because there are uneven numbers of CCSs per barcode:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get parameters for building consensus</span>
@@ -1244,13 +1243,13 @@ Building consensus sequences with following settings
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-aa8b458f35d24a4f9f0083cbf33e3de6"></div>
+<div id="altair-viz-7d72e2fa5b1141a99c3fbc00df87e18f"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-aa8b458f35d24a4f9f0083cbf33e3de6") {
-      outputDiv = document.getElementById("altair-viz-aa8b458f35d24a4f9f0083cbf33e3de6");
+    if (outputDiv.id !== "altair-viz-7d72e2fa5b1141a99c3fbc00df87e18f") {
+      outputDiv = document.getElementById("altair-viz-7d72e2fa5b1141a99c3fbc00df87e18f");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1304,7 +1303,7 @@ Building consensus sequences with following settings
 <h2>Write consensus sequences to barcode-variant lookup tables for subsequent use<a class="headerlink" href="#Write-consensus-sequences-to-barcode-variant-lookup-tables-for-subsequent-use" title="Permalink to this headline">¶</a></h2>
 <p>We filter any consensus sequences with indels that are not in-frame codon-length deletions, and then write the remaining sequences to barcode-variant lookup tables for later use:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># annotate with information on mutation types</span>
@@ -1363,13 +1362,13 @@ Building consensus sequences with following settings
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-0e287707712c4f97989d654cec6a9a4b"></div>
+<div id="altair-viz-886d4ec835fa49e68fe3db1a3db0a897"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-0e287707712c4f97989d654cec6a9a4b") {
-      outputDiv = document.getElementById("altair-viz-0e287707712c4f97989d654cec6a9a4b");
+    if (outputDiv.id !== "altair-viz-886d4ec835fa49e68fe3db1a3db0a897") {
+      outputDiv = document.getElementById("altair-viz-886d4ec835fa49e68fe3db1a3db0a897");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1427,7 +1426,7 @@ Writing 58312 consensus sequences to results/variants/nt_variants.csv
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">

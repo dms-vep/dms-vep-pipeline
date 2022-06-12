@@ -20,13 +20,15 @@ def pacbio_runs_from_config(pacbio_runs_csv):
     return pacbio_runs
 
 
-SAMPLE_TYPES = frozendict.frozendict({
-    "antibody": "antibody",
-    "no-antibody_control": "no-antibody_control",
-    "no-VEP_control": "no-VEP_control",
-    "plasmid": "no-VEP_control",
-    "VSVG_control": "no-VEP_control",
-})
+SAMPLE_TYPES = frozendict.frozendict(
+    {
+        "antibody": "antibody",
+        "no-antibody_control": "no-antibody_control",
+        "no-VEP_control": "no-VEP_control",
+        "plasmid": "no-VEP_control",
+        "VSVG_control": "no-VEP_control",
+    }
+)
 """frozendict.frozendict: Map sample type synonyms in barcode runs to sample type."""
 
 
@@ -109,20 +111,20 @@ def get_antibody_selections(
     barcode_runs = barcode_runs.query("exclude_after_counts == 'no'")
 
     antibodies = (
-        barcode_runs
-        .assign(sample_type=lambda x: x["sample_type"].map(SAMPLE_TYPES))
+        barcode_runs.assign(sample_type=lambda x: x["sample_type"].map(SAMPLE_TYPES))
         .query("sample_type == 'antibody'")
-        .rename(columns={"sample": "antibody_sample"})
-        [["antibody_sample", "antibody", "antibody_concentration", *pair_on]]
+        .rename(columns={"sample": "antibody_sample"})[
+            ["antibody_sample", "antibody", "antibody_concentration", *pair_on]
+        ]
     )
     assert len(antibodies) == len(antibodies.drop_duplicates())
 
     controls = (
-        barcode_runs
-        .assign(sample_type=lambda x: x["sample_type"].map(SAMPLE_TYPES))
+        barcode_runs.assign(sample_type=lambda x: x["sample_type"].map(SAMPLE_TYPES))
         .query("sample_type == 'no-antibody_control'")
-        .rename(columns={"sample": "no-antibody_sample"})
-        [["no-antibody_sample", *pair_on]]
+        .rename(columns={"sample": "no-antibody_sample"})[
+            ["no-antibody_sample", *pair_on]
+        ]
     )
     assert len(controls) == len(controls.drop_duplicates())
 
