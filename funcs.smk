@@ -4,6 +4,8 @@
 import hashlib
 import os
 
+import frozendict
+
 import pandas as pd
 
 
@@ -18,6 +20,16 @@ def pacbio_runs_from_config(pacbio_runs_csv):
     return pacbio_runs
 
 
+SAMPLE_TYPES = frozendict.frozendict({
+    "antibody": "antibody",
+    "no-antibody_control": "no-antibody_control",
+    "no-VEP_control": "no-VEP_control",
+    "plasmid": "no-VEP_control",
+    "VSVG_control": "no-VEP_control",
+})
+"""frozendict.frozendict: Map sample type synonyms in barcode runs to sample type."""
+
+
 def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
     """Data frame of barcode runs from input CSV."""
 
@@ -26,9 +38,9 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
         if row["library"] not in valid_libraries:
             raise ValueError(f"{row['library']=} not in {valid_libraries=}\n{row=}")
         label_cols = ["date", "virus_batch", "sample_type"]
-        if row["sample_type"] == "antibody":
+        if SAMPLE_TYPES[row["sample_type"]] == "antibody":
             label_cols += ["antibody", "antibody_concentration"]
-        elif row["sample_type"] not in {"VSVG_control", "no-antibody_control"}:
+        elif row["sample_type"] not in SAMPLE_TYPES:
             raise ValueError(f"invalid `sample_type` {row['sample_type']}")
         label_cols.append("replicate")
         sample = []
@@ -96,14 +108,22 @@ def get_antibody_selections(
     """
     barcode_runs = barcode_runs.query("exclude_after_counts == 'no'")
 
-    antibodies = barcode_runs.query("sample_type == 'antibody'").rename(
-        columns={"sample": "antibody_sample"}
-    )[["antibody_sample", "antibody", "antibody_concentration", *pair_on]]
+    antibodies = (
+        barcode_runs
+        .assign(sample_type=lambda x: x["sample_type"].map(SAMPLE_TYPES))
+        .query("sample_type == 'antibody'")
+        .rename(columns={"sample": "antibody_sample"})
+        [["antibody_sample", "antibody", "antibody_concentration", *pair_on]]
+    )
     assert len(antibodies) == len(antibodies.drop_duplicates())
 
-    controls = barcode_runs.query("sample_type == 'no-antibody_control'").rename(
-        columns={"sample": "no-antibody_sample"}
-    )[["no-antibody_sample", *pair_on]]
+    controls = (
+        barcode_runs
+        .assign(sample_type=lambda x: x["sample_type"].map(SAMPLE_TYPES))
+        .query("sample_type == 'no-antibody_control'")
+        .rename(columns={"sample": "no-antibody_sample"})
+        [["no-antibody_sample", *pair_on]]
+    )
     assert len(controls) == len(controls.drop_duplicates())
 
     antibody_selections = (
