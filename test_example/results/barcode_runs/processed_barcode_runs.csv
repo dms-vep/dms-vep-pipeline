@@ -19,3 +19,6 @@ date,virus_batch,library,sample_type,antibody,antibody_concentration,replicate,f
 2022-03-02,thaw-3,LibA,no-antibody_control,,,2,['sequencing_data/A51_S2M11_NA_Rep1_NA_S23_R1_001.fastq.gz'],no,,2022-03-02_thaw-3_no-antibody_control_2,LibA_2022-03-02_thaw-3_no-antibody_control_2
 2022-03-02,thaw-3,LibA,no-antibody_control,,,1,['sequencing_data/A51_S2M11_NA_Rep2_NA_S24_R1_001.fastq.gz'],no,,2022-03-02_thaw-3_no-antibody_control_1,LibA_2022-03-02_thaw-3_no-antibody_control_1
 2022-03-02,thaw-3,LibB,no-antibody_control,,,1,['sequencing_data/B1_267C_NA_Rep1_NA_S1_R1_001.fastq.gz'],no,,2022-03-02_thaw-3_no-antibody_control_1,LibB_2022-03-02_thaw-3_no-antibody_control_1
+2021-10-28,thaw-3,LibA,VSVG_control,,,1,['sequencing_data/Library_A51_1_S1_R1_001.fastq.gz'],no,VSVG_rep1,2021-10-28_thaw-3_VSVG_control_1,LibA_2021-10-28_thaw-3_VSVG_control_1
+2021-10-28,thaw-3,LibA,VSVG_control,,,2,['sequencing_data/Library_A51_2_S2_R1_001.fastq.gz'],no,VSVG_rep2,2021-10-28_thaw-3_VSVG_control_2,LibA_2021-10-28_thaw-3_VSVG_control_2
+2021-10-28,thaw-3,LibB,VSVG_control,,,1,['sequencing_data/Library_B1_1_S5_R1_001.fastq.gz'],no,VSVG_rep1,2021-10-28_thaw-3_VSVG_control_1,LibB_2021-10-28_thaw-3_VSVG_control_1
