@@ -1,7 +1,6 @@
 """Count variants from Illumina barcodes."""
 
 
-import ast
 import os
 import sys
 
