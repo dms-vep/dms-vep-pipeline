@@ -27,6 +27,11 @@ barcode_runs = barcode_runs_from_config(
 os.makedirs(os.path.dirname(config["processed_barcode_runs"]), exist_ok=True)
 to_csv_if_changed(barcode_runs, config["processed_barcode_runs"], index=False)
 
+library_sample_to_library = barcode_runs.set_index("library_sample")[
+    "library"
+].to_dict()
+library_sample_to_sample = barcode_runs.set_index("library_sample")["sample"].to_dict()
+
 variant_count_files = [
     os.path.join(config["variant_counts_dir"], f"{library_sample}.csv")
     for library_sample in barcode_runs.query("exclude_after_counts == 'no'")[
@@ -263,11 +268,10 @@ rule check_adequate_variant_counts:
 rule prob_escape:
     """Compute probabilities of escape for variants."""
     input:
-        rules.check_adequate_variant_counts.output.passed,
+        ancient(rules.check_adequate_variant_counts.output.passed),
         gene_sequence_codon=config["gene_sequence_codon"],
         codon_variants=config["codon_variants"],
         antibody_selections=config["antibody_selections"],
-        barcode_runs=config["processed_barcode_runs"],
         site_numbering_map=config["site_numbering_map"],
         variant_counts=lambda wc: expand(
             rules.variant_counts.output.counts,
@@ -290,6 +294,18 @@ rule prob_escape:
         library_samples=lambda wc: antibody_selection_group_samples[
             wc.antibody_selection_group
         ],
+        libraries=lambda wc: {
+            libsamp: library_sample_to_library[libsamp]
+            for libsamp in antibody_selection_group_samples[
+                wc.antibody_selection_group
+            ]
+        },
+        samples=lambda wc: {
+            libsamp: library_sample_to_sample[libsamp]
+            for libsamp in antibody_selection_group_samples[
+                wc.antibody_selection_group
+            ]
+        },
         min_neut_standard_frac=config["prob_escape_min_neut_standard_frac"],
         min_neut_standard_count=config["prob_escape_min_neut_standard_count"],
         min_no_antibody_frac=config["prob_escape_min_no_antibody_frac"],
