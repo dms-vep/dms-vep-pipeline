@@ -14,21 +14,14 @@ sys.stderr = sys.stdout = log = open(snakemake.log[0], "w")
 
 # get variables from Snakemake
 fastq_R1 = snakemake.input.fastq_R1
-barcode_runs_csv = snakemake.input.barcode_runs
 variants_csv = snakemake.input.variants
 counts_csv = snakemake.output.counts
 counts_invalid_csv = snakemake.output.counts_invalid
 fates_csv = snakemake.output.fates
 library_sample = snakemake.wildcards.library_sample
+library = snakemake.params.library
+sample = snakemake.params.sample
 parser_params = snakemake.params.parser_params
-
-# get library and sample
-barcode_runs = pd.read_csv(
-    barcode_runs_csv, converters={"fastq_R1": ast.literal_eval}
-).set_index("library_sample")
-assert fastq_R1 == barcode_runs.at[library_sample, "fastq_R1"]
-library = barcode_runs.at[library_sample, "library"]
-sample = barcode_runs.at[library_sample, "sample"]
 
 # get valid barcodes
 valid_barcodes = (

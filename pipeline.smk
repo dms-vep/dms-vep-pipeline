@@ -158,7 +158,6 @@ rule count_barcodes:
             )
         ),
         variants=config["codon_variants"],
-        barcode_runs=config["processed_barcode_runs"],
     output:
         counts=os.path.join(config["barcode_counts_dir"], "{library_sample}.csv"),
         counts_invalid=os.path.join(
@@ -167,6 +166,12 @@ rule count_barcodes:
         fates=os.path.join(config["barcode_fates_dir"], "{library_sample}.csv"),
     params:
         parser_params=config["illumina_barcode_parser_params"],
+        library=lambda wc: barcode_runs.set_index("library_sample").at[
+            wc.library_sample, "library"
+        ],
+        sample=lambda wc: barcode_runs.set_index("library_sample").at[
+            wc.library_sample, "sample"
+        ],
     conda:
         "environment.yml"
     log:
