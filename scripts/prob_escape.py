@@ -25,8 +25,6 @@ variants = dms_variants.codonvarianttable.CodonVariantTable(
     substitutions_col="codon_substitutions",
 )
 
-barcode_runs = pd.read_csv(snakemake.input.barcode_runs)
-
 variant_counts = pd.concat(
     [
         pd.read_csv(variant_counts, na_filter=None).assign(
@@ -36,11 +34,9 @@ variant_counts = pd.concat(
             snakemake.input.variant_counts, snakemake.params.library_samples
         )
     ]
-).merge(
-    barcode_runs[["library", "sample", "library_sample"]],
-    on="library_sample",
-    validate="many_to_one",
-    how="left",
+).assign(
+    library=lambda x: x["library_sample"].map(snakemake.params.libraries),
+    sample=lambda x: x["library_sample"].map(snakemake.params.samples),
 )
 assert variant_counts.notnull().all().all()
 
