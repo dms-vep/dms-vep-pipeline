@@ -1,0 +1,943 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Functional scores of variants for viral entry &#8212; Deep mutational scanning (DMS) pipeline for a viral entry protein (VEP)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Probabilities of escape and neutralization in antibody selections" href="analyze_prob_escape.html" />
+    <link rel="prev" title="Counts of variants" href="analyze_variant_counts.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Functional-scores-of-variants-for-viral-entry">
+<h1>Functional scores of variants for viral entry<a class="headerlink" href="#Functional-scores-of-variants-for-viral-entry" title="Permalink to this headline">¶</a></h1>
+<p>This notebook analyzes the functional scores, which are effects of mutations on viral entry: positive values indicate better entry, negative values worse entry.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">altair</span> <span class="k">as</span> <span class="nn">alt</span>
+
+<span class="kn">import</span> <span class="nn">dms_variants.codonvarianttable</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">plotnine</span> <span class="k">as</span> <span class="nn">p9</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># allow more rows for Altair</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">data_transformers</span><span class="o">.</span><span class="n">disable_max_rows</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Get configuration information:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If you are running notebook interactively rather than in pipeline that handles</span>
+<span class="c1"># working directories, you may have to first `os.chdir` to appropriate directory.</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;../test_example&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Read-functional-selections-and-functional-scores">
+<h2>Read functional selections and functional scores<a class="headerlink" href="#Read-functional-selections-and-functional-scores" title="Permalink to this headline">¶</a></h2>
+<p>Get the functional selections data frame:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">functional_selections</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;functional_selections&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>Read in the functional scores:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">func_scores</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;func_score_dir&quot;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">selection_name</span><span class="si">}</span><span class="s2">_func_scores.csv&quot;</span><span class="p">),</span>
+            <span class="n">na_filter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">selection_name</span> <span class="ow">in</span> <span class="n">functional_selections</span><span class="p">[</span><span class="s2">&quot;selection_name&quot;</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">func_scores</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">func_scores</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Variants-with-sufficient-pre-selection-counts">
+<h2>Variants with sufficient pre-selection counts<a class="headerlink" href="#Variants-with-sufficient-pre-selection-counts" title="Permalink to this headline">¶</a></h2>
+<p>We will eventually only analyze the functional scores for variants with some minimum threshold of pre-selection counts.</p>
+<p>Draw a boxplot for the pre-selection samples with a black line at the median, boxes spanning the 25th to 75th percentiles, lines spanning the minimum to the maximum, and a red line indciating the threshold. You can mouseover bars for details and use the dropdown selections to just show certain subsets. Note that y-axis uses a symlog scale:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get data to plot</span>
+<span class="n">preselection_count_boxplot_df</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">func_scores</span><span class="p">[</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;library&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pre_sample&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pre_count&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;barcode&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pre_count_threshold&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">]</span>
+    <span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+        <span class="n">variant_above_threshold</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">x</span><span class="p">[</span><span class="s2">&quot;pre_count&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;pre_count_threshold&quot;</span><span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+        <span class="n">count_above_threshold</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;pre_count&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;variant_above_threshold&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;pre_sample&quot;</span><span class="p">,</span> <span class="s2">&quot;pre_count_threshold&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
+        <span class="n">median</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;pre_count&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">),</span>
+        <span class="n">percentile_25</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;pre_count&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)),</span>
+        <span class="n">percentile_75</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;pre_count&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)),</span>
+        <span class="nb">min</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;pre_count&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">),</span>
+        <span class="nb">max</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;pre_count&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">),</span>
+        <span class="n">nvariants</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;barcode&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">),</span>
+        <span class="n">total_counts</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;pre_count&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">),</span>
+        <span class="n">variants_above_threshold</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;variant_above_threshold&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">),</span>
+        <span class="n">counts_above_threshold</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;count_above_threshold&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+        <span class="n">library_sample</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;pre_sample&quot;</span><span class="p">],</span>
+        <span class="n">frac_counts_above_threshold</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;counts_above_threshold&quot;</span><span class="p">]</span>
+        <span class="o">/</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;total_counts&quot;</span><span class="p">],</span>
+        <span class="n">frac_variants_above_threshold</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;variants_above_threshold&quot;</span><span class="p">]</span>
+        <span class="o">/</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;nvariants&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;counts_above_threshold&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;variants_above_threshold&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;total_counts&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;nvariants&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">functional_selections</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;preselection_sample&quot;</span><span class="p">:</span> <span class="s2">&quot;pre_sample&quot;</span><span class="p">})[</span>
+            <span class="p">[</span><span class="s2">&quot;pre_sample&quot;</span><span class="p">,</span> <span class="s2">&quot;virus_batch&quot;</span><span class="p">,</span> <span class="s2">&quot;library&quot;</span><span class="p">]</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(),</span>
+        <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="n">validate</span><span class="o">=</span><span class="s2">&quot;one_to_one&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">preselection_count_boxplot_df</span><span class="p">)</span>
+    <span class="o">==</span> <span class="n">preselection_count_boxplot_df</span><span class="p">[</span><span class="s2">&quot;library_sample&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="c1"># make plot</span>
+<span class="n">preselection_count_base</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">preselection_count_boxplot_df</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="s2">&quot;library_sample&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+    <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">alt</span><span class="o">.</span><span class="n">Tooltip</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;.2g&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">preselection_count_boxplot_df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">float</span>
+        <span class="k">else</span> <span class="n">c</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">preselection_count_boxplot_df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s2">&quot;library_sample&quot;</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">preselection_count_quartile_bars</span> <span class="o">=</span> <span class="n">preselection_count_base</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span>
+        <span class="s2">&quot;percentile_25&quot;</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;symlog&quot;</span><span class="p">,</span> <span class="n">constant</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;counts for variant&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">X2</span><span class="p">(</span><span class="s2">&quot;percentile_75&quot;</span><span class="p">),</span>
+<span class="p">)</span><span class="o">.</span><span class="n">mark_bar</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+
+<span class="n">preselection_count_range_lines</span> <span class="o">=</span> <span class="n">preselection_count_base</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">),</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">X2</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">),</span>
+<span class="p">)</span><span class="o">.</span><span class="n">mark_rule</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">preselection_count_median_lines</span> <span class="o">=</span> <span class="n">preselection_count_base</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;median&quot;</span><span class="p">),</span> <span class="n">alt</span><span class="o">.</span><span class="n">X2</span><span class="p">(</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">mark_bar</span><span class="p">(</span><span class="n">xOffset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x2Offset</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">preselection_count_threshold</span> <span class="o">=</span> <span class="n">preselection_count_base</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;pre_count_threshold&quot;</span><span class="p">),</span> <span class="n">alt</span><span class="o">.</span><span class="n">X2</span><span class="p">(</span><span class="s2">&quot;pre_count_threshold&quot;</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">mark_bar</span><span class="p">(</span><span class="n">xOffset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x2Offset</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+
+<span class="n">preselection_count_chart</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span>
+        <span class="n">preselection_count_quartile_bars</span>
+        <span class="o">+</span> <span class="n">preselection_count_range_lines</span>
+        <span class="o">+</span> <span class="n">preselection_count_median_lines</span>
+        <span class="o">+</span> <span class="n">preselection_count_threshold</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">configure_axis</span><span class="p">(</span><span class="n">labelLimit</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">350</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="mi">14</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="c1"># set up selections over other columns of interest</span>
+<span class="n">selection_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;virus_batch&quot;</span><span class="p">]</span>
+<span class="n">selections</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">selection_point</span><span class="p">(</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">col</span><span class="p">],</span>
+        <span class="n">bind</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">binding_select</span><span class="p">(</span>
+            <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">functional_selections</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">functional_selections</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()],</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">col</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">selection_names</span>
+<span class="p">]</span>
+
+<span class="c1"># add selections</span>
+<span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">selections</span><span class="p">,</span> <span class="n">selection_names</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;antibody&quot;</span><span class="p">:</span>
+        <span class="n">preselection_count_chart</span> <span class="o">=</span> <span class="n">preselection_count_chart</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span>
+            <span class="n">s</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">transform_filter</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">preselection_count_chart</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div id="altair-viz-8643c9e3daf4490a96874c4706765662"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-8643c9e3daf4490a96874c4706765662") {
+      outputDiv = document.getElementById("altair-viz-8643c9e3daf4490a96874c4706765662");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm//vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm//vega-lite@5.2.0?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm//vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.2.0"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "layer": [{"mark": {"type": "bar", "color": "blue"}, "encoding": {"tooltip": [{"field": "library", "type": "nominal"}, {"field": "pre_sample", "type": "nominal"}, {"field": "pre_count_threshold", "type": "quantitative"}, {"field": "median", "format": ".2g", "type": "quantitative"}, {"field": "percentile_25", "format": ".2g", "type": "quantitative"}, {"field": "percentile_75", "format": ".2g", "type": "quantitative"}, {"field": "min", "type": "quantitative"}, {"field": "max", "type": "quantitative"}, {"field": "frac_counts_above_threshold", "format": ".2g", "type": "quantitative"}, {"field": "frac_variants_above_threshold", "format": ".2g", "type": "quantitative"}, {"field": "virus_batch", "type": "nominal"}], "x": {"field": "percentile_25", "scale": {"constant": 20, "type": "symlog"}, "title": "counts for variant", "type": "quantitative"}, "x2": {"field": "percentile_75"}, "y": {"field": "library_sample", "title": null, "type": "nominal"}}, "params": [{"name": "parameter001", "select": {"type": "point", "fields": ["library"]}, "bind": {"input": "select", "options": [null, "LibA", "LibB"], "labels": ["all", "LibA", "LibB"], "name": "library"}}, {"name": "parameter002", "select": {"type": "point", "fields": ["virus_batch"]}, "bind": {"input": "select", "options": [null, "thaw-3"], "labels": ["all", "thaw-3"], "name": "virus_batch"}}]}, {"mark": {"type": "rule", "color": "blue", "opacity": 0.5}, "encoding": {"tooltip": [{"field": "library", "type": "nominal"}, {"field": "pre_sample", "type": "nominal"}, {"field": "pre_count_threshold", "type": "quantitative"}, {"field": "median", "format": ".2g", "type": "quantitative"}, {"field": "percentile_25", "format": ".2g", "type": "quantitative"}, {"field": "percentile_75", "format": ".2g", "type": "quantitative"}, {"field": "min", "type": "quantitative"}, {"field": "max", "type": "quantitative"}, {"field": "frac_counts_above_threshold", "format": ".2g", "type": "quantitative"}, {"field": "frac_variants_above_threshold", "format": ".2g", "type": "quantitative"}, {"field": "virus_batch", "type": "nominal"}], "x": {"field": "min", "type": "quantitative"}, "x2": {"field": "max"}, "y": {"field": "library_sample", "title": null, "type": "nominal"}}}, {"mark": {"type": "bar", "color": "black", "x2Offset": -1, "xOffset": 1}, "encoding": {"tooltip": [{"field": "library", "type": "nominal"}, {"field": "pre_sample", "type": "nominal"}, {"field": "pre_count_threshold", "type": "quantitative"}, {"field": "median", "format": ".2g", "type": "quantitative"}, {"field": "percentile_25", "format": ".2g", "type": "quantitative"}, {"field": "percentile_75", "format": ".2g", "type": "quantitative"}, {"field": "min", "type": "quantitative"}, {"field": "max", "type": "quantitative"}, {"field": "frac_counts_above_threshold", "format": ".2g", "type": "quantitative"}, {"field": "frac_variants_above_threshold", "format": ".2g", "type": "quantitative"}, {"field": "virus_batch", "type": "nominal"}], "x": {"field": "median", "type": "quantitative"}, "x2": {"field": "median"}, "y": {"field": "library_sample", "title": null, "type": "nominal"}}}, {"mark": {"type": "bar", "color": "red", "x2Offset": -1, "xOffset": 1}, "encoding": {"tooltip": [{"field": "library", "type": "nominal"}, {"field": "pre_sample", "type": "nominal"}, {"field": "pre_count_threshold", "type": "quantitative"}, {"field": "median", "format": ".2g", "type": "quantitative"}, {"field": "percentile_25", "format": ".2g", "type": "quantitative"}, {"field": "percentile_75", "format": ".2g", "type": "quantitative"}, {"field": "min", "type": "quantitative"}, {"field": "max", "type": "quantitative"}, {"field": "frac_counts_above_threshold", "format": ".2g", "type": "quantitative"}, {"field": "frac_variants_above_threshold", "format": ".2g", "type": "quantitative"}, {"field": "virus_batch", "type": "nominal"}], "x": {"field": "pre_count_threshold", "type": "quantitative"}, "x2": {"field": "pre_count_threshold"}, "y": {"field": "library_sample", "title": null, "type": "nominal"}}}], "data": {"name": "data-cc8634b04869dba9e3ff5b3b16dc5f06"}, "height": {"step": 14}, "transform": [{"filter": {"param": "parameter001"}}, {"filter": {"param": "parameter002"}}], "width": 350, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-cc8634b04869dba9e3ff5b3b16dc5f06": [{"library": "LibA", "pre_sample": "2021-10-28_thaw-3_VSVG_control_1", "pre_count_threshold": 15, "median": 36.0, "percentile_25": 20.0, "percentile_75": 60.0, "min": 0, "max": 439, "library_sample": "LibA 2021-10-28_thaw-3_VSVG_control_1", "frac_counts_above_threshold": 0.9708830316227371, "frac_variants_above_threshold": 0.8349211074724621, "virus_batch": "thaw-3"}, {"library": "LibA", "pre_sample": "2021-10-28_thaw-3_VSVG_control_2", "pre_count_threshold": 15, "median": 36.0, "percentile_25": 20.0, "percentile_75": 60.0, "min": 0, "max": 459, "library_sample": "LibA 2021-10-28_thaw-3_VSVG_control_2", "frac_counts_above_threshold": 0.9715223675829291, "frac_variants_above_threshold": 0.8380470378088717, "virus_batch": "thaw-3"}, {"library": "LibB", "pre_sample": "2021-10-28_thaw-3_VSVG_control_1", "pre_count_threshold": 21, "median": 47.0, "percentile_25": 27.0, "percentile_75": 76.0, "min": 0, "max": 657, "library_sample": "LibB 2021-10-28_thaw-3_VSVG_control_1", "frac_counts_above_threshold": 0.9658101913948145, "frac_variants_above_threshold": 0.8347377004620821, "virus_batch": "thaw-3"}]}}, {"mode": "vega-lite"});
+</script></div>
+</div>
+<p>Plot the fraction of all variants, and fraction of all counts, that are above the thresholds for the pre-selection samples:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">frac_counts_df</span> <span class="o">=</span> <span class="n">preselection_count_boxplot_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;median&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pre_count_threshold&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;min&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;percentile_25&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;percentile_75&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;frac_counts_above_threshold&quot;</span><span class="p">:</span> <span class="s2">&quot;counts&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;frac_variants_above_threshold&quot;</span><span class="p">:</span> <span class="s2">&quot;variants&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">fraction_type_selection</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">selection_point</span><span class="p">(</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fraction_type&quot;</span><span class="p">],</span>
+    <span class="n">bind</span><span class="o">=</span><span class="s2">&quot;legend&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">frac_counts_chart</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">frac_counts_df</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">transform_fold</span><span class="p">(</span><span class="n">fold</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="s2">&quot;variants&quot;</span><span class="p">],</span> <span class="n">as_</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fraction_type&quot;</span><span class="p">,</span> <span class="s2">&quot;fraction&quot;</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="s2">&quot;library_sample&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+        <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">alt</span><span class="o">.</span><span class="n">Tooltip</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;.2g&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">frac_counts_df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">float</span> <span class="k">else</span> <span class="n">c</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">frac_counts_df</span><span class="o">.</span><span class="n">columns</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s2">&quot;library_sample&quot;</span>
+        <span class="p">],</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span>
+            <span class="s2">&quot;fraction:Q&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;fraction above threshold&quot;</span><span class="p">,</span>
+            <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="p">),</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span>
+            <span class="s2">&quot;fraction_type:N&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="s2">&quot;variants&quot;</span><span class="p">]),</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">mark_point</span><span class="p">(</span><span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="mi">14</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">configure_axis</span><span class="p">(</span><span class="n">labelLimit</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_selection</span><span class="p">(</span><span class="n">fraction_type_selection</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">transform_filter</span><span class="p">(</span><span class="n">fraction_type_selection</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selections</span><span class="p">:</span>
+    <span class="n">frac_counts_chart</span> <span class="o">=</span> <span class="n">frac_counts_chart</span><span class="o">.</span><span class="n">add_selection</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">transform_filter</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">frac_counts_chart</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div id="altair-viz-419b1d0f38a9457dbb50b5f1f72acc52"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-419b1d0f38a9457dbb50b5f1f72acc52") {
+      outputDiv = document.getElementById("altair-viz-419b1d0f38a9457dbb50b5f1f72acc52");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm//vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm//vega-lite@5.2.0?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm//vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.2.0"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "data": {"name": "data-014e056a003d3b7bc2cc786250aa3334"}, "mark": {"type": "point", "filled": true, "size": 50}, "encoding": {"color": {"field": "fraction_type", "scale": {"domain": ["counts", "variants"]}, "title": null, "type": "nominal"}, "tooltip": [{"field": "library", "type": "nominal"}, {"field": "pre_sample", "type": "nominal"}, {"field": "counts", "format": ".2g", "type": "quantitative"}, {"field": "variants", "format": ".2g", "type": "quantitative"}, {"field": "virus_batch", "type": "nominal"}], "x": {"field": "fraction", "scale": {"domain": [0, 1]}, "title": "fraction above threshold", "type": "quantitative"}, "y": {"field": "library_sample", "title": null, "type": "nominal"}}, "height": {"step": 14}, "params": [{"name": "parameter003", "select": {"type": "point", "fields": ["fraction_type"]}, "bind": "legend"}, {"name": "parameter001", "select": {"type": "point", "fields": ["library"]}, "bind": {"input": "select", "options": [null, "LibA", "LibB"], "labels": ["all", "LibA", "LibB"], "name": "library"}}, {"name": "parameter002", "select": {"type": "point", "fields": ["virus_batch"]}, "bind": {"input": "select", "options": [null, "thaw-3"], "labels": ["all", "thaw-3"], "name": "virus_batch"}}], "transform": [{"fold": ["counts", "variants"], "as": ["fraction_type", "fraction"]}, {"filter": {"param": "parameter003"}}, {"filter": {"param": "parameter001"}}, {"filter": {"param": "parameter002"}}], "width": 200, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-014e056a003d3b7bc2cc786250aa3334": [{"library": "LibA", "pre_sample": "2021-10-28_thaw-3_VSVG_control_1", "library_sample": "LibA 2021-10-28_thaw-3_VSVG_control_1", "counts": 0.9708830316227371, "variants": 0.8349211074724621, "virus_batch": "thaw-3"}, {"library": "LibA", "pre_sample": "2021-10-28_thaw-3_VSVG_control_2", "library_sample": "LibA 2021-10-28_thaw-3_VSVG_control_2", "counts": 0.9715223675829291, "variants": 0.8380470378088717, "virus_batch": "thaw-3"}, {"library": "LibB", "pre_sample": "2021-10-28_thaw-3_VSVG_control_1", "library_sample": "LibB 2021-10-28_thaw-3_VSVG_control_1", "counts": 0.9658101913948145, "variants": 0.8347377004620821, "virus_batch": "thaw-3"}]}}, {"mode": "vega-lite"});
+</script></div>
+</div>
+<p>Now just get the functional scores for variant with sufficient pre-selection counts:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">func_scores_filtered</span> <span class="o">=</span> <span class="n">func_scores</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;pre_count &gt;= pre_count_threshold&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Distributions-of-functional-scores">
+<h2>Distributions of functional scores<a class="headerlink" href="#Distributions-of-functional-scores" title="Permalink to this headline">¶</a></h2>
+<p>Plot the distribution of functional scores. These plots are most informative if we classify variants by the “types” of mutations they have, which we do here using the <a class="reference external" href="https://jbloomlab.github.io/dms_variants/dms_variants.codonvarianttable.html#dms_variants.codonvarianttable.CodonVariantTable.classifyVariants">CodonVariantTable.classifyVariants</a> method, which adds a column called variant_class to the data frame:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">func_scores_filtered</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">func_scores_filtered</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;aa_substitutions_sequential&quot;</span><span class="p">:</span> <span class="s2">&quot;aa_substitutions&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">dms_variants</span><span class="o">.</span><span class="n">codonvarianttable</span><span class="o">.</span><span class="n">CodonVariantTable</span><span class="o">.</span><span class="n">classifyVariants</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;aa_substitutions&quot;</span><span class="p">:</span> <span class="s2">&quot;aa_substitutions_sequential&quot;</span><span class="p">})</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now we use <a class="reference external" href="https://plotnine.readthedocs.io/">plotnine</a> to plot the distributions of scores in ggplot2-like syntax, coloring by the variant class. This plot shows the expected behavior for different variant classes; for instance, stop codon variants tend to have low scores and synonymous variants tend to have wildtype-like (near 0) scores. As expected, there is more noise with a tighter bottleneck:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ncols</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">nrows</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">func_scores_filtered</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;pre_sample&quot;</span><span class="p">,</span> <span class="s2">&quot;post_sample&quot;</span><span class="p">]))</span> <span class="o">/</span> <span class="n">ncols</span>
+<span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">p9</span><span class="o">.</span><span class="n">ggplot</span><span class="p">(</span><span class="n">func_scores_filtered</span><span class="p">,</span> <span class="n">p9</span><span class="o">.</span><span class="n">aes</span><span class="p">(</span><span class="s2">&quot;variant_class&quot;</span><span class="p">,</span> <span class="s2">&quot;func_score&quot;</span><span class="p">))</span>
+    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">geom_violin</span><span class="p">(</span><span class="n">p9</span><span class="o">.</span><span class="n">aes</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s2">&quot;variant_class&quot;</span><span class="p">))</span>
+    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">ylab</span><span class="p">(</span><span class="s2">&quot;functional score&quot;</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">xlab</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">facet_wrap</span><span class="p">(</span><span class="s2">&quot;~ library + pre_sample + post_sample&quot;</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="n">ncols</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">theme</span><span class="p">(</span>
+        <span class="n">figure_size</span><span class="o">=</span><span class="p">(</span><span class="mf">3.75</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">nrows</span><span class="p">),</span>
+        <span class="n">axis_text_x</span><span class="o">=</span><span class="n">p9</span><span class="o">.</span><span class="n">element_text</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="mi">90</span><span class="p">),</span>
+        <span class="n">panel_grid_major_x</span><span class="o">=</span><span class="n">p9</span><span class="o">.</span><span class="n">element_blank</span><span class="p">(),</span>  <span class="c1"># no vertical grid lines</span>
+    <span class="p">)</span>
+    <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">scale_fill_discrete</span><span class="p">(</span><span class="n">guide</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/fh/fast/bloom_j/software/miniconda3/envs/dms-vep-pipeline/lib/python3.9/site-packages/plotnine/utils.py:371: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/analyze_func_scores_18_1.png" src="_images/analyze_func_scores_18_1.png" />
+</div>
+</div>
+</section>
+<section id="Correlations-in-variant-level-functional-scores">
+<h2>Correlations in variant-level functional scores<a class="headerlink" href="#Correlations-in-variant-level-functional-scores" title="Permalink to this headline">¶</a></h2>
+<p>Analyze correlations of escape probabilities of different variants in same library:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corrs</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">dms_variants</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">tidy_to_corr</span><span class="p">(</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">func_scores_filtered</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+            <span class="n">sample</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;pre_sample&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; vs &quot;</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;post_sample&quot;</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">sample_col</span><span class="o">=</span><span class="s2">&quot;sample&quot;</span><span class="p">,</span>
+        <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;barcode&quot;</span><span class="p">,</span>
+        <span class="n">value_col</span><span class="o">=</span><span class="s2">&quot;func_score&quot;</span><span class="p">,</span>
+        <span class="n">group_cols</span><span class="o">=</span><span class="s2">&quot;library&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">r2</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;correlation&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;correlation&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">library</span><span class="p">,</span> <span class="n">library_corr</span> <span class="ow">in</span> <span class="n">corrs</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;library&quot;</span><span class="p">):</span>
+    <span class="n">corr_chart</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">library_corr</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+            <span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;sample_1&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+            <span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="s2">&quot;sample_2&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">zero</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+            <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">alt</span><span class="o">.</span><span class="n">Tooltip</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;.3g&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;r2&quot;</span> <span class="k">else</span> <span class="n">c</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample_1&quot;</span><span class="p">,</span> <span class="s2">&quot;sample_2&quot;</span><span class="p">,</span> <span class="s2">&quot;r2&quot;</span><span class="p">]</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">mark_rect</span><span class="p">(</span><span class="n">stroke</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="mi">15</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="mi">15</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="n">library</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">configure_axis</span><span class="p">(</span><span class="n">labelLimit</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">display</span><span class="p">(</span><span class="n">corr_chart</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div id="altair-viz-e8e4bc7170284f1b9a85823dcaf1d199"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-e8e4bc7170284f1b9a85823dcaf1d199") {
+      outputDiv = document.getElementById("altair-viz-e8e4bc7170284f1b9a85823dcaf1d199");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm//vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm//vega-lite@5.2.0?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm//vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.2.0"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "data": {"name": "data-7a3cea7243f683a0fa4828ef7d38b194"}, "mark": {"type": "rect", "stroke": "black"}, "encoding": {"color": {"field": "r2", "scale": {"zero": true}, "type": "quantitative"}, "tooltip": [{"field": "library", "type": "nominal"}, {"field": "sample_1", "type": "nominal"}, {"field": "sample_2", "type": "nominal"}, {"field": "r2", "format": ".3g", "type": "quantitative"}], "x": {"field": "sample_1", "title": null, "type": "nominal"}, "y": {"field": "sample_2", "title": null, "type": "nominal"}}, "height": {"step": 15}, "title": "LibA", "width": {"step": 15}, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-7a3cea7243f683a0fa4828ef7d38b194": [{"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-02-10a_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-02-10a_thaw-3_no-antibody_control_1", "r2": 1.0}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-02-10a_thaw-3_no-antibody_control_1", "r2": 0.7962030264324017}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-02-10a_thaw-3_no-antibody_control_2", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-02-10a_thaw-3_no-antibody_control_1", "r2": 0.8140794481668372}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-03-02_thaw-3_no-antibody_control_2", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-02-10a_thaw-3_no-antibody_control_1", "r2": 0.7975956722820238}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-02-10a_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "r2": 0.7962030264324017}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "r2": 1.0}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-02-10a_thaw-3_no-antibody_control_2", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "r2": 0.7921991754859652}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-03-02_thaw-3_no-antibody_control_2", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "r2": 0.787887468769196}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-02-10a_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-02-10a_thaw-3_no-antibody_control_2", "r2": 0.8140794481668372}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-02-10a_thaw-3_no-antibody_control_2", "r2": 0.7921991754859652}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-02-10a_thaw-3_no-antibody_control_2", "sample_2": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-02-10a_thaw-3_no-antibody_control_2", "r2": 1.0}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-03-02_thaw-3_no-antibody_control_2", "sample_2": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-02-10a_thaw-3_no-antibody_control_2", "r2": 0.8166378501638601}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-02-10a_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-03-02_thaw-3_no-antibody_control_2", "r2": 0.7975956722820238}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-03-02_thaw-3_no-antibody_control_2", "r2": 0.787887468769196}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-02-10a_thaw-3_no-antibody_control_2", "sample_2": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-03-02_thaw-3_no-antibody_control_2", "r2": 0.8166378501638601}, {"library": "LibA", "sample_1": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-03-02_thaw-3_no-antibody_control_2", "sample_2": "2021-10-28_thaw-3_VSVG_control_2 vs 2022-03-02_thaw-3_no-antibody_control_2", "r2": 1.0}]}}, {"mode": "vega-lite"});
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div id="altair-viz-68005d4900cb4f22b4e081b8d3b375f7"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-68005d4900cb4f22b4e081b8d3b375f7") {
+      outputDiv = document.getElementById("altair-viz-68005d4900cb4f22b4e081b8d3b375f7");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm//vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm//vega-lite@5.2.0?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm//vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.2.0"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "data": {"name": "data-c87baf37f7ac7d9f82c47c9fc10f8a7f"}, "mark": {"type": "rect", "stroke": "black"}, "encoding": {"color": {"field": "r2", "scale": {"zero": true}, "type": "quantitative"}, "tooltip": [{"field": "library", "type": "nominal"}, {"field": "sample_1", "type": "nominal"}, {"field": "sample_2", "type": "nominal"}, {"field": "r2", "format": ".3g", "type": "quantitative"}], "x": {"field": "sample_1", "title": null, "type": "nominal"}, "y": {"field": "sample_2", "title": null, "type": "nominal"}}, "height": {"step": 15}, "title": "LibB", "width": {"step": 15}, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-c87baf37f7ac7d9f82c47c9fc10f8a7f": [{"library": "LibB", "sample_1": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "sample_2": "2021-10-28_thaw-3_VSVG_control_1 vs 2022-03-02_thaw-3_no-antibody_control_1", "r2": 1.0}]}}, {"mode": "vega-lite"});
+</script></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Jesse Bloom (2022).
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/analyze_func_scores.nblink.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
