@@ -92,6 +92,29 @@ func_scores = (
     )
 )
 
+# add pre-selection counts threshold
+pre_count_threshold = (
+    func_scores.groupby(["library", "pre_sample", "post_sample"])
+    .aggregate({"pre_count": "sum"})
+    .reset_index()
+    .assign(
+        pre_count_threshold=lambda x: (
+            x["pre_count"] * snakemake.params.min_preselection_frac
+        )
+        .clip(lower=snakemake.params.min_preselection_counts)
+        .round()
+        .astype(int)
+    )
+    .drop(columns="pre_count")
+)
+
+func_scores = func_scores.merge(
+    pre_count_threshold,
+    how="left",
+    on=["library", "pre_sample", "post_sample"],
+    validate="many_to_one",
+)
+
 func_scores.to_csv(
     snakemake.output.func_scores, index=False, float_format="%.4f", na_rep="nan"
 )
