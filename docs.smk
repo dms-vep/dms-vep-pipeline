@@ -62,6 +62,7 @@ data_files = {
         prob_escape_files,
         config["prob_escape_dir"],
     ),
+    "functional selection experiments": config["functional_selections"],
     **extra_data_files,
 }
 

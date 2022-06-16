@@ -122,5 +122,9 @@ antibody_selections: results/prob_escape/antibody_selections.csv
 # polyclonal fitting directory
 polyclonal_dir: results/polyclonal_fits
 
+# functional scores for functional selections
+func_score_dir: results/func_scores
+functional_selections: results/func_scores/functional_selections.csv
+
 # html documentation
 docs_source_dir: results/docs_source

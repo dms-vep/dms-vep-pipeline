@@ -60,6 +60,10 @@ prob_escape_files = [
     for suffix in ["prob_escape", "neut_standard_fracs", "neutralization"]
 ]
 
+functional_selections = get_functional_selections(barcode_runs)
+os.makedirs(os.path.dirname(config["functional_selections"]), exist_ok=True)
+to_csv_if_changed(functional_selections, config["functional_selections"], index=False)
+
 
 # Rules ---------------------------------------------------------------------
 

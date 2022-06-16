@@ -31,3 +31,6 @@ results/antibody_selections/*
 !results/prob_escape
 results/prob_escape/*
 !results/prob_escape/*.csv
+!results/func_scores
+results/func_scores/*
+!results/func_scores/*.csv

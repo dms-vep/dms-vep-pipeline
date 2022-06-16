@@ -98,6 +98,82 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
     return barcode_runs
 
 
+def get_functional_selections(
+    barcode_runs,
+    pair_on=("library", "virus_batch", "replicate"),
+):
+    """Data frame of functional selections from data frame of barcode runs.
+
+    Pairs each no-antibody control with the corresponding no VEP control
+    that is the same in all of the properites specificied in `pair_on`.
+
+    """
+    barcode_runs = barcode_runs.query("exclude_after_counts == 'no'")
+
+    preselection = (
+        barcode_runs.assign(sample_type=lambda x: x["sample_type"].map(SAMPLE_TYPES))
+        .query("sample_type == 'no-VEP_control'")
+        .rename(columns={"sample": "preselection_sample"})[
+            ["preselection_sample", *pair_on]
+        ]
+    )
+    assert len(preselection) == len(preselection.drop_duplicates())
+
+    postselection = (
+        barcode_runs.assign(sample_type=lambda x: x["sample_type"].map(SAMPLE_TYPES))
+        .query("sample_type == 'no-antibody_control'")
+        .rename(columns={"sample": "postselection_sample"})[
+            ["postselection_sample", *pair_on]
+        ]
+    )
+    assert len(postselection) == len(postselection.drop_duplicates())
+
+    functional_selections = (
+        preselection.merge(postselection, how="inner", on=pair_on)
+        .merge(
+            barcode_runs[["library", "sample", "library_sample"]].rename(
+                columns={
+                    "sample": "preselection_sample",
+                    "library_sample": "preselection_library_sample",
+                },
+            ),
+            how="left",
+            validate="many_to_one",
+            on=["library", "preselection_sample"],
+        )
+        .merge(
+            barcode_runs[["library", "sample", "library_sample"]].rename(
+                columns={
+                    "sample": "postselection_sample",
+                    "library_sample": "postselection_library_sample",
+                },
+            ),
+            how="left",
+            validate="many_to_one",
+            on=["library", "postselection_sample"],
+        )
+        .assign(
+            selection_name=lambda x: (
+                x["library"]
+                + "_"
+                + x["preselection_sample"]
+                + "_vs_"
+                + x["postselection_sample"]
+            )
+        )
+    )
+    if functional_selections.isnull().any().any():
+        raise ValueError(
+            "null functional selections:\n"
+            + str(functional_selections[functional_selections.isnull().any(axis=1)])
+        )
+    assert (
+        len(functional_selections) == functional_selections["selection_name"].nunique()
+    )
+
+    return functional_selections
+
+
 def get_antibody_selections(
     barcode_runs,
     pair_on=("library", "virus_batch", "date", "replicate"),
