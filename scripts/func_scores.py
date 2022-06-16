@@ -39,6 +39,25 @@ variant_counts = pd.concat(
 )
 assert variant_counts.notnull().all().all()
 
+wt_fracs = (
+    variant_counts.assign(
+        wt_aa_sequence=lambda x: (x["aa_substitutions"] == "").map(
+            {True: "wt", False: "not_wt"}
+        )
+    )
+    .groupby(["library", "sample", "wt_aa_sequence"], as_index=False)
+    .aggregate({"count": "sum"})
+    .pivot_table(index=["library", "sample"], values="count", columns="wt_aa_sequence")
+    .assign(frac_wt=lambda x: x["wt"] / x["not_wt"])
+    .assign(
+        adequate_wt_counts=lambda x: x["wt"] >= snakemake.params.min_wt_count,
+        adequate_wt_frac=lambda x: x["frac_wt"] >= snakemake.params.min_wt_frac,
+        adequate_wt=lambda x: x["adequate_wt_counts"] | x["adequate_wt_frac"],
+    )
+)
+if not wt_fracs["adequate_wt"].all():
+    raise ValueError(f"Inadequate wildtype counts or fraction:\n{str(wt_fracs)}")
+
 variants.add_sample_counts_df(variant_counts)
 
 func_scores = variants.func_scores(

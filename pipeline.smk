@@ -300,7 +300,6 @@ rule func_scores:
             "{func_selection}_func_scores.csv",
         ),
     params:
-        pseudocount=config["func_scores_pseudocount"],
         library=lambda wc: func_selections_dict[wc.func_selection]["library"],
         preselection_sample=lambda wc: func_selections_dict[wc.func_selection][
             "preselection_sample"
@@ -308,6 +307,11 @@ rule func_scores:
         postselection_sample=lambda wc: func_selections_dict[wc.func_selection][
             "postselection_sample"
         ],
+        pseudocount=config["func_scores_pseudocount"],
+        min_wt_count=config["func_scores_min_wt_count"],
+        min_wt_frac=config["func_scores_min_wt_frac"],
+        min_preselection_counts=config["func_scores_min_preselection_counts"],
+        min_preselection_frac=config["func_scores_min_preselection_frac"],
     conda:
         "environment.yml"
     log:
