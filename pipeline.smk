@@ -320,6 +320,22 @@ rule func_scores:
         "scripts/func_scores.py"
 
 
+rule analyze_func_scores:
+    """Analyze the functional scores."""
+    input:
+        func_score_files,
+        config["functional_selections"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/analyze_func_scores.ipynb"),
+    output:
+        nb="results/notebooks/analyze_func_scores.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "analyze_func_scores.txt"),
+    shell:
+        "papermill {input.nb} {output.nb} &> {log}"
+
+
 rule prob_escape:
     """Compute probabilities of escape for variants."""
     input:
