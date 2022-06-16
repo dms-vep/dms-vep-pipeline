@@ -60,6 +60,18 @@ prob_escape_files = [
     for suffix in ["prob_escape", "neut_standard_fracs", "neutralization"]
 ]
 
+func_selections = get_functional_selections(barcode_runs)
+os.makedirs(os.path.dirname(config["functional_selections"]), exist_ok=True)
+to_csv_if_changed(func_selections, config["functional_selections"], index=False)
+func_selections_dict = func_selections.set_index("selection_name").to_dict(
+    orient="index"
+)
+
+func_score_files = [
+    os.path.join(config["func_score_dir"], f"{func_selection}_func_scores.csv")
+    for func_selection in func_selections["selection_name"]
+]
+
 
 # Rules ---------------------------------------------------------------------
 
@@ -263,6 +275,65 @@ rule check_adequate_variant_counts:
         os.path.join(config["logdir"], "check_adequate_variant_counts.txt"),
     script:
         "scripts/check_adequate_variant_counts.py"
+
+
+rule func_scores:
+    """Compute functional scores for variants."""
+    input:
+        ancient(rules.check_adequate_variant_counts.output.passed),
+        gene_sequence_codon=config["gene_sequence_codon"],
+        codon_variants=config["codon_variants"],
+        site_numbering_map=config["site_numbering_map"],
+        preselection=lambda wc: os.path.join(
+            config["variant_counts_dir"],
+            func_selections_dict[wc.func_selection]["preselection_library_sample"]
+            + ".csv",
+        ),
+        postselection=lambda wc: os.path.join(
+            config["variant_counts_dir"],
+            func_selections_dict[wc.func_selection]["postselection_library_sample"]
+            + ".csv",
+        ),
+    output:
+        func_scores=os.path.join(
+            config["func_score_dir"],
+            "{func_selection}_func_scores.csv",
+        ),
+    params:
+        library=lambda wc: func_selections_dict[wc.func_selection]["library"],
+        preselection_sample=lambda wc: func_selections_dict[wc.func_selection][
+            "preselection_sample"
+        ],
+        postselection_sample=lambda wc: func_selections_dict[wc.func_selection][
+            "postselection_sample"
+        ],
+        pseudocount=config["func_scores_pseudocount"],
+        min_wt_count=config["func_scores_min_wt_count"],
+        min_wt_frac=config["func_scores_min_wt_frac"],
+        min_preselection_counts=config["func_scores_min_preselection_counts"],
+        min_preselection_frac=config["func_scores_min_preselection_frac"],
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "func_scores_{func_selection}.txt"),
+    script:
+        "scripts/func_scores.py"
+
+
+rule analyze_func_scores:
+    """Analyze the functional scores."""
+    input:
+        func_score_files,
+        config["functional_selections"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/analyze_func_scores.ipynb"),
+    output:
+        nb="results/notebooks/analyze_func_scores.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "analyze_func_scores.txt"),
+    shell:
+        "papermill {input.nb} {output.nb} &> {log}"
 
 
 rule prob_escape:
