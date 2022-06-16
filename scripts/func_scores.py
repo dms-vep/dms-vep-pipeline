@@ -79,7 +79,7 @@ renumber = alignparse.utils.MutationRenumber(
 
 func_scores = (
     func_scores.query("target == 'gene'")
-    .drop(columns=["codon_substitutions", "n_codon_substitutions", "target"])
+    .drop(columns=["codon_substitutions", "target"])
     .rename(columns={"aa_substitutions": "aa_substitutions_sequential"})
     .assign(
         aa_substitutions_reference=lambda x: (
