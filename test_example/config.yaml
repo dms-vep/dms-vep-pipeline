@@ -53,6 +53,9 @@ prob_escape_min_neut_standard_frac: 0.001
 prob_escape_min_no_antibody_counts: 5  # maybe make bigger for real expts, say 20
 prob_escape_min_no_antibody_frac: 0.00005  # make smaller for large libraries, say 0.1 / (library size)
 
+# Parameters for functional scores and analysis
+func_scores_pseudocount: 0.5  # pseudocount when computing functional scores
+
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
 # ----------------------------------------------------------------------------

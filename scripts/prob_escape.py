@@ -1,4 +1,4 @@
-"""Get variant counts from barcode counts."""
+"""Get probabilities of escape from variant counts."""
 
 
 import sys

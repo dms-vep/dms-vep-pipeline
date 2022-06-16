@@ -20,6 +20,7 @@ rule all:
             rules.fit_polyclonal.output.pickle,
             antibody_selection_group=antibody_selections["selection_group"].unique(),
         ),
+        func_score_files,
         config["docs"],
 
 
