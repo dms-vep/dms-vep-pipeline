@@ -72,6 +72,15 @@ func_score_files = [
     for func_selection in func_selections["selection_name"]
 ]
 
+muteffects_files = [
+    os.path.join(
+        config["globalepistasis_dir"],
+        f"{func_selection}_muteffects_{phenotype}.csv",
+    )
+    for func_selection in func_selections["selection_name"]
+    for phenotype in ["latent", "observed"]
+]
+
 
 # Rules ---------------------------------------------------------------------
 
@@ -320,6 +329,22 @@ rule func_scores:
         "scripts/func_scores.py"
 
 
+rule analyze_func_scores:
+    """Analyze the functional scores."""
+    input:
+        func_score_files,
+        config["functional_selections"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/analyze_func_scores.ipynb"),
+    output:
+        nb="results/notebooks/analyze_func_scores.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "analyze_func_scores.txt"),
+    shell:
+        "papermill {input.nb} {output.nb} &> {log}"
+
+
 rule fit_globalepistasis:
     """Fit global epistasis models to variant functional scores."""
     input:
@@ -354,22 +379,6 @@ rule fit_globalepistasis:
             -p min_times_seen {params.min_times_seen} \
             &> {log}
         """
-
-
-rule analyze_func_scores:
-    """Analyze the functional scores."""
-    input:
-        func_score_files,
-        config["functional_selections"],
-        nb=os.path.join(config["pipeline_path"], "notebooks/analyze_func_scores.ipynb"),
-    output:
-        nb="results/notebooks/analyze_func_scores.ipynb",
-    conda:
-        "environment.yml"
-    log:
-        os.path.join(config["logdir"], "analyze_func_scores.txt"),
-    shell:
-        "papermill {input.nb} {output.nb} &> {log}"
 
 
 rule prob_escape:

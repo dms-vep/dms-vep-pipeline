@@ -71,6 +71,10 @@ data_files = {
         func_score_files,
         config["func_score_dir"],
     ),
+    "mutation effects for functional selections": (
+        muteffects_files,
+        config["globalepistasis_dir"],
+    ),
     **extra_data_files,
 }
 

@@ -27,8 +27,8 @@ details, using dropdowns, etc.
    build_pacbio_consensus
    build_codon_variants
    analyze_variant_counts
-   fit_globalepistasis
    analyze_func_scores
+   fit_globalepistasis
    analyze_prob_escape
    fit_polyclonal
 
@@ -44,6 +44,7 @@ Data files
 - `prob escapes for antibody selections <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/prob_escape>`_
 - `functional selection experiments <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/func_scores/functional_selections.csv>`_
 - `func scores for functional selections <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/func_scores>`_
+- `mutation effects for functional selections <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/globalepistasis_fits>`_
 
 
 
