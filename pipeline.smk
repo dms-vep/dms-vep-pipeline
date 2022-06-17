@@ -347,7 +347,7 @@ rule fit_globalepistasis:
         """
         papermill {input.nb} {output.nb} \
             -p func_scores_csv {input.func_scores_csv} \
-            -p sitenumbering_map_csv {input.sitenumbering_map} \
+            -p sitenumbering_map_csv {input.site_numbering_map} \
             -p pickle_file {output.pickle} \
             -p muteffects_latent_csv {output.muteffects_latent} \
             -p muteffects_observed_csv {output.muteffects_observed} \
