@@ -58,9 +58,11 @@ func_scores_pseudocount: 0.5  # pseudocount when computing functional scores
 func_scores_min_wt_count: 1000  # require this many wildtype counts or error
 func_scores_min_wt_frac:  0.001  # require this fraction of all counts for wildtype or error
 # Only fit global epistasis models for variants with at least this many
-# pre-selection coutns and this fraction of total pre-selection counts
+# pre-selection counts and this fraction of total pre-selection counts
 func_scores_min_preselection_counts: 10  # maybe make larger for real expts, say 20 to 50
 func_scores_min_preselection_frac: 0.00005  # make smaller for large libraries, say 0.1 / (library size)
+# when plotting mut effects on viral entry, initially require mutation seen in this many variants:
+plot_muteffects_min_times_seen: 3
 
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline

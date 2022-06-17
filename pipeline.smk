@@ -337,6 +337,8 @@ rule fit_globalepistasis:
             "{func_selection}_muteffects_observed.csv",
         ),
         nb="results/notebooks/fit_globalepistasis_{func_selection}.ipynb",
+    params:
+        min_times_seen=config["plot_muteffects_min_times_seen"],
     conda:
         "environment.yml"
     log:
@@ -349,6 +351,7 @@ rule fit_globalepistasis:
             -p pickle_file {output.pickle} \
             -p muteffects_latent_csv {output.muteffects_latent} \
             -p muteffects_observed_csv {output.muteffects_observed} \
+            -p min_times_seen {params.min_times_seen} \
             &> {log}
         """
 
