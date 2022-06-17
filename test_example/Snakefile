@@ -22,7 +22,11 @@ rule all:
         ),
         func_score_files,
         expand(
-            rules.fit_globalepistasis.output.pickle,
+            rules.fit_globalepistasis.output.muteffects_latent,
+            func_selection=func_selections["selection_name"],
+        ),
+        expand(
+            rules.fit_globalepistasis.output.muteffects_observed,
             func_selection=func_selections["selection_name"],
         ),
         config["docs"],
