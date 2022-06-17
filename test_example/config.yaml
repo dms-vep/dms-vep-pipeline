@@ -135,5 +135,8 @@ polyclonal_dir: results/polyclonal_fits
 func_score_dir: results/func_scores
 functional_selections: results/func_scores/functional_selections.csv
 
+# global epistasis fitting directory
+globalepistasis_dir: results/globalepistasis_fits
+
 # html documentation
 docs_source_dir: results/docs_source

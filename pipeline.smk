@@ -320,6 +320,27 @@ rule func_scores:
         "scripts/func_scores.py"
 
 
+rule fit_globalepistasis:
+    """Fit global epistasis models to variant functional scores."""
+    input:
+        func_scores_csv=rules.func_scores.output.func_scores,
+        nb=os.path.join(config["pipeline_path"], "notebooks/fit_globalepistasis.ipynb"),
+    output:
+        pickle=os.path.join(config["globalepistasis_dir"], "{func_selection}.pickle"),
+        nb="results/notebooks/fit_globalepistasis_{func_selection}.ipynb",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "fit_globalepistasis_{func_selection}.txt"),
+    shell:
+        """
+        papermill {input.nb} {output.nb} \
+            -p func_scores_csv {input.func_scores_csv} \
+            -p pickle_file {output.pickle}
+            &> {log}
+        """
+
+
 rule analyze_func_scores:
     """Analyze the functional scores."""
     input:

@@ -21,6 +21,10 @@ rule all:
             antibody_selection_group=antibody_selections["selection_group"].unique(),
         ),
         func_score_files,
+        expand(
+            rules.fit_globalepistasis.output.pickle,
+            func_selection=func_selections["selection_name"],
+        ),
         config["docs"],
 
 
