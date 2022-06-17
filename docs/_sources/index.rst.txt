@@ -27,6 +27,7 @@ details, using dropdowns, etc.
    build_pacbio_consensus
    build_codon_variants
    analyze_variant_counts
+   fit_globalepistasis
    analyze_func_scores
    analyze_prob_escape
    fit_polyclonal

@@ -1,0 +1,3 @@
+{
+    "path": "../notebooks/fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-03-02_thaw-3_no-antibody_control_2.ipynb"
+}

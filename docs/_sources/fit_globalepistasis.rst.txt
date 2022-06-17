@@ -1,0 +1,10 @@
+
+Fit global epistasis models
+---------------------------
+
+- :doc:`LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-02-10a_thaw-3_no-antibody_control_1 <fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-02-10a_thaw-3_no-antibody_control_1>`
+- :doc:`LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1 <fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1>`
+- :doc:`LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-02-10a_thaw-3_no-antibody_control_2 <fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-02-10a_thaw-3_no-antibody_control_2>`
+- :doc:`LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-03-02_thaw-3_no-antibody_control_2 <fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-03-02_thaw-3_no-antibody_control_2>`
+- :doc:`LibB_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1 <fit_globalepistasis_LibB_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1>`
+
