@@ -1,4 +1,4 @@
-antibody_sample,antibody,antibody_concentration,library,virus_batch,date,replicate,no-antibody_sample,antibody_library_sample,no-antibody_library_sample,selection_group,antibody_count,antibody_frac,no-antibody_count,no-antibody_frac
-2022-03-02_thaw-3_antibody_S2M11_0.3082_2,S2M11,0.3082,LibA,thaw-3,2022-03-02,2,2022-03-02_thaw-3_no-antibody_control_2,LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_2,LibA_2022-03-02_thaw-3_no-antibody_control_2,LibA_2022-03-02_thaw-3_S2M11_2,61023,0.4125,3203,0.02072
-2022-03-02_thaw-3_antibody_S2M11_1.2328_2,S2M11,1.233,LibA,thaw-3,2022-03-02,2,2022-03-02_thaw-3_no-antibody_control_2,LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_2,LibA_2022-03-02_thaw-3_no-antibody_control_2,LibA_2022-03-02_thaw-3_S2M11_2,21934,0.4839,3203,0.02072
-2022-03-02_thaw-3_antibody_S2M11_4.9314_2,S2M11,4.931,LibA,thaw-3,2022-03-02,2,2022-03-02_thaw-3_no-antibody_control_2,LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_2,LibA_2022-03-02_thaw-3_no-antibody_control_2,LibA_2022-03-02_thaw-3_S2M11_2,57483,0.5403,3203,0.02072
+library,antibody_sample,no-antibody_sample,antibody,antibody_concentration,antibody_count,antibody_frac,no-antibody_count,no-antibody_frac
+LibA,2022-03-02_thaw-3_antibody_S2M11_0.3082_2,2022-03-02_thaw-3_no-antibody_control_2,S2M11,0.3082,61023,0.4125,3203,0.02072
+LibA,2022-03-02_thaw-3_antibody_S2M11_1.2328_2,2022-03-02_thaw-3_no-antibody_control_2,S2M11,1.233,21934,0.4839,3203,0.02072
+LibA,2022-03-02_thaw-3_antibody_S2M11_4.9314_2,2022-03-02_thaw-3_no-antibody_control_2,S2M11,4.931,57483,0.5403,3203,0.02072
