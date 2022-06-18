@@ -21,6 +21,14 @@ rule all:
             antibody_selection_group=antibody_selections["selection_group"].unique(),
         ),
         func_score_files,
+        expand(
+            rules.fit_globalepistasis.output.muteffects_latent,
+            func_selection=func_selections["selection_name"],
+        ),
+        expand(
+            rules.fit_globalepistasis.output.muteffects_observed,
+            func_selection=func_selections["selection_name"],
+        ),
         config["docs"],
 
 

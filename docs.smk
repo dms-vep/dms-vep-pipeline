@@ -18,10 +18,14 @@ rule_wildcards = {
     "fit_polyclonal": {
         "antibody_selection_group": antibody_selections["selection_group"].unique(),
     },
+    "fit_globalepistasis": {
+        "func_selection": func_selections["selection_name"].unique(),
+    },
 }
 subindex_titles = {
     # name for each rule outputting wildcard notebooks
     "fit_polyclonal": "Fit ``polyclonal`` models",
+    "fit_globalepistasis": "Fit global epistasis models",
 }
 nbs = []
 nblinks = {}
@@ -66,6 +70,10 @@ data_files = {
     "func scores for functional selections": (
         func_score_files,
         config["func_score_dir"],
+    ),
+    "mutation effects for functional selections": (
+        muteffects_files,
+        config["globalepistasis_dir"],
     ),
     **extra_data_files,
 }

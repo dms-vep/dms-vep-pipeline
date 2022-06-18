@@ -72,6 +72,15 @@ func_score_files = [
     for func_selection in func_selections["selection_name"]
 ]
 
+muteffects_files = [
+    os.path.join(
+        config["globalepistasis_dir"],
+        f"{func_selection}_muteffects_{phenotype}.csv",
+    )
+    for func_selection in func_selections["selection_name"]
+    for phenotype in ["latent", "observed"]
+]
+
 
 # Rules ---------------------------------------------------------------------
 
@@ -334,6 +343,42 @@ rule analyze_func_scores:
         os.path.join(config["logdir"], "analyze_func_scores.txt"),
     shell:
         "papermill {input.nb} {output.nb} &> {log}"
+
+
+rule fit_globalepistasis:
+    """Fit global epistasis models to variant functional scores."""
+    input:
+        func_scores_csv=rules.func_scores.output.func_scores,
+        site_numbering_map=config["site_numbering_map"],
+        nb=os.path.join(config["pipeline_path"], "notebooks/fit_globalepistasis.ipynb"),
+    output:
+        pickle=os.path.join(config["globalepistasis_dir"], "{func_selection}.pickle"),
+        muteffects_latent=os.path.join(
+            config["globalepistasis_dir"],
+            "{func_selection}_muteffects_latent.csv",
+        ),
+        muteffects_observed=os.path.join(
+            config["globalepistasis_dir"],
+            "{func_selection}_muteffects_observed.csv",
+        ),
+        nb="results/notebooks/fit_globalepistasis_{func_selection}.ipynb",
+    params:
+        min_times_seen=config["plot_muteffects_min_times_seen"],
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "fit_globalepistasis_{func_selection}.txt"),
+    shell:
+        """
+        papermill {input.nb} {output.nb} \
+            -p func_scores_csv {input.func_scores_csv} \
+            -p sitenumbering_map_csv {input.site_numbering_map} \
+            -p pickle_file {output.pickle} \
+            -p muteffects_latent_csv {output.muteffects_latent} \
+            -p muteffects_observed_csv {output.muteffects_observed} \
+            -p min_times_seen {params.min_times_seen} \
+            &> {log}
+        """
 
 
 rule prob_escape:

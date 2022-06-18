@@ -34,3 +34,6 @@ results/prob_escape/*
 !results/func_scores
 results/func_scores/*
 !results/func_scores/*.csv
+!results/globalepistasis_fits
+results/globalepistasis_fits/*
+!results/globalepistasis_fits/*.csv
