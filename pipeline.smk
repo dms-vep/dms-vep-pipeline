@@ -387,7 +387,6 @@ rule prob_escape:
         ancient(rules.check_adequate_variant_counts.output.passed),
         gene_sequence_codon=config["gene_sequence_codon"],
         codon_variants=config["codon_variants"],
-        antibody_selections=config["antibody_selections"],
         site_numbering_map=config["site_numbering_map"],
         variant_counts=lambda wc: expand(
             rules.variant_counts.output.counts,
@@ -422,6 +421,26 @@ rule prob_escape:
                 wc.antibody_selection_group
             ]
         },
+        antibody_samples=lambda wc: tuple(
+            antibody_selections.query(
+                "selection_group == @wc.antibody_selection_group"
+            )["antibody_sample"]
+        ),
+        no_antibody_samples=lambda wc: tuple(
+            antibody_selections.query(
+                "selection_group == @wc.antibody_selection_group"
+            )["no-antibody_sample"]
+        ),
+        antibodies=lambda wc: tuple(
+            antibody_selections.query(
+                "selection_group == @wc.antibody_selection_group"
+            )["antibody"]
+        ),
+        antibody_concentrations=lambda wc: tuple(
+            antibody_selections.query(
+                "selection_group == @wc.antibody_selection_group"
+            )["antibody_concentration"]
+        ),
         min_neut_standard_frac=config["prob_escape_min_neut_standard_frac"],
         min_neut_standard_count=config["prob_escape_min_neut_standard_count"],
         min_no_antibody_frac=config["prob_escape_min_no_antibody_frac"],
