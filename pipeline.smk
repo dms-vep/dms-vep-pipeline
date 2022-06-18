@@ -336,7 +336,12 @@ rule analyze_func_scores:
         config["functional_selections"],
         nb=os.path.join(config["pipeline_path"], "notebooks/analyze_func_scores.ipynb"),
     output:
-        nb="results/notebooks/analyze_func_scores.ipynb",
+        # only make a notebook output for docs if there are functional selections
+        **(
+            {"nb": "results/notebooks/analyze_func_scores.ipynb"}
+            if len(func_selections)
+            else {}
+        ),
     conda:
         "environment.yml"
     log:
@@ -460,7 +465,12 @@ rule analyze_prob_escape:
         config["antibody_selections"],
         nb=os.path.join(config["pipeline_path"], "notebooks/analyze_prob_escape.ipynb"),
     output:
-        nb="results/notebooks/analyze_prob_escape.ipynb",
+        # only make a notebook output for docs if there are functional selections
+        **(
+            {"nb": "results/notebooks/analyze_prob_escape.ipynb"}
+            if len(antibody_selections)
+            else {}
+        ),
     conda:
         "environment.yml"
     log:
