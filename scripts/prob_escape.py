@@ -25,6 +25,14 @@ variants = dms_variants.codonvarianttable.CodonVariantTable(
     substitutions_col="codon_substitutions",
 )
 
+library = set(snakemake.params.libraries.values())
+assert len(library) == 1
+library = list(library)[0]
+
+antibody = set(snakemake.params.antibodies)
+assert len(antibody) == 1
+antibody = list(antibody)[0]
+
 variant_counts = pd.concat(
     [
         pd.read_csv(variant_counts, na_filter=None).assign(
@@ -35,19 +43,25 @@ variant_counts = pd.concat(
         )
     ]
 ).assign(
-    library=lambda x: x["library_sample"].map(snakemake.params.libraries),
+    library=library,
     sample=lambda x: x["library_sample"].map(snakemake.params.samples),
 )
 assert variant_counts.notnull().all().all()
 
 variants.add_sample_counts_df(variant_counts)
 
-antibody_selections = pd.read_csv(snakemake.input.antibody_selections).query(
-    "selection_group == @snakemake.wildcards.antibody_selection_group"
+selections_df = pd.DataFrame(
+    {
+        "library": library,
+        "antibody_sample": snakemake.params.antibody_samples,
+        "no-antibody_sample": snakemake.params.no_antibody_samples,
+        "antibody": antibody,
+        "antibody_concentration": snakemake.params.antibody_concentrations,
+    }
 )
 
 prob_escape, neut_standard_fracs, neutralization = variants.prob_escape(
-    selections_df=antibody_selections,
+    selections_df=selections_df,
     min_neut_standard_frac=snakemake.params.min_neut_standard_frac,
     min_neut_standard_count=snakemake.params.min_neut_standard_count,
 )
@@ -96,19 +110,7 @@ prob_escape = (
             )
         ),
     )
-    .merge(
-        antibody_selections[
-            [
-                "library",
-                "antibody_sample",
-                "no-antibody_sample",
-                "antibody",
-                "antibody_concentration",
-            ]
-        ],
-        how="left",
-        validate="many_to_one",
-    )
+    .merge(selections_df, how="left", validate="many_to_one")
 )
 
 prob_escape.to_csv(
