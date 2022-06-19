@@ -61,22 +61,35 @@ data_files = {
     "codon-variant table": config["codon_variants"],
     "processed barcode sequencing runs": config["processed_barcode_runs"],
     "variant counts": (variant_count_files, config["variant_counts_dir"]),
-    "antibody selection experiments": config["antibody_selections"],
-    "prob escapes for antibody selections": (
-        prob_escape_files,
-        config["prob_escape_dir"],
-    ),
-    "functional selection experiments": config["functional_selections"],
-    "func scores for functional selections": (
-        func_score_files,
-        config["func_score_dir"],
-    ),
-    "mutation effects for functional selections": (
-        muteffects_files,
-        config["globalepistasis_dir"],
-    ),
-    **extra_data_files,
 }
+if len(func_selections):
+    # if we have functional selections, add those data files
+    data_files.update(
+        {
+            "functional selection experiments": config["functional_selections"],
+            "func scores for functional selections": (
+                func_score_files,
+                config["func_score_dir"],
+            ),
+            "mutation effects for functional selections": (
+                muteffects_files,
+                config["globalepistasis_dir"],
+            ),
+        }
+    )
+if len(antibody_selections):
+    # if we have antibody selections, add those data files
+    data_files.update(
+        {
+            "antibody selection experiments": config["antibody_selections"],
+            "prob escapes for antibody selections": (
+                prob_escape_files,
+                config["prob_escape_dir"],
+            ),
+        }
+    )
+# add any extra data files specified in top-level Snakefile
+data_files.update(extra_data_files)
 
 # Rules ---------------------------------------------------------------------
 
