@@ -71,10 +71,16 @@ if len(func_selections):
                 func_score_files,
                 config["func_score_dir"],
             ),
-            "mutation effects for functional selections": (
+            "mutation effects for each functional selection": (
                 muteffects_files,
                 config["globalepistasis_dir"],
             ),
+            "mutation functional effects replicate average (observed phenotype)": config[
+                "muteffects_observed"
+            ],
+            "mutation functional effects replicate average (latent phenotype)": config[
+                "muteffects_latent"
+            ],
         }
     )
 if len(antibody_selections):
