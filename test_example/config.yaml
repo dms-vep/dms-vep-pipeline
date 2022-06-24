@@ -140,5 +140,11 @@ functional_selections: results/func_scores/functional_selections.csv
 # global epistasis fitting directory
 globalepistasis_dir: results/globalepistasis_fits
 
+# mutation effects on function (viral entry) averaged over replicates
+muteffects_observed: results/muteffects_functional/muteffects_observed.csv
+muteffects_latent: results/muteffects_functional/muteffects_latent.csv
+muteffects_observed_heatmap: results/muteffects_functional/muteffects_observed_heatmap.html
+muteffects_latent_heatmap: results/muteffects_functional/muteffects_latent_heatmap.html
+
 # html documentation
 docs_source_dir: results/docs_source

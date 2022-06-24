@@ -29,6 +29,8 @@ rule all:
             rules.fit_globalepistasis.output.muteffects_observed,
             func_selection=func_selections["selection_name"],
         ),
+        config["muteffects_observed"],
+        config["muteffects_latent"],
         config["docs"],
 
 

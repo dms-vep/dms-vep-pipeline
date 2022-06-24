@@ -351,7 +351,7 @@ rule analyze_func_scores:
 
 
 rule fit_globalepistasis:
-    """Fit global epistasis models to variant functional scores."""
+    """Fit global epistasis models to variant functional scores to get muteffects."""
     input:
         func_scores_csv=rules.func_scores.output.func_scores,
         site_numbering_map=config["site_numbering_map"],
@@ -384,6 +384,38 @@ rule fit_globalepistasis:
             -p min_times_seen {params.min_times_seen} \
             &> {log}
         """
+
+
+rule avg_muteffects:
+    """Average the mutation effects on viral entry across replicates and libraries."""
+    input:
+        config["functional_selections"],
+        expand(
+            rules.fit_globalepistasis.output.muteffects_latent,
+            func_selection=func_selections["selection_name"],
+        ),
+        expand(
+            rules.fit_globalepistasis.output.muteffects_observed,
+            func_selection=func_selections["selection_name"],
+        ),
+        nb=os.path.join(config["pipeline_path"], "notebooks/avg_muteffects.ipynb"),
+    output:
+        config["muteffects_observed"],
+        config["muteffects_latent"],
+        config["muteffects_observed_heatmap"],
+        config["muteffects_latent_heatmap"],
+        # only make a notebook output for docs if there are functional selections
+        **(
+            {"nb": "results/notebooks/avg_muteffects.ipynb"}
+            if len(func_selections)
+            else {}
+        ),
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "avg_muteffects.txt"),
+    shell:
+        "papermill {input.nb} {output.nb} &> {log}"
 
 
 rule prob_escape:
