@@ -402,6 +402,8 @@ rule avg_muteffects:
     output:
         config["muteffects_observed"],
         config["muteffects_latent"],
+        config["muteffects_observed_heatmap"],
+        config["muteffects_latent_heatmap"],
         # only make a notebook output for docs if there are functional selections
         **(
             {"nb": "results/notebooks/avg_muteffects.ipynb"}

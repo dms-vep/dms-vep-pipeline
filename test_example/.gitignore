@@ -37,3 +37,6 @@ results/func_scores/*
 !results/globalepistasis_fits
 results/globalepistasis_fits/*
 !results/globalepistasis_fits/*.csv
+!results/muteffects_functional
+results/muteffects_functional/*
+!results/muteffects_functional/*.csv
