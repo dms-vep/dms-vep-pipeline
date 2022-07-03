@@ -63,6 +63,8 @@ func_scores_min_preselection_counts: 10  # maybe make larger for real expts, say
 func_scores_min_preselection_frac: 0.00005  # make smaller for large libraries, say 0.1 / (library size)
 # when plotting mut effects on viral entry, initially require mutation seen in this many variants:
 plot_muteffects_min_times_seen: 3
+# when averaging mutation effects on viral entry, take the "median" or "mean"?
+muteffects_avg_method: median
 
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
