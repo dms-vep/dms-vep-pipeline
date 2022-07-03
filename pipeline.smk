@@ -410,6 +410,9 @@ rule avg_muteffects:
             if len(func_selections)
             else {}
         ),
+    params:
+        config["plot_muteffects_min_times_seen"],
+        config["muteffects_avg_method"],
     conda:
         "environment.yml"
     log:
