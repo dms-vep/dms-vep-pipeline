@@ -592,5 +592,5 @@ rule avg_antibody_escape:
             -p antibody {wildcards.antibody} \
             -p escape_avg_method {params.escape_avg_method} \
             -p avg_pickle {output.avg_pickle} \
-            -y selection_groups "{params.selection_groups_yaml}"
+            -y "{params.selection_groups_yaml}"
         """
