@@ -566,7 +566,7 @@ rule avg_antibody_escape:
         escape_avg_method=config["escape_avg_method"],
         selection_groups_yaml=lambda wc: yaml.dump(
             {
-                "selection_groups": (
+                "selection_groups_dict": (
                     antibody_selections.query("antibody == @wc.antibody")[
                         [
                             "library",
@@ -577,6 +577,13 @@ rule avg_antibody_escape:
                         ]
                     ]
                     .drop_duplicates()
+                    .assign(pickle_file=lambda x: (
+                            config["polyclonal_dir"]
+                            + "/"
+                            + x["selection_group"]
+                            + ".pickle"
+                        )
+                    )
                     .set_index("selection_group")
                     .to_dict(orient="index")
                 )
