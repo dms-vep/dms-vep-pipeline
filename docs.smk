@@ -21,6 +21,9 @@ rule_wildcards = {
     "fit_globalepistasis": {
         "func_selection": func_selections["selection_name"].unique(),
     },
+    "avg_antibody_escape": {
+        "antibody": antibody_selections["antibody"].unique(),
+    },
 }
 subindex_titles = {
     # name for each rule outputting wildcard notebooks

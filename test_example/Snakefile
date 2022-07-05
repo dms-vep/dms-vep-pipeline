@@ -17,8 +17,8 @@ rule all:
         rules.check_adequate_variant_counts.output.passed,
         # antibody escape output
         expand(
-            rules.fit_polyclonal.output.pickle,
-            antibody_selection_group=antibody_selections["selection_group"].unique(),
+            rules.avg_antibody_escape.output.avg_pickle,
+            antibody=antibody_selections["antibody"].unique(),
         ),
         # functional effects of mutations output
         expand(

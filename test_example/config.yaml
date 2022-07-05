@@ -52,6 +52,8 @@ prob_escape_min_neut_standard_frac: 0.001
 # counts and this fraction of total counts in no-antibody sample:
 prob_escape_min_no_antibody_counts: 5  # maybe make bigger for real expts, say 20
 prob_escape_min_no_antibody_frac: 0.00005  # make smaller for large libraries, say 0.1 / (library size)
+# when averaging antibody escape values, take the "median" or "mean"?
+escape_avg_method: median
 
 # Parameters for functional scores and global epistasis analysis
 func_scores_pseudocount: 0.5  # pseudocount when computing functional scores
@@ -135,6 +137,9 @@ antibody_selections: results/prob_escape/antibody_selections.csv
 
 # polyclonal fitting directory
 polyclonal_dir: results/polyclonal_fits
+
+# antibody-escape values
+escape_dir: results/antibody_escape
 
 # functional scores for functional selections
 func_score_dir: results/func_scores
