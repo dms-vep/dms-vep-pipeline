@@ -84,7 +84,8 @@ variant_tags:  # variant tags in PacBio amplicon, or "null" if no tags
     wildtype: A
 
 # Map sequential 1, 2, numbering of gene in PacBio amplicon to the desired
-# final reference numbering scheme.
+# final reference numbering scheme. Required to have columns named
+# "sequential_site" and "reference_site"
 site_numbering_map: data/site_numbering_map.csv
 
 # Classify mutations into different categories, such as which ones are

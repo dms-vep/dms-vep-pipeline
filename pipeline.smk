@@ -158,6 +158,7 @@ rule build_codon_variants:
     input:
         config["nt_variants"],
         config["gene_sequence_codon"],
+        config["gene_sequence_protein"],
         config["site_numbering_map"],
         config["mutation_design_classification"],
         config["neut_standard_barcodes"],
