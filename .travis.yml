@@ -18,6 +18,7 @@ script:
   - flake8_nb
   - cd test_example && snakemake --lint && cd ..
   - rm -rf docs && cd test_example && rm -rf results && snakemake -j 2 --use-conda && cd ..
+  - rm -rf docs && cd test_example && rm -rf results && snakemake -j 2 --use-conda --config barcode_runs=null && cd ..
 
 branches:
   only:
