@@ -35,6 +35,26 @@ SAMPLE_TYPES = frozendict.frozendict(
 def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
     """Data frame of barcode runs from input CSV."""
 
+    # expected columns in final output
+    expected_cols = [
+        "date",
+        "virus_batch",
+        "library",
+        "sample_type",
+        "antibody",
+        "antibody_concentration",
+        "replicate",
+        "fastq_R1",
+        "exclude_after_counts",
+        "notes",
+        "sample",
+        "library_sample",
+    ]
+
+    if barcode_runs_csv == "null" or barcode_runs_csv is None:
+        # no barcode runs, return empty data frame
+        return pd.DataFrame(columns=expected_cols)
+
     def process_sample(row):
         """Internal function that processes rows in data frame."""
         if row["library"] not in valid_libraries:
@@ -93,6 +113,11 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
         pd.set_option("display.max_colwidth", None)
         raise ValueError(
             f"FASTQs repeated:\n{dup_fastqs[['fastq_R1', 'n_occurrences']]}"
+        )
+
+    if set(expected_cols) != set(barcode_runs.columns):
+        raise ValueError(
+            f"Not expected columns:\n{expected_cols=}\n{barcode_runs.columns=}"
         )
 
     return barcode_runs

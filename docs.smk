@@ -34,13 +34,14 @@ nb_subindices = {}
 for name, ruleproxy in rules.__dict__.items():
     rule_nb = ruleproxy.output.get("nb")
     if rule_nb:
-        nbs_for_index.append(name)
         if ruleproxy.rule.has_wildcards():
             assert set(rule_wildcards[name]) == set(ruleproxy.rule.wildcard_names)
             if len(rule_wildcards[name]) != 1:
                 raise ValueError("currently only handles one wildcard per rule")
             else:
                 wcs = list(rule_wildcards[name].values())[0]
+                if len(wcs) == 0:
+                    continue
             subindex = os.path.join(config["docs_source_dir"], f"{name}.rst")
             nb_subindices[subindex] = []
             for wc, nb in zip(wcs, expand(rule_nb, **rule_wildcards[name])):
@@ -51,6 +52,7 @@ for name, ruleproxy in rules.__dict__.items():
         else:
             nbs.append(rule_nb)
             nblinks[os.path.join(config["docs_source_dir"], f"{name}.nblink")] = rule_nb
+        nbs_for_index.append(name)
 
 # If file should be linked, just specify file as value. If directory should be linked,
 # specify value (files_in_directory, directory)
@@ -59,8 +61,16 @@ data_files = {
     "parental protein sequence": config["gene_sequence_protein"],
     "sequential-to-reference site numbers": config["site_numbering_map"],
     "codon-variant table": config["codon_variants"],
-    "processed barcode sequencing runs": config["processed_barcode_runs"],
-    "variant counts": (variant_count_files, config["variant_counts_dir"]),
+    **(
+        {"processed barcode sequencing runs": config["processed_barcode_runs"]}
+        if len(barcode_runs)
+        else {}
+    ),
+    **(
+        {"variant counts": (variant_count_files, config["variant_counts_dir"])}
+        if variant_count_files
+        else {}
+    ),
 }
 if len(func_selections):
     # if we have functional selections, add those data files
