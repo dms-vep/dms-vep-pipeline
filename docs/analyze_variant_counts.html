@@ -432,13 +432,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-69862afb41b44eb88020f88c2774ff14"></div>
+<div id="altair-viz-3c19fbfd9ae74b12ade46d64da6e6110"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-69862afb41b44eb88020f88c2774ff14") {
-      outputDiv = document.getElementById("altair-viz-69862afb41b44eb88020f88c2774ff14");
+    if (outputDiv.id !== "altair-viz-3c19fbfd9ae74b12ade46d64da6e6110") {
+      outputDiv = document.getElementById("altair-viz-3c19fbfd9ae74b12ade46d64da6e6110");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -574,13 +574,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-909a41e3563c495cafd3753a91de988a"></div>
+<div id="altair-viz-4105b9073ac34d2196305b0bca6b1969"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-909a41e3563c495cafd3753a91de988a") {
-      outputDiv = document.getElementById("altair-viz-909a41e3563c495cafd3753a91de988a");
+    if (outputDiv.id !== "altair-viz-4105b9073ac34d2196305b0bca6b1969") {
+      outputDiv = document.getElementById("altair-viz-4105b9073ac34d2196305b0bca6b1969");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -637,34 +637,26 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># function to calculate inverse simpson index</span>
-<span class="c1"># ISI = 1/D</span>
-<span class="c1"># D = sum((ni/N)^2)</span>
-<span class="k">def</span> <span class="nf">inverse_simpson_index</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="nb">sum</span><span class="p">((</span><span class="n">arr</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">inverse_simpson_index</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate inverse simpson index of sample.</span>
+<span class="sd">    ISI = 1/D</span>
+<span class="sd">    D = sum((ni/N)^2)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">((</span><span class="n">arr</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
 
-<span class="c1"># keep only valid barcodes and barcodes with a count of at least 1</span>
-<span class="n">valid_bc_counts</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">counts</span><span class="p">[</span><span class="s2">&quot;valid&quot;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-<span class="n">inverse_simpson_index_df</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">valid_bc_counts</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">])[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span>
-    <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">inverse_simpson_index</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-    <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Inverse Simpson Index&quot;</span><span class="p">)</span>
-<span class="p">)</span>
-
-<span class="n">num_unique_bcs</span> <span class="o">=</span> <span class="p">(</span>
-     <span class="n">valid_bc_counts</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span> <span class="p">:</span> <span class="s2">&quot;num unique barcodes&quot;</span><span class="p">})</span>
-<span class="p">)</span>
-
-<span class="n">unique_bcs_and_simpson_index</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">inverse_simpson_index_df</span><span class="p">,</span> <span class="n">num_unique_bcs</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">])</span>
-    <span class="o">.</span><span class="n">merge</span><span class="p">(</span>
-        <span class="n">barcode_runs</span><span class="p">,</span>
-        <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">],</span>
-        <span class="n">validate</span><span class="o">=</span><span class="s2">&quot;one_to_one&quot;</span><span class="p">,</span>
+<span class="n">unique_bcs_and_ISI</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">counts</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;valid&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;count &gt; 0&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
+        <span class="n">inv_simpson_index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">inverse_simpson_index</span><span class="p">),</span>
+        <span class="n">n_unique_barcodes</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;barcode&quot;</span><span class="p">,</span> <span class="s2">&quot;nunique&quot;</span><span class="p">),</span>
     <span class="p">)</span>
+    <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">barcode_runs</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">],</span> <span class="n">validate</span><span class="o">=</span><span class="s2">&quot;one_to_one&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">astype</span><span class="p">({</span><span class="s2">&quot;n_unique_barcodes&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">})</span>
     <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fastq_R1&quot;</span><span class="p">,</span> <span class="s2">&quot;notes&quot;</span><span class="p">])</span>
 <span class="p">)</span>
 </pre></div>
@@ -676,15 +668,20 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unique_barcodes_chart</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">unique_bcs_and_simpson_index</span><span class="p">)</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">unique_bcs_and_ISI</span><span class="p">)</span>
     <span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-        <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="s2">&quot;library_sample&quot;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;Inverse Simpson Index&quot;</span><span class="p">),</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="s2">&quot;library_sample&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;inv_simpson_index&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;inverse simpson index&quot;</span><span class="p">),</span>
         <span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span>
             <span class="s2">&quot;sample_type&quot;</span><span class="p">,</span>
-            <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">unique_bcs_and_simpson_index</span><span class="p">[</span><span class="s2">&quot;sample_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+            <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">unique_bcs_and_ISI</span><span class="p">[</span><span class="s2">&quot;sample_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
         <span class="p">),</span>
-        <span class="n">tooltip</span><span class="o">=</span><span class="n">unique_bcs_and_simpson_index</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">alt</span><span class="o">.</span><span class="n">Tooltip</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;.3g&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;inv_simpson_index&quot;</span><span class="p">,</span> <span class="s2">&quot;n_unique_barcodes&quot;</span><span class="p">}</span>
+            <span class="k">else</span> <span class="n">c</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">unique_bcs_and_ISI</span><span class="o">.</span><span class="n">columns</span>
+        <span class="p">],</span>
     <span class="p">)</span>
     <span class="o">.</span><span class="n">mark_bar</span><span class="p">()</span>
     <span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">275</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span>
@@ -693,7 +690,9 @@ div.rendered_html tbody tr:hover {
 <span class="p">)</span>
 
 <span class="k">for</span> <span class="n">selection</span> <span class="ow">in</span> <span class="n">selections</span><span class="p">:</span>
-    <span class="n">unique_barcodes_chart</span> <span class="o">=</span> <span class="n">unique_barcodes_chart</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span><span class="o">.</span><span class="n">transform_filter</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+    <span class="n">unique_barcodes_chart</span> <span class="o">=</span> <span class="n">unique_barcodes_chart</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span>
+        <span class="n">selection</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">transform_filter</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">unique_barcodes_chart</span><span class="p">)</span>
 </pre></div>
@@ -703,13 +702,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-2f22cedcae0d489eb4a81b7e7f5a18fa"></div>
+<div id="altair-viz-2948c49722a54a6da79da2cfb4c7b62a"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-2f22cedcae0d489eb4a81b7e7f5a18fa") {
-      outputDiv = document.getElementById("altair-viz-2f22cedcae0d489eb4a81b7e7f5a18fa");
+    if (outputDiv.id !== "altair-viz-2948c49722a54a6da79da2cfb4c7b62a") {
+      outputDiv = document.getElementById("altair-viz-2948c49722a54a6da79da2cfb4c7b62a");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -755,7 +754,7 @@ div.rendered_html tbody tr:hover {
         .catch(showError)
         .then(() => displayChart(vegaEmbed));
     }
-  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "data": {"name": "data-688c2096c1f011ed2ba0748a84994f58"}, "mark": "bar", "encoding": {"color": {"field": "sample_type", "scale": {"domain": ["VSVG_control", "antibody", "no-antibody_control"]}, "type": "nominal"}, "tooltip": [{"field": "library", "type": "nominal"}, {"field": "sample", "type": "nominal"}, {"field": "Inverse Simpson Index", "type": "quantitative"}, {"field": "num unique barcodes", "type": "quantitative"}, {"field": "date", "type": "nominal"}, {"field": "virus_batch", "type": "nominal"}, {"field": "sample_type", "type": "nominal"}, {"field": "antibody", "type": "nominal"}, {"field": "antibody_concentration", "type": "quantitative"}, {"field": "replicate", "type": "quantitative"}, {"field": "exclude_after_counts", "type": "nominal"}, {"field": "library_sample", "type": "nominal"}], "x": {"field": "Inverse Simpson Index", "type": "quantitative"}, "y": {"field": "library_sample", "title": null, "type": "nominal"}}, "height": {"step": 15}, "params": [{"name": "parameter001", "select": {"type": "point", "fields": ["exclude_after_counts"]}, "bind": {"input": "select", "options": [null, "no", "yes"], "labels": ["all", "no", "yes"], "name": "exclude_after_counts"}}, {"name": "parameter002", "select": {"type": "point", "fields": ["antibody"]}, "bind": {"input": "select", "options": [null, "REGN10933", "S2M11"], "labels": ["all", "REGN10933", "S2M11"], "name": "antibody"}}, {"name": "parameter003", "select": {"type": "point", "fields": ["virus_batch"]}, "bind": {"input": "select", "options": [null, "thaw-3"], "labels": ["all", "thaw-3"], "name": "virus_batch"}}, {"name": "parameter004", "select": {"type": "point", "fields": ["sample_type"]}, "bind": {"input": "select", "options": [null, "antibody", "no-antibody_control", "VSVG_control"], "labels": ["all", "antibody", "no-antibody_control", "VSVG_control"], "name": "sample_type"}}, {"name": "parameter005", "select": {"type": "point", "fields": ["date"]}, "bind": {"input": "select", "options": [null, "2022-02-10a", "2022-03-02", "2021-10-28"], "labels": ["all", "2022-02-10a", "2022-03-02", "2021-10-28"], "name": "date"}}, {"name": "parameter006", "select": {"type": "point", "fields": ["library"]}, "bind": {"input": "select", "options": [null, "LibA", "LibB"], "labels": ["all", "LibA", "LibB"], "name": "library"}}, {"name": "parameter007", "select": {"type": "point", "fields": ["valid"]}, "bind": "legend"}, {"name": "parameter001", "select": {"type": "point", "fields": ["exclude_after_counts"]}, "bind": {"input": "select", "options": [null, "no", "yes"], "labels": ["all", "no", "yes"], "name": "exclude_after_counts"}}, {"name": "parameter002", "select": {"type": "point", "fields": ["antibody"]}, "bind": {"input": "select", "options": [null, "REGN10933", "S2M11"], "labels": ["all", "REGN10933", "S2M11"], "name": "antibody"}}, {"name": "parameter003", "select": {"type": "point", "fields": ["virus_batch"]}, "bind": {"input": "select", "options": [null, "thaw-3"], "labels": ["all", "thaw-3"], "name": "virus_batch"}}, {"name": "parameter004", "select": {"type": "point", "fields": ["sample_type"]}, "bind": {"input": "select", "options": [null, "antibody", "no-antibody_control", "VSVG_control"], "labels": ["all", "antibody", "no-antibody_control", "VSVG_control"], "name": "sample_type"}}, {"name": "parameter005", "select": {"type": "point", "fields": ["date"]}, "bind": {"input": "select", "options": [null, "2022-02-10a", "2022-03-02", "2021-10-28"], "labels": ["all", "2022-02-10a", "2022-03-02", "2021-10-28"], "name": "date"}}, {"name": "parameter006", "select": {"type": "point", "fields": ["library"]}, "bind": {"input": "select", "options": [null, "LibA", "LibB"], "labels": ["all", "LibA", "LibB"], "name": "library"}}], "transform": [{"filter": {"param": "parameter001"}}, {"filter": {"param": "parameter002"}}, {"filter": {"param": "parameter003"}}, {"filter": {"param": "parameter004"}}, {"filter": {"param": "parameter005"}}, {"filter": {"param": "parameter006"}}], "width": 275, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-688c2096c1f011ed2ba0748a84994f58": [{"library": "LibA", "sample": "2021-10-28_thaw-3_VSVG_control_1", "Inverse Simpson Index": 3993.7529639988734, "num unique barcodes": 6618, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2021-10-28_thaw-3_VSVG_control_1"}, {"library": "LibA", "sample": "2021-10-28_thaw-3_VSVG_control_2", "Inverse Simpson Index": 4010.303112416067, "num unique barcodes": 6621, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2021-10-28_thaw-3_VSVG_control_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_0.15_1", "Inverse Simpson Index": 365.9951132004545, "num unique barcodes": 4908, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_0.15_2", "Inverse Simpson Index": 384.03029491669383, "num unique barcodes": 5194, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_1.39_1", "Inverse Simpson Index": 14.541656976720258, "num unique barcodes": 1760, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_1.39_2", "Inverse Simpson Index": 14.23356699392429, "num unique barcodes": 1832, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_5.58_1", "Inverse Simpson Index": 11.321077489436123, "num unique barcodes": 1580, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_5.58_2", "Inverse Simpson Index": 11.008291407801115, "num unique barcodes": 1479, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_no-antibody_control_1", "Inverse Simpson Index": 1530.767307767493, "num unique barcodes": 5287, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_no-antibody_control_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_no-antibody_control_2", "Inverse Simpson Index": 1513.4328486954848, "num unique barcodes": 5357, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_no-antibody_control_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_0.3082_1", "Inverse Simpson Index": 45.18370513097292, "num unique barcodes": 2462, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 0.3082, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_0.3082_2", "Inverse Simpson Index": 42.643549667336785, "num unique barcodes": 2689, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 0.3082, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_1.2328_1", "Inverse Simpson Index": 32.86565936198496, "num unique barcodes": 2306, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 1.2328, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_1.2328_2", "Inverse Simpson Index": 31.5688679214568, "num unique barcodes": 2376, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 1.2328, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_4.9314_1", "Inverse Simpson Index": 25.85976530093482, "num unique barcodes": 2047, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 4.9314, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_4.9314_2", "Inverse Simpson Index": 25.410128709780135, "num unique barcodes": 2169, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 4.9314, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_no-antibody_control_1", "Inverse Simpson Index": 1592.2962734930616, "num unique barcodes": 5346, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_no-antibody_control_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_no-antibody_control_2", "Inverse Simpson Index": 1610.2400905274972, "num unique barcodes": 5377, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_no-antibody_control_2"}, {"library": "LibB", "sample": "2021-10-28_thaw-3_VSVG_control_1", "Inverse Simpson Index": 4433.228067143119, "num unique barcodes": 7257, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2021-10-28_thaw-3_VSVG_control_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_0.15_1", "Inverse Simpson Index": 1633.6697051567305, "num unique barcodes": 6553, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_0.15_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_1.39_1", "Inverse Simpson Index": 199.17893100732715, "num unique barcodes": 3283, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 1, "exclude_after_counts": "yes", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_1.39_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_5.58_1", "Inverse Simpson Index": 19.151281009238737, "num unique barcodes": 2417, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_5.58_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_no-antibody_control_1", "Inverse Simpson Index": 2156.2471451881997, "num unique barcodes": 6425, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_no-antibody_control_1"}]}}, {"mode": "vega-lite"});
+  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "data": {"name": "data-c6bd9c7b6589fdb24941b70f7d9aa7aa"}, "mark": "bar", "encoding": {"color": {"field": "sample_type", "scale": {"domain": ["VSVG_control", "antibody", "no-antibody_control"]}, "type": "nominal"}, "tooltip": [{"field": "library", "type": "nominal"}, {"field": "sample", "type": "nominal"}, {"field": "inv_simpson_index", "format": ".3g", "type": "quantitative"}, {"field": "n_unique_barcodes", "format": ".3g", "type": "quantitative"}, {"field": "date", "type": "nominal"}, {"field": "virus_batch", "type": "nominal"}, {"field": "sample_type", "type": "nominal"}, {"field": "antibody", "type": "nominal"}, {"field": "antibody_concentration", "type": "quantitative"}, {"field": "replicate", "type": "quantitative"}, {"field": "exclude_after_counts", "type": "nominal"}, {"field": "library_sample", "type": "nominal"}], "x": {"field": "inv_simpson_index", "title": "inverse simpson index", "type": "quantitative"}, "y": {"field": "library_sample", "title": null, "type": "nominal"}}, "height": {"step": 15}, "params": [{"name": "parameter001", "select": {"type": "point", "fields": ["exclude_after_counts"]}, "bind": {"input": "select", "options": [null, "no", "yes"], "labels": ["all", "no", "yes"], "name": "exclude_after_counts"}}, {"name": "parameter002", "select": {"type": "point", "fields": ["antibody"]}, "bind": {"input": "select", "options": [null, "REGN10933", "S2M11"], "labels": ["all", "REGN10933", "S2M11"], "name": "antibody"}}, {"name": "parameter003", "select": {"type": "point", "fields": ["virus_batch"]}, "bind": {"input": "select", "options": [null, "thaw-3"], "labels": ["all", "thaw-3"], "name": "virus_batch"}}, {"name": "parameter004", "select": {"type": "point", "fields": ["sample_type"]}, "bind": {"input": "select", "options": [null, "antibody", "no-antibody_control", "VSVG_control"], "labels": ["all", "antibody", "no-antibody_control", "VSVG_control"], "name": "sample_type"}}, {"name": "parameter005", "select": {"type": "point", "fields": ["date"]}, "bind": {"input": "select", "options": [null, "2022-02-10a", "2022-03-02", "2021-10-28"], "labels": ["all", "2022-02-10a", "2022-03-02", "2021-10-28"], "name": "date"}}, {"name": "parameter006", "select": {"type": "point", "fields": ["library"]}, "bind": {"input": "select", "options": [null, "LibA", "LibB"], "labels": ["all", "LibA", "LibB"], "name": "library"}}, {"name": "parameter007", "select": {"type": "point", "fields": ["valid"]}, "bind": "legend"}, {"name": "parameter001", "select": {"type": "point", "fields": ["exclude_after_counts"]}, "bind": {"input": "select", "options": [null, "no", "yes"], "labels": ["all", "no", "yes"], "name": "exclude_after_counts"}}, {"name": "parameter002", "select": {"type": "point", "fields": ["antibody"]}, "bind": {"input": "select", "options": [null, "REGN10933", "S2M11"], "labels": ["all", "REGN10933", "S2M11"], "name": "antibody"}}, {"name": "parameter003", "select": {"type": "point", "fields": ["virus_batch"]}, "bind": {"input": "select", "options": [null, "thaw-3"], "labels": ["all", "thaw-3"], "name": "virus_batch"}}, {"name": "parameter004", "select": {"type": "point", "fields": ["sample_type"]}, "bind": {"input": "select", "options": [null, "antibody", "no-antibody_control", "VSVG_control"], "labels": ["all", "antibody", "no-antibody_control", "VSVG_control"], "name": "sample_type"}}, {"name": "parameter005", "select": {"type": "point", "fields": ["date"]}, "bind": {"input": "select", "options": [null, "2022-02-10a", "2022-03-02", "2021-10-28"], "labels": ["all", "2022-02-10a", "2022-03-02", "2021-10-28"], "name": "date"}}, {"name": "parameter006", "select": {"type": "point", "fields": ["library"]}, "bind": {"input": "select", "options": [null, "LibA", "LibB"], "labels": ["all", "LibA", "LibB"], "name": "library"}}], "transform": [{"filter": {"param": "parameter001"}}, {"filter": {"param": "parameter002"}}, {"filter": {"param": "parameter003"}}, {"filter": {"param": "parameter004"}}, {"filter": {"param": "parameter005"}}, {"filter": {"param": "parameter006"}}], "width": 275, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-c6bd9c7b6589fdb24941b70f7d9aa7aa": [{"library": "LibA", "sample": "2021-10-28_thaw-3_VSVG_control_1", "inv_simpson_index": 3993.7529639988734, "n_unique_barcodes": 6618.0, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2021-10-28_thaw-3_VSVG_control_1"}, {"library": "LibA", "sample": "2021-10-28_thaw-3_VSVG_control_2", "inv_simpson_index": 4010.303112416067, "n_unique_barcodes": 6621.0, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2021-10-28_thaw-3_VSVG_control_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_0.15_1", "inv_simpson_index": 365.9951132004545, "n_unique_barcodes": 4908.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_0.15_2", "inv_simpson_index": 384.03029491669383, "n_unique_barcodes": 5194.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_1.39_1", "inv_simpson_index": 14.541656976720258, "n_unique_barcodes": 1760.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_1.39_2", "inv_simpson_index": 14.23356699392429, "n_unique_barcodes": 1832.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_5.58_1", "inv_simpson_index": 11.321077489436123, "n_unique_barcodes": 1580.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_5.58_2", "inv_simpson_index": 11.008291407801115, "n_unique_barcodes": 1479.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_no-antibody_control_1", "inv_simpson_index": 1530.767307767493, "n_unique_barcodes": 5287.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_no-antibody_control_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_no-antibody_control_2", "inv_simpson_index": 1513.4328486954848, "n_unique_barcodes": 5357.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_no-antibody_control_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_0.3082_1", "inv_simpson_index": 45.18370513097292, "n_unique_barcodes": 2462.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 0.3082, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_0.3082_2", "inv_simpson_index": 42.643549667336785, "n_unique_barcodes": 2689.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 0.3082, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_1.2328_1", "inv_simpson_index": 32.86565936198496, "n_unique_barcodes": 2306.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 1.2328, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_1.2328_2", "inv_simpson_index": 31.5688679214568, "n_unique_barcodes": 2376.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 1.2328, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_4.9314_1", "inv_simpson_index": 25.85976530093482, "n_unique_barcodes": 2047.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 4.9314, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_4.9314_2", "inv_simpson_index": 25.410128709780135, "n_unique_barcodes": 2169.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 4.9314, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_no-antibody_control_1", "inv_simpson_index": 1592.2962734930616, "n_unique_barcodes": 5346.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_no-antibody_control_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_no-antibody_control_2", "inv_simpson_index": 1610.2400905274972, "n_unique_barcodes": 5377.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_no-antibody_control_2"}, {"library": "LibB", "sample": "2021-10-28_thaw-3_VSVG_control_1", "inv_simpson_index": 4433.228067143119, "n_unique_barcodes": 7257.0, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2021-10-28_thaw-3_VSVG_control_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_0.15_1", "inv_simpson_index": 1633.6697051567305, "n_unique_barcodes": 6553.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_0.15_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_1.39_1", "inv_simpson_index": 199.17893100732715, "n_unique_barcodes": 3283.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 1, "exclude_after_counts": "yes", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_1.39_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_5.58_1", "inv_simpson_index": 19.151281009238737, "n_unique_barcodes": 2417.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_5.58_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_no-antibody_control_1", "inv_simpson_index": 2156.2471451881997, "n_unique_barcodes": 6425.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_no-antibody_control_1"}]}}, {"mode": "vega-lite"});
 </script></div>
 </div>
 </section>
@@ -846,13 +845,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-75b05ef6d5eb482ba5c90ea2c022619b"></div>
+<div id="altair-viz-9b919e0818244533acc25d95e97e6a02"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-75b05ef6d5eb482ba5c90ea2c022619b") {
-      outputDiv = document.getElementById("altair-viz-75b05ef6d5eb482ba5c90ea2c022619b");
+    if (outputDiv.id !== "altair-viz-9b919e0818244533acc25d95e97e6a02") {
+      outputDiv = document.getElementById("altair-viz-9b919e0818244533acc25d95e97e6a02");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1099,13 +1098,13 @@ Top barcode for samples with an invalid barcode in top 10:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-3649c2c42b2a4dc3a7dd1b6631e95bbd"></div>
+<div id="altair-viz-d8b3d8069fb54420b341141af537b580"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-3649c2c42b2a4dc3a7dd1b6631e95bbd") {
-      outputDiv = document.getElementById("altair-viz-3649c2c42b2a4dc3a7dd1b6631e95bbd");
+    if (outputDiv.id !== "altair-viz-d8b3d8069fb54420b341141af537b580") {
+      outputDiv = document.getElementById("altair-viz-d8b3d8069fb54420b341141af537b580");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1246,13 +1245,13 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-804eb435ef324a86840cb796fc6ba8de"></div>
+<div id="altair-viz-0aee234654b34e4c971be43278738c86"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-804eb435ef324a86840cb796fc6ba8de") {
-      outputDiv = document.getElementById("altair-viz-804eb435ef324a86840cb796fc6ba8de");
+    if (outputDiv.id !== "altair-viz-0aee234654b34e4c971be43278738c86") {
+      outputDiv = document.getElementById("altair-viz-0aee234654b34e4c971be43278738c86");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1424,13 +1423,13 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-90064953b06b4e959c3f8c4a0382e81e"></div>
+<div id="altair-viz-d454c818ac71453c8a93e3be36c9c7ab"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-90064953b06b4e959c3f8c4a0382e81e") {
-      outputDiv = document.getElementById("altair-viz-90064953b06b4e959c3f8c4a0382e81e");
+    if (outputDiv.id !== "altair-viz-d454c818ac71453c8a93e3be36c9c7ab") {
+      outputDiv = document.getElementById("altair-viz-d454c818ac71453c8a93e3be36c9c7ab");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1639,13 +1638,13 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-e6ac377f74b745338638a7b05854fe02"></div>
+<div id="altair-viz-f2233439310946489901defa68ad15f4"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-e6ac377f74b745338638a7b05854fe02") {
-      outputDiv = document.getElementById("altair-viz-e6ac377f74b745338638a7b05854fe02");
+    if (outputDiv.id !== "altair-viz-f2233439310946489901defa68ad15f4") {
+      outputDiv = document.getElementById("altair-viz-f2233439310946489901defa68ad15f4");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1979,13 +1978,13 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-3c2dee8738d34815b37479f8c059612e"></div>
+<div id="altair-viz-97133d7065154e7ab76081e211734ff1"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-3c2dee8738d34815b37479f8c059612e") {
-      outputDiv = document.getElementById("altair-viz-3c2dee8738d34815b37479f8c059612e");
+    if (outputDiv.id !== "altair-viz-97133d7065154e7ab76081e211734ff1") {
+      outputDiv = document.getElementById("altair-viz-97133d7065154e7ab76081e211734ff1");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
