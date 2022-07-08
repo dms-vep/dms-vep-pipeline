@@ -250,6 +250,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -258,10 +259,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -273,12 +278,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -424,13 +432,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-599513024b6746c0971e7b85a3562c73"></div>
+<div id="altair-viz-3c19fbfd9ae74b12ade46d64da6e6110"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-599513024b6746c0971e7b85a3562c73") {
-      outputDiv = document.getElementById("altair-viz-599513024b6746c0971e7b85a3562c73");
+    if (outputDiv.id !== "altair-viz-3c19fbfd9ae74b12ade46d64da6e6110") {
+      outputDiv = document.getElementById("altair-viz-3c19fbfd9ae74b12ade46d64da6e6110");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -566,13 +574,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-3746d18f2241425bbc8032b880e2b991"></div>
+<div id="altair-viz-4105b9073ac34d2196305b0bca6b1969"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-3746d18f2241425bbc8032b880e2b991") {
-      outputDiv = document.getElementById("altair-viz-3746d18f2241425bbc8032b880e2b991");
+    if (outputDiv.id !== "altair-viz-4105b9073ac34d2196305b0bca6b1969") {
+      outputDiv = document.getElementById("altair-viz-4105b9073ac34d2196305b0bca6b1969");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -622,12 +630,140 @@ div.rendered_html tbody tr:hover {
 </script></div>
 </div>
 </section>
+<section id="Unique-barcodes-and-other-estimates-of-diversity">
+<h2>Unique barcodes and other estimates of diversity<a class="headerlink" href="#Unique-barcodes-and-other-estimates-of-diversity" title="Permalink to this headline">¶</a></h2>
+<p>Calculate the inverse simpson index for each sample as well as the total number of unique barcodes per sample</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">inverse_simpson_index</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate inverse simpson index of sample.</span>
+<span class="sd">    ISI = 1/D</span>
+<span class="sd">    D = sum((ni/N)^2)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">((</span><span class="n">arr</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+
+<span class="n">unique_bcs_and_ISI</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">counts</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;valid&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;count &gt; 0&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">aggregate</span><span class="p">(</span>
+        <span class="n">inv_simpson_index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">inverse_simpson_index</span><span class="p">),</span>
+        <span class="n">n_unique_barcodes</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NamedAgg</span><span class="p">(</span><span class="s2">&quot;barcode&quot;</span><span class="p">,</span> <span class="s2">&quot;nunique&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">barcode_runs</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">],</span> <span class="n">validate</span><span class="o">=</span><span class="s2">&quot;one_to_one&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">astype</span><span class="p">({</span><span class="s2">&quot;n_unique_barcodes&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fastq_R1&quot;</span><span class="p">,</span> <span class="s2">&quot;notes&quot;</span><span class="p">])</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Plot the inverse simpson metrics as an interactive plot. The number of unique barcodes is shown when mousing over a sample</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unique_barcodes_chart</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">unique_bcs_and_ISI</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="s2">&quot;library_sample&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;inv_simpson_index&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;inverse simpson index&quot;</span><span class="p">),</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span>
+            <span class="s2">&quot;sample_type&quot;</span><span class="p">,</span>
+            <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">unique_bcs_and_ISI</span><span class="p">[</span><span class="s2">&quot;sample_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()),</span>
+        <span class="p">),</span>
+        <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">alt</span><span class="o">.</span><span class="n">Tooltip</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;.3g&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;inv_simpson_index&quot;</span><span class="p">,</span> <span class="s2">&quot;n_unique_barcodes&quot;</span><span class="p">}</span>
+            <span class="k">else</span> <span class="n">c</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">unique_bcs_and_ISI</span><span class="o">.</span><span class="n">columns</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">mark_bar</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">275</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">configure_axis</span><span class="p">(</span><span class="n">labelLimit</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="o">*</span><span class="n">selections</span><span class="p">,</span> <span class="n">valid_selection</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">selection</span> <span class="ow">in</span> <span class="n">selections</span><span class="p">:</span>
+    <span class="n">unique_barcodes_chart</span> <span class="o">=</span> <span class="n">unique_barcodes_chart</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span>
+        <span class="n">selection</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">transform_filter</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">unique_barcodes_chart</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div id="altair-viz-2948c49722a54a6da79da2cfb4c7b62a"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-2948c49722a54a6da79da2cfb4c7b62a") {
+      outputDiv = document.getElementById("altair-viz-2948c49722a54a6da79da2cfb4c7b62a");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm//vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm//vega-lite@5.2.0?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm//vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.2.0"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "data": {"name": "data-c6bd9c7b6589fdb24941b70f7d9aa7aa"}, "mark": "bar", "encoding": {"color": {"field": "sample_type", "scale": {"domain": ["VSVG_control", "antibody", "no-antibody_control"]}, "type": "nominal"}, "tooltip": [{"field": "library", "type": "nominal"}, {"field": "sample", "type": "nominal"}, {"field": "inv_simpson_index", "format": ".3g", "type": "quantitative"}, {"field": "n_unique_barcodes", "format": ".3g", "type": "quantitative"}, {"field": "date", "type": "nominal"}, {"field": "virus_batch", "type": "nominal"}, {"field": "sample_type", "type": "nominal"}, {"field": "antibody", "type": "nominal"}, {"field": "antibody_concentration", "type": "quantitative"}, {"field": "replicate", "type": "quantitative"}, {"field": "exclude_after_counts", "type": "nominal"}, {"field": "library_sample", "type": "nominal"}], "x": {"field": "inv_simpson_index", "title": "inverse simpson index", "type": "quantitative"}, "y": {"field": "library_sample", "title": null, "type": "nominal"}}, "height": {"step": 15}, "params": [{"name": "parameter001", "select": {"type": "point", "fields": ["exclude_after_counts"]}, "bind": {"input": "select", "options": [null, "no", "yes"], "labels": ["all", "no", "yes"], "name": "exclude_after_counts"}}, {"name": "parameter002", "select": {"type": "point", "fields": ["antibody"]}, "bind": {"input": "select", "options": [null, "REGN10933", "S2M11"], "labels": ["all", "REGN10933", "S2M11"], "name": "antibody"}}, {"name": "parameter003", "select": {"type": "point", "fields": ["virus_batch"]}, "bind": {"input": "select", "options": [null, "thaw-3"], "labels": ["all", "thaw-3"], "name": "virus_batch"}}, {"name": "parameter004", "select": {"type": "point", "fields": ["sample_type"]}, "bind": {"input": "select", "options": [null, "antibody", "no-antibody_control", "VSVG_control"], "labels": ["all", "antibody", "no-antibody_control", "VSVG_control"], "name": "sample_type"}}, {"name": "parameter005", "select": {"type": "point", "fields": ["date"]}, "bind": {"input": "select", "options": [null, "2022-02-10a", "2022-03-02", "2021-10-28"], "labels": ["all", "2022-02-10a", "2022-03-02", "2021-10-28"], "name": "date"}}, {"name": "parameter006", "select": {"type": "point", "fields": ["library"]}, "bind": {"input": "select", "options": [null, "LibA", "LibB"], "labels": ["all", "LibA", "LibB"], "name": "library"}}, {"name": "parameter007", "select": {"type": "point", "fields": ["valid"]}, "bind": "legend"}, {"name": "parameter001", "select": {"type": "point", "fields": ["exclude_after_counts"]}, "bind": {"input": "select", "options": [null, "no", "yes"], "labels": ["all", "no", "yes"], "name": "exclude_after_counts"}}, {"name": "parameter002", "select": {"type": "point", "fields": ["antibody"]}, "bind": {"input": "select", "options": [null, "REGN10933", "S2M11"], "labels": ["all", "REGN10933", "S2M11"], "name": "antibody"}}, {"name": "parameter003", "select": {"type": "point", "fields": ["virus_batch"]}, "bind": {"input": "select", "options": [null, "thaw-3"], "labels": ["all", "thaw-3"], "name": "virus_batch"}}, {"name": "parameter004", "select": {"type": "point", "fields": ["sample_type"]}, "bind": {"input": "select", "options": [null, "antibody", "no-antibody_control", "VSVG_control"], "labels": ["all", "antibody", "no-antibody_control", "VSVG_control"], "name": "sample_type"}}, {"name": "parameter005", "select": {"type": "point", "fields": ["date"]}, "bind": {"input": "select", "options": [null, "2022-02-10a", "2022-03-02", "2021-10-28"], "labels": ["all", "2022-02-10a", "2022-03-02", "2021-10-28"], "name": "date"}}, {"name": "parameter006", "select": {"type": "point", "fields": ["library"]}, "bind": {"input": "select", "options": [null, "LibA", "LibB"], "labels": ["all", "LibA", "LibB"], "name": "library"}}], "transform": [{"filter": {"param": "parameter001"}}, {"filter": {"param": "parameter002"}}, {"filter": {"param": "parameter003"}}, {"filter": {"param": "parameter004"}}, {"filter": {"param": "parameter005"}}, {"filter": {"param": "parameter006"}}], "width": 275, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-c6bd9c7b6589fdb24941b70f7d9aa7aa": [{"library": "LibA", "sample": "2021-10-28_thaw-3_VSVG_control_1", "inv_simpson_index": 3993.7529639988734, "n_unique_barcodes": 6618.0, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2021-10-28_thaw-3_VSVG_control_1"}, {"library": "LibA", "sample": "2021-10-28_thaw-3_VSVG_control_2", "inv_simpson_index": 4010.303112416067, "n_unique_barcodes": 6621.0, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2021-10-28_thaw-3_VSVG_control_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_0.15_1", "inv_simpson_index": 365.9951132004545, "n_unique_barcodes": 4908.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_0.15_2", "inv_simpson_index": 384.03029491669383, "n_unique_barcodes": 5194.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_0.15_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_1.39_1", "inv_simpson_index": 14.541656976720258, "n_unique_barcodes": 1760.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_1.39_2", "inv_simpson_index": 14.23356699392429, "n_unique_barcodes": 1832.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_1.39_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_5.58_1", "inv_simpson_index": 11.321077489436123, "n_unique_barcodes": 1580.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_antibody_REGN10933_5.58_2", "inv_simpson_index": 11.008291407801115, "n_unique_barcodes": 1479.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_antibody_REGN10933_5.58_2"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_no-antibody_control_1", "inv_simpson_index": 1530.767307767493, "n_unique_barcodes": 5287.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_no-antibody_control_1"}, {"library": "LibA", "sample": "2022-02-10a_thaw-3_no-antibody_control_2", "inv_simpson_index": 1513.4328486954848, "n_unique_barcodes": 5357.0, "date": "2022-02-10a", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-02-10a_thaw-3_no-antibody_control_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_0.3082_1", "inv_simpson_index": 45.18370513097292, "n_unique_barcodes": 2462.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 0.3082, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_0.3082_2", "inv_simpson_index": 42.643549667336785, "n_unique_barcodes": 2689.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 0.3082, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_0.3082_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_1.2328_1", "inv_simpson_index": 32.86565936198496, "n_unique_barcodes": 2306.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 1.2328, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_1.2328_2", "inv_simpson_index": 31.5688679214568, "n_unique_barcodes": 2376.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 1.2328, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_1.2328_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_4.9314_1", "inv_simpson_index": 25.85976530093482, "n_unique_barcodes": 2047.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 4.9314, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_antibody_S2M11_4.9314_2", "inv_simpson_index": 25.410128709780135, "n_unique_barcodes": 2169.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "S2M11", "antibody_concentration": 4.9314, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_antibody_S2M11_4.9314_2"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_no-antibody_control_1", "inv_simpson_index": 1592.2962734930616, "n_unique_barcodes": 5346.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_no-antibody_control_1"}, {"library": "LibA", "sample": "2022-03-02_thaw-3_no-antibody_control_2", "inv_simpson_index": 1610.2400905274972, "n_unique_barcodes": 5377.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 2, "exclude_after_counts": "no", "library_sample": "LibA_2022-03-02_thaw-3_no-antibody_control_2"}, {"library": "LibB", "sample": "2021-10-28_thaw-3_VSVG_control_1", "inv_simpson_index": 4433.228067143119, "n_unique_barcodes": 7257.0, "date": "2021-10-28", "virus_batch": "thaw-3", "sample_type": "VSVG_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2021-10-28_thaw-3_VSVG_control_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_0.15_1", "inv_simpson_index": 1633.6697051567305, "n_unique_barcodes": 6553.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 0.15, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_0.15_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_1.39_1", "inv_simpson_index": 199.17893100732715, "n_unique_barcodes": 3283.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 1.39, "replicate": 1, "exclude_after_counts": "yes", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_1.39_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_antibody_REGN10933_5.58_1", "inv_simpson_index": 19.151281009238737, "n_unique_barcodes": 2417.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "antibody", "antibody": "REGN10933", "antibody_concentration": 5.58, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_antibody_REGN10933_5.58_1"}, {"library": "LibB", "sample": "2022-03-02_thaw-3_no-antibody_control_1", "inv_simpson_index": 2156.2471451881997, "n_unique_barcodes": 6425.0, "date": "2022-03-02", "virus_batch": "thaw-3", "sample_type": "no-antibody_control", "antibody": null, "antibody_concentration": null, "replicate": 1, "exclude_after_counts": "no", "library_sample": "LibB_2022-03-02_thaw-3_no-antibody_control_1"}]}}, {"mode": "vega-lite"});
+</script></div>
+</div>
+</section>
 <section id="Invalid-barcodes-and-possible-library-to-library-contamination">
 <h2>Invalid barcodes and possible library-to-library contamination<a class="headerlink" href="#Invalid-barcodes-and-possible-library-to-library-contamination" title="Permalink to this headline">¶</a></h2>
 <p>Look at the top invalid barcodes.</p>
 <p>First get all invalid barcodes along with where their counts rank among <strong>all</strong> (valid and invalid) barcodes for that library / sample:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ranked_invalid</span> <span class="o">=</span> <span class="p">(</span>
@@ -647,7 +783,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>How many invalid barcodes are in top 10 most abundant? Plot this, and then list top barcode for any sample with an invalid in the top 10:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get top invalid barcode and number invalid in top 10</span>
@@ -709,13 +845,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-aedf31f5656a4b39a68c2186196438ec"></div>
+<div id="altair-viz-9b919e0818244533acc25d95e97e6a02"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-aedf31f5656a4b39a68c2186196438ec") {
-      outputDiv = document.getElementById("altair-viz-aedf31f5656a4b39a68c2186196438ec");
+    if (outputDiv.id !== "altair-viz-9b919e0818244533acc25d95e97e6a02") {
+      outputDiv = document.getElementById("altair-viz-9b919e0818244533acc25d95e97e6a02");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -809,7 +945,7 @@ Top barcode for samples with an invalid barcode in top 10:
 </div>
 <p>Get which libraries each barcode maps to:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">barcodes_by_library</span> <span class="o">=</span> <span class="p">(</span>
@@ -881,7 +1017,7 @@ Top barcode for samples with an invalid barcode in top 10:
 </div>
 <p>Now look at the overall barcode counts for each sample and see how many map to the expected library or to some other library. Having many barcodes that map to a different library can be an indication of contamination unless there is a lot of expected overlap between the two libraries (which would be indicated in table above):</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counts_by_library</span> <span class="o">=</span> <span class="p">(</span>
@@ -916,7 +1052,7 @@ Top barcode for samples with an invalid barcode in top 10:
 </div>
 <p>Plot which libraries overall barcode counts map to for each sample:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ordered_cats</span> <span class="o">=</span> <span class="p">(</span>
@@ -958,17 +1094,17 @@ Top barcode for samples with an invalid barcode in top 10:
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-21e834d7c5a84d1c97db443df4a964a9"></div>
+<div id="altair-viz-d8b3d8069fb54420b341141af537b580"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-21e834d7c5a84d1c97db443df4a964a9") {
-      outputDiv = document.getElementById("altair-viz-21e834d7c5a84d1c97db443df4a964a9");
+    if (outputDiv.id !== "altair-viz-d8b3d8069fb54420b341141af537b580") {
+      outputDiv = document.getElementById("altair-viz-d8b3d8069fb54420b341141af537b580");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1022,7 +1158,7 @@ Top barcode for samples with an invalid barcode in top 10:
 <h2>Get <code class="docutils literal notranslate"><span class="pre">CodonVariantTable</span></code> for valid variant counts<a class="headerlink" href="#Get-CodonVariantTable-for-valid-variant-counts" title="Permalink to this headline">¶</a></h2>
 <p>Get the variant counts for samples with sufficient valid barcode counts, and determine if there are any samples without sufficient counts that don’t havea <code class="docutils literal notranslate"><span class="pre">exclude_after_counts</span></code> specified:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Requiring </span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;min_avg_counts&#39;</span><span class="p">]</span><span class="si">=}</span><span class="s2"> average counts per variant</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1109,13 +1245,13 @@ Requiring config[&#39;min_avg_counts&#39;]=6 average counts per variant
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-622b1185261c4d8e901893d351083d7f"></div>
+<div id="altair-viz-0aee234654b34e4c971be43278738c86"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-622b1185261c4d8e901893d351083d7f") {
-      outputDiv = document.getElementById("altair-viz-622b1185261c4d8e901893d351083d7f");
+    if (outputDiv.id !== "altair-viz-0aee234654b34e4c971be43278738c86") {
+      outputDiv = document.getElementById("altair-viz-0aee234654b34e4c971be43278738c86");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1175,7 +1311,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 <p>Now create a <a class="reference external" href="https://jbloomlab.github.io/dms_variants/dms_variants.codonvarianttable.html">CodonVariantTable</a> for the samples not specified for exclusion:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">geneseq</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Bio</span><span class="o">.</span><span class="n">SeqIO</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;gene_sequence_codon&quot;</span><span class="p">],</span> <span class="s2">&quot;fasta&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
@@ -1205,7 +1341,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 <h2>Average mutations per variant<a class="headerlink" href="#Average-mutations-per-variant" title="Permalink to this headline">¶</a></h2>
 <p>Interactive plot of average codon mutations per variant:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">avg_muts</span> <span class="o">=</span> <span class="p">(</span>
@@ -1229,7 +1365,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mut_types_sort</span> <span class="o">=</span> <span class="n">avg_muts</span><span class="p">[</span><span class="s2">&quot;mutation_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -1283,17 +1419,17 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-f9d87884375640648d12d36c8ff1e31a"></div>
+<div id="altair-viz-d454c818ac71453c8a93e3be36c9c7ab"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-f9d87884375640648d12d36c8ff1e31a") {
-      outputDiv = document.getElementById("altair-viz-f9d87884375640648d12d36c8ff1e31a");
+    if (outputDiv.id !== "altair-viz-d454c818ac71453c8a93e3be36c9c7ab") {
+      outputDiv = document.getElementById("altair-viz-d454c818ac71453c8a93e3be36c9c7ab");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1348,7 +1484,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 <p>Plot frequencies of mutations across the gene.</p>
 <p>First, get the frequencies of mutations at each site:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># read reference site numbering</span>
@@ -1397,7 +1533,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 <p>Now to make these plots smaller we pivot the data to wide form and remove all most of the data to a separate lookup table:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># encode samples as integers</span>
@@ -1428,7 +1564,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 <p>Now plot the frequencies:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">zoom_brush</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">selection_interval</span><span class="p">(</span>
@@ -1498,17 +1634,17 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-7aad4fba172a45299c377aa4dcec1be4"></div>
+<div id="altair-viz-f2233439310946489901defa68ad15f4"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-7aad4fba172a45299c377aa4dcec1be4") {
-      outputDiv = document.getElementById("altair-viz-7aad4fba172a45299c377aa4dcec1be4");
+    if (outputDiv.id !== "altair-viz-f2233439310946489901defa68ad15f4") {
+      outputDiv = document.getElementById("altair-viz-f2233439310946489901defa68ad15f4");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1562,7 +1698,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 <h2>How much do individual variants dominate counts?<a class="headerlink" href="#How-much-do-individual-variants-dominate-counts?" title="Permalink to this headline">¶</a></h2>
 <p>We look to see which individual variants dominate the counts, doing this separately for each target:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variant_counts</span> <span class="o">=</span> <span class="p">(</span>
@@ -1591,7 +1727,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 <p>Get the top 25 variants, and the 10th and 90th percentiles:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_n</span> <span class="o">=</span> <span class="mi">25</span>
@@ -1619,7 +1755,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1767,7 +1903,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 <p>Now plot these data. The points show the top variants, and can be moused over for details. The bars show the 10th to 90th percentiles, and the lines the full span. Note that these are the percent frequencies of variants, not the fractional frequencies. Also, note that the x-axis is a symlog scale:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variant_selector</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">selection_point</span><span class="p">(</span>
@@ -1838,17 +1974,17 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-1d3a5ae7794241b987b43fd684e3a353"></div>
+<div id="altair-viz-97133d7065154e7ab76081e211734ff1"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-1d3a5ae7794241b987b43fd684e3a353") {
-      outputDiv = document.getElementById("altair-viz-1d3a5ae7794241b987b43fd684e3a353");
+    if (outputDiv.id !== "altair-viz-97133d7065154e7ab76081e211734ff1") {
+      outputDiv = document.getElementById("altair-viz-97133d7065154e7ab76081e211734ff1");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1902,7 +2038,7 @@ Writing average counts per variant to results/variant_counts/avg_counts_per_vari
 <h2>Check counts are consistent with variant count files<a class="headerlink" href="#Check-counts-are-consistent-with-variant-count-files" title="Permalink to this headline">¶</a></h2>
 <p>Make sure the variant counts analyzed here are the same ones written to CSV files by the pipeline for each library/sample:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">library_sample</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">variants</span><span class="o">.</span><span class="n">variant_count_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>

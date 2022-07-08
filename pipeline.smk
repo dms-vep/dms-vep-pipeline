@@ -255,14 +255,14 @@ rule analyze_variant_counts:
             "notebooks/analyze_variant_counts.ipynb",
         ),
     output:
-        avg_counts_plot=config["variant_avg_counts_plot"],
-        avg_counts_csv=config["variant_avg_counts_csv"],
         # only make a notebook output for docs if there are barcode runs
         **(
             {"nb": "results/notebooks/analyze_variant_counts.ipynb"}
             if len(barcode_runs)
             else {}
         ),
+        avg_counts_plot=config["variant_avg_counts_plot"],
+        avg_counts_csv=config["variant_avg_counts_csv"],
     params:
         config["min_avg_counts"],
     conda:
