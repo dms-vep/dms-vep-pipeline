@@ -1,4 +1,0 @@
-library,antibody_sample,no-antibody_sample,antibody,antibody_concentration,antibody_count,antibody_frac,no-antibody_count,no-antibody_frac
-LibA,2022-02-10a_thaw-3_antibody_REGN10933_0.15_2,2022-02-10a_thaw-3_no-antibody_control_2,REGN10933,0.15,26826,0.1248,3900,0.02237
-LibA,2022-02-10a_thaw-3_antibody_REGN10933_1.39_2,2022-02-10a_thaw-3_no-antibody_control_2,REGN10933,1.39,177405,0.7222,3900,0.02237
-LibA,2022-02-10a_thaw-3_antibody_REGN10933_5.58_2,2022-02-10a_thaw-3_no-antibody_control_2,REGN10933,5.58,128411,0.8263,3900,0.02237
