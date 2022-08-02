@@ -42,12 +42,10 @@ Data files
 - `processed barcode sequencing runs <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/barcode_runs/processed_barcode_runs.csv>`_
 - `variant counts <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/variant_counts>`_
 - `functional selection experiments <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/func_scores/functional_selections.csv>`_
-- `func scores for functional selections <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/func_scores>`_
 - `mutation effects for each functional selection <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/globalepistasis_fits>`_
 - `mutation functional effects replicate average (observed phenotype) <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/muteffects_functional/muteffects_observed.csv>`_
 - `mutation functional effects replicate average (latent phenotype) <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/muteffects_functional/muteffects_latent.csv>`_
 - `antibody selection experiments <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/prob_escape/antibody_selections.csv>`_
-- `prob escapes for antibody selections <https://github.com/dms-vep/dms-vep-pipeline/blob/main/test_example/results/prob_escape>`_
 
 
 
