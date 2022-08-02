@@ -77,10 +77,6 @@ if len(func_selections):
     data_files.update(
         {
             "functional selection experiments": config["functional_selections"],
-            "func scores for functional selections": (
-                func_score_files,
-                config["func_score_dir"],
-            ),
             "mutation effects for each functional selection": (
                 muteffects_files,
                 config["globalepistasis_dir"],
@@ -98,10 +94,6 @@ if len(antibody_selections):
     data_files.update(
         {
             "antibody selection experiments": config["antibody_selections"],
-            "prob escapes for antibody selections": (
-                prob_escape_files,
-                config["prob_escape_dir"],
-            ),
         }
     )
 # add any extra data files specified in top-level Snakefile

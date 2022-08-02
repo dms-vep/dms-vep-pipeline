@@ -1,4 +1,0 @@
-library,antibody_sample,no-antibody_sample,antibody,antibody_concentration,antibody_count,antibody_frac,no-antibody_count,no-antibody_frac
-LibA,2022-03-02_thaw-3_antibody_S2M11_0.3082_1,2022-03-02_thaw-3_no-antibody_control_1,S2M11,0.3082,71035,0.3961,3260,0.02183
-LibA,2022-03-02_thaw-3_antibody_S2M11_1.2328_1,2022-03-02_thaw-3_no-antibody_control_1,S2M11,1.233,66820,0.4704,3260,0.02183
-LibA,2022-03-02_thaw-3_antibody_S2M11_4.9314_1,2022-03-02_thaw-3_no-antibody_control_1,S2M11,4.931,36560,0.532,3260,0.02183
