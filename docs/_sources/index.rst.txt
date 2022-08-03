@@ -32,6 +32,7 @@ details, using dropdowns, etc.
    avg_muteffects
    analyze_prob_escape
    fit_polyclonal
+   avg_antibody_escape
 
 Data files
 ----------
