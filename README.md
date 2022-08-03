@@ -119,3 +119,6 @@ The large data files for the test example in [./test_example/sequencing_data/](t
 Note the first time you set up the repo, you have to run:
 
     git lfs install
+
+### Notes
+If you add noteboooks in subindices, to avoid ``sphinx`` errors they must have the "orphan" tag: https://nbsphinx.readthedocs.io/en/0.8.8/orphan.html

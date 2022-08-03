@@ -550,6 +550,7 @@ rule fit_polyclonal:
 rule avg_antibody_escape:
     """Average escape for an antibody or serum."""
     input:
+        polyclonal_config=config["polyclonal_config"],
         selection_group_pickles=lambda wc: expand(
             rules.fit_polyclonal.output.pickle,
             antibody_selection_group=(
@@ -598,6 +599,7 @@ rule avg_antibody_escape:
         papermill {input.nb} {output.nb} \
             -p antibody {wildcards.antibody} \
             -p escape_avg_method {params.escape_avg_method} \
+            -p polyclonal_config {input.polyclonal_config} \
             -p avg_pickle {output.avg_pickle} \
             -y "{params.selection_groups_yaml}"
         """
