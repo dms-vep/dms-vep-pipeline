@@ -48,7 +48,6 @@ Should have columns *sequential_site*, *amino_acid*, and *mutation_type*.
 For each antibody listed in [barcode_runs.csv](barcode_runs.csv), specify:
 
  - *max_epitopes*: the maximum number of epitopes to test. The fitting keeps testing more epitopes up to this max until additional epitopes don't improve fitting anymore.
- - *n_bootstrap_samples*: number of bootstrap samples to use.
  - *reg_escape_weight*: regularization weight for mutation-escape values.
  - *reg_spread_weight*: regularization weight for spread of escape values at each site.
  - *reg_activity_weight*: regularization weight for epitope activities.

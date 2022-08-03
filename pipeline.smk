@@ -9,6 +9,8 @@ in the upstream file that includes this one.
 import glob
 import os
 
+import yaml
+
 
 include: "funcs.smk"  # import functions
 
@@ -542,4 +544,62 @@ rule fit_polyclonal:
             -p pickle_file {output.pickle} \
             -p n_threads {threads} \
             &> {log}
+        """
+
+
+rule avg_antibody_escape:
+    """Average escape for an antibody or serum."""
+    input:
+        polyclonal_config=config["polyclonal_config"],
+        selection_group_pickles=lambda wc: expand(
+            rules.fit_polyclonal.output.pickle,
+            antibody_selection_group=(
+                antibody_selections.query("antibody == @wc.antibody")[
+                    "selection_group"
+                ].unique()
+            ),
+        ),
+        nb=os.path.join(config["pipeline_path"], "notebooks/avg_antibody_escape.ipynb"),
+    output:
+        avg_pickle=os.path.join(config["escape_dir"], "{antibody}.pickle"),
+        nb="results/notebooks/avg_antibody_escape_{antibody}.ipynb",
+    params:
+        escape_avg_method=config["escape_avg_method"],
+        selection_groups_yaml=lambda wc: yaml.dump(
+            {
+                "selection_groups_dict": (
+                    antibody_selections.query("antibody == @wc.antibody")[
+                        [
+                            "library",
+                            "virus_batch",
+                            "date",
+                            "replicate",
+                            "selection_group",
+                        ]
+                    ]
+                    .drop_duplicates()
+                    .assign(pickle_file=lambda x: (
+                            config["polyclonal_dir"]
+                            + "/"
+                            + x["selection_group"]
+                            + ".pickle"
+                        )
+                    )
+                    .set_index("selection_group")
+                    .to_dict(orient="index")
+                )
+            }
+        ),
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "avg_antibody_escape_{antibody}.txt"),
+    shell:
+        """
+        papermill {input.nb} {output.nb} \
+            -p antibody {wildcards.antibody} \
+            -p escape_avg_method {params.escape_avg_method} \
+            -p polyclonal_config {input.polyclonal_config} \
+            -p avg_pickle {output.avg_pickle} \
+            -y "{params.selection_groups_yaml}"
         """
