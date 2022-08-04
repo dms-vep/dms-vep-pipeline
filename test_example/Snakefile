@@ -16,19 +16,8 @@ rule all:
         variant_count_files,
         rules.check_adequate_variant_counts.output.passed,
         # antibody escape output
-        expand(
-            rules.avg_antibody_escape.output.avg_escape,
-            antibody=antibody_selections["antibody"].unique(),
-        ),
+        antibody_escape_files,
         # functional effects of mutations output
-        expand(
-            rules.fit_globalepistasis.output.muteffects_latent,
-            func_selection=func_selections["selection_name"],
-        ),
-        expand(
-            rules.fit_globalepistasis.output.muteffects_observed,
-            func_selection=func_selections["selection_name"],
-        ),
         (
             [config["muteffects_observed"], config["muteffects_latent"]]
             if len(func_selections)

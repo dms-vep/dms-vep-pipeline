@@ -62,6 +62,12 @@ prob_escape_files = [
     for suffix in ["prob_escape", "neut_standard_fracs", "neutralization"]
 ]
 
+antibody_escape_files = [
+    os.path.join(config["escape_dir"], f"{antibody}_{suffix}")
+    for antibody in antibody_selections["antibody"].unique()
+    for suffix in ["avg.csv", "rep.csv", "heatmap.html", "lineplot.html"]
+]
+
 func_selections = get_functional_selections(barcode_runs)
 os.makedirs(os.path.dirname(config["functional_selections"]), exist_ok=True)
 to_csv_if_changed(func_selections, config["functional_selections"], index=False)
@@ -583,7 +589,8 @@ rule avg_antibody_escape:
                         ]
                     ]
                     .drop_duplicates()
-                    .assign(pickle_file=lambda x: (
+                    .assign(
+                        pickle_file=lambda x: (
                             config["polyclonal_dir"]
                             + "/"
                             + x["selection_group"]

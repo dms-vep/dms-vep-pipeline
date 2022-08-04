@@ -98,7 +98,7 @@ if len(antibody_selections):
     data_files.update(
         {
             "antibody selection experiments": config["antibody_selections"],
-            "antibody escape measurements": config["escape_dir"],
+            "antibody escape values": (antibody_escape_files, config["escape_dir"]),
         }
     )
 # add any extra data files specified in top-level Snakefile
