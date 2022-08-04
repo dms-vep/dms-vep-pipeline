@@ -17,7 +17,7 @@ rule all:
         rules.check_adequate_variant_counts.output.passed,
         # antibody escape output
         expand(
-            rules.avg_antibody_escape.output.avg_pickle,
+            rules.avg_antibody_escape.output.avg_escape,
             antibody=antibody_selections["antibody"].unique(),
         ),
         # functional effects of mutations output
