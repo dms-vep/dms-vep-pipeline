@@ -62,6 +62,12 @@ prob_escape_files = [
     for suffix in ["prob_escape", "neut_standard_fracs", "neutralization"]
 ]
 
+antibody_escape_files = [
+    os.path.join(config["escape_dir"], f"{antibody}_{suffix}")
+    for antibody in antibody_selections["antibody"].unique()
+    for suffix in ["avg.csv", "rep.csv", "heatmap.html", "lineplot.html"]
+]
+
 func_selections = get_functional_selections(barcode_runs)
 os.makedirs(os.path.dirname(config["functional_selections"]), exist_ok=True)
 to_csv_if_changed(func_selections, config["functional_selections"], index=False)
@@ -563,6 +569,10 @@ rule avg_antibody_escape:
         nb=os.path.join(config["pipeline_path"], "notebooks/avg_antibody_escape.ipynb"),
     output:
         avg_pickle=os.path.join(config["escape_dir"], "{antibody}.pickle"),
+        avg_escape=os.path.join(config["escape_dir"], "{antibody}_avg.csv"),
+        rep_escape=os.path.join(config["escape_dir"], "{antibody}_rep.csv"),
+        heatmap=os.path.join(config["escape_dir"], "{antibody}_heatmap.html"),
+        lineplot=os.path.join(config["escape_dir"], "{antibody}_lineplot.html"),
         nb="results/notebooks/avg_antibody_escape_{antibody}.ipynb",
     params:
         escape_avg_method=config["escape_avg_method"],
@@ -579,7 +589,8 @@ rule avg_antibody_escape:
                         ]
                     ]
                     .drop_duplicates()
-                    .assign(pickle_file=lambda x: (
+                    .assign(
+                        pickle_file=lambda x: (
                             config["polyclonal_dir"]
                             + "/"
                             + x["selection_group"]
@@ -602,5 +613,9 @@ rule avg_antibody_escape:
             -p escape_avg_method {params.escape_avg_method} \
             -p polyclonal_config {input.polyclonal_config} \
             -p avg_pickle {output.avg_pickle} \
+            -p avg_escape {output.avg_escape} \
+            -p rep_escape {output.rep_escape} \
+            -p heatmap {output.heatmap} \
+            -p lineplot {output.lineplot} \
             -y "{params.selection_groups_yaml}"
         """
