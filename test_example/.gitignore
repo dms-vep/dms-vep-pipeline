@@ -40,3 +40,7 @@ results/globalepistasis_fits/*
 !results/muteffects_functional
 results/muteffects_functional/*
 !results/muteffects_functional/*.csv
+!results/antibody_escape
+results/antibody_escape/*
+!results/antibody_escape/*.csv
+!results/antibody_escape/*.html
