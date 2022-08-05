@@ -382,6 +382,8 @@ rule fit_globalepistasis:
         nb="results/notebooks/fit_globalepistasis_{func_selection}.ipynb",
     params:
         min_times_seen=config["plot_muteffects_min_times_seen"],
+        likelihood=config["epistasis_model_likelihood"],
+        ftol=config["epistasis_model_ftol"],
     conda:
         "environment.yml"
     log:
@@ -395,6 +397,8 @@ rule fit_globalepistasis:
             -p muteffects_latent_csv {output.muteffects_latent} \
             -p muteffects_observed_csv {output.muteffects_observed} \
             -p min_times_seen {params.min_times_seen} \
+            -p likelihood {params.likelihood} \
+            -p ftol {params.ftol} \
             &> {log}
         """
 
