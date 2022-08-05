@@ -382,8 +382,8 @@ rule fit_globalepistasis:
         nb="results/notebooks/fit_globalepistasis_{func_selection}.ipynb",
     params:
         min_times_seen=config["plot_muteffects_min_times_seen"],
-        likelihood=config["epistasis_model_likelihood"],
-        ftol=config["epistasis_model_ftol"],
+        likelihood=config["epistasis_model_likelihood"] if "epistasis_model_likelihood" in config else "Gaussian",
+        ftol=config["epistasis_model_ftol"] if "epistasis_model_ftol" in config else .0000001,
     conda:
         "environment.yml"
     log:
