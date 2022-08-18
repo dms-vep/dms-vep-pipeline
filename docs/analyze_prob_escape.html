@@ -332,7 +332,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">antibody_selections</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;antibody_selections&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">antibody_selections</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;antibody_selections&quot;</span><span class="p">],</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;antibody&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -364,6 +367,7 @@ div.rendered_html tbody tr:hover {
                 <span class="n">config</span><span class="p">[</span><span class="s2">&quot;prob_escape_dir&quot;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">selection_group</span><span class="si">}</span><span class="s2">_neut_standard_fracs.csv&quot;</span>
             <span class="p">),</span>
             <span class="n">na_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;antibody&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">selection_group</span> <span class="ow">in</span> <span class="n">selection_groups</span>
     <span class="p">],</span>
@@ -458,13 +462,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-a1fe7a3f12ac472fbf5bc3a296c802cf"></div>
+<div id="altair-viz-5707a9e2d4dd46b08d646170de3015ce"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-a1fe7a3f12ac472fbf5bc3a296c802cf") {
-      outputDiv = document.getElementById("altair-viz-a1fe7a3f12ac472fbf5bc3a296c802cf");
+    if (outputDiv.id !== "altair-viz-5707a9e2d4dd46b08d646170de3015ce") {
+      outputDiv = document.getElementById("altair-viz-5707a9e2d4dd46b08d646170de3015ce");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -614,13 +618,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-ea5059245d3544019eeaa4a8abf8b993"></div>
+<div id="altair-viz-b72150b68ef34eefbb999a6bddaa39a0"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-ea5059245d3544019eeaa4a8abf8b993") {
-      outputDiv = document.getElementById("altair-viz-ea5059245d3544019eeaa4a8abf8b993");
+    if (outputDiv.id !== "altair-viz-b72150b68ef34eefbb999a6bddaa39a0") {
+      outputDiv = document.getElementById("altair-viz-b72150b68ef34eefbb999a6bddaa39a0");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -799,13 +803,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-9040cc144b7746ddbac3dd9aa4f1ce6c"></div>
+<div id="altair-viz-3dab54438fbf4c8ea0df3b00cbffc99d"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-9040cc144b7746ddbac3dd9aa4f1ce6c") {
-      outputDiv = document.getElementById("altair-viz-9040cc144b7746ddbac3dd9aa4f1ce6c");
+    if (outputDiv.id !== "altair-viz-3dab54438fbf4c8ea0df3b00cbffc99d") {
+      outputDiv = document.getElementById("altair-viz-3dab54438fbf4c8ea0df3b00cbffc99d");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -921,13 +925,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-b89aebf8b69c4f44a5fbd10ddabeb730"></div>
+<div id="altair-viz-ea6cf628179a4155939e40d1ea3985c5"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-b89aebf8b69c4f44a5fbd10ddabeb730") {
-      outputDiv = document.getElementById("altair-viz-b89aebf8b69c4f44a5fbd10ddabeb730");
+    if (outputDiv.id !== "altair-viz-ea6cf628179a4155939e40d1ea3985c5") {
+      outputDiv = document.getElementById("altair-viz-ea6cf628179a4155939e40d1ea3985c5");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1093,13 +1097,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-10d899ef1e0d4afab12f22fe7a15fba7"></div>
+<div id="altair-viz-3da8113e78494ea89b852a71590c0025"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-10d899ef1e0d4afab12f22fe7a15fba7") {
-      outputDiv = document.getElementById("altair-viz-10d899ef1e0d4afab12f22fe7a15fba7");
+    if (outputDiv.id !== "altair-viz-3da8113e78494ea89b852a71590c0025") {
+      outputDiv = document.getElementById("altair-viz-3da8113e78494ea89b852a71590c0025");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1252,13 +1256,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-8389ea4f061a498db720babf381c6af9"></div>
+<div id="altair-viz-4cdb5a91781b42e295c7c4c7bae480a3"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-8389ea4f061a498db720babf381c6af9") {
-      outputDiv = document.getElementById("altair-viz-8389ea4f061a498db720babf381c6af9");
+    if (outputDiv.id !== "altair-viz-4cdb5a91781b42e295c7c4c7bae480a3") {
+      outputDiv = document.getElementById("altair-viz-4cdb5a91781b42e295c7c4c7bae480a3");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1311,13 +1315,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-1ab6f70e3cab420e9cf3e61bea603cf4"></div>
+<div id="altair-viz-4e5eef24bfdd4b5ab14c621aa93f0690"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-1ab6f70e3cab420e9cf3e61bea603cf4") {
-      outputDiv = document.getElementById("altair-viz-1ab6f70e3cab420e9cf3e61bea603cf4");
+    if (outputDiv.id !== "altair-viz-4e5eef24bfdd4b5ab14c621aa93f0690") {
+      outputDiv = document.getElementById("altair-viz-4e5eef24bfdd4b5ab14c621aa93f0690");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
