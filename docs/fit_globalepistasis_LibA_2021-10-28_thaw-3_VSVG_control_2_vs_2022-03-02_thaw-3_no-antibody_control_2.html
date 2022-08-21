@@ -330,6 +330,8 @@ div.rendered_html tbody tr:hover {
 <span class="n">muteffects_latent_csv</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">muteffects_observed_csv</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">min_times_seen</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">likelihood</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">ftol</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 </div>
 </div>
@@ -344,6 +346,8 @@ div.rendered_html tbody tr:hover {
 <span class="n">muteffects_latent_csv</span> <span class="o">=</span> <span class="s2">&quot;results/globalepistasis_fits/LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-03-02_thaw-3_no-antibody_control_2_muteffects_latent.csv&quot;</span>
 <span class="n">muteffects_observed_csv</span> <span class="o">=</span> <span class="s2">&quot;results/globalepistasis_fits/LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-03-02_thaw-3_no-antibody_control_2_muteffects_observed.csv&quot;</span>
 <span class="n">min_times_seen</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">likelihood</span> <span class="o">=</span> <span class="s2">&quot;Gaussian&quot;</span>
+<span class="n">ftol</span> <span class="o">=</span> <span class="mf">1e-07</span>
 </pre></div>
 </div>
 </div>
@@ -384,7 +388,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_df</span> <span class="o">=</span> <span class="n">dms_variants</span><span class="o">.</span><span class="n">globalepistasis</span><span class="o">.</span><span class="n">fit_models</span><span class="p">(</span>
     <span class="n">binarymap</span><span class="o">=</span><span class="n">bmap</span><span class="p">,</span>
-    <span class="n">likelihood</span><span class="o">=</span><span class="s2">&quot;Gaussian&quot;</span><span class="p">,</span>
+    <span class="n">likelihood</span><span class="o">=</span><span class="n">likelihood</span><span class="p">,</span>
+    <span class="n">ftol</span><span class="o">=</span><span class="n">ftol</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -435,7 +440,7 @@ div.rendered_html tbody tr:hover {
       <td>21628.1</td>
       <td>5149</td>
       <td>-5665.0</td>
-      <td>19.2</td>
+      <td>20.9</td>
     </tr>
     <tr>
       <th>1</th>
@@ -443,7 +448,7 @@ div.rendered_html tbody tr:hover {
       <td>21824.8</td>
       <td>5143</td>
       <td>-5769.4</td>
-      <td>3.8</td>
+      <td>3.3</td>
     </tr>
   </tbody>
 </table>
@@ -589,13 +594,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-b1ecfa1ccd4347bd95685cc8fae4c353"></div>
+<div id="altair-viz-942e909b63dc44569f4304a604af2e27"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-b1ecfa1ccd4347bd95685cc8fae4c353") {
-      outputDiv = document.getElementById("altair-viz-b1ecfa1ccd4347bd95685cc8fae4c353");
+    if (outputDiv.id !== "altair-viz-942e909b63dc44569f4304a604af2e27") {
+      outputDiv = document.getElementById("altair-viz-942e909b63dc44569f4304a604af2e27");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
