@@ -89,6 +89,8 @@ variant_tags:  # variant tags in PacBio amplicon, or "null" if no tags
 # final reference numbering scheme. Required to have columns named
 # "sequential_site" and "reference_site". If you just want to number in
 # sequential numbering for everything, just make both entries sequential.
+# Can optionally have a column called "region" that assigns each site to a
+# region of the protein (eg, domain like RBD or NTD).
 site_numbering_map: data/site_numbering_map.csv
 
 # Classify mutations into different categories, such as which ones are
