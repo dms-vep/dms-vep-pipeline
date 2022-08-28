@@ -108,7 +108,7 @@ data_files.update(extra_data_files)
 
 
 rule make_graphs:
-    """Build ``snakemake`` rulegraph, filegraph, and dag."""
+    """Build ``snakemake`` rulegraph and filegraph."""
     input:
         glob.glob("Snakefile*"),
         glob.glob("*.smk"),
@@ -117,7 +117,6 @@ rule make_graphs:
     output:
         rulegraph=os.path.join(config["docs_source_dir"], "rulegraph.svg"),
         filegraph=os.path.join(config["docs_source_dir"], "filegraph.svg"),
-        dag=os.path.join(config["docs_source_dir"], "dag.svg"),
     log:
         os.path.join(config["logdir"], "make_graphs.txt"),
     conda:
@@ -126,7 +125,6 @@ rule make_graphs:
         """
         snakemake -F --rulegraph | dot -Tsvg > {output.rulegraph} 2> {log}
         snakemake -F --filegraph | dot -Tsvg > {output.filegraph} 2>> {log}
-        snakemake -F --dag | dot -Tsvg > {output.dag} 2>> {log}
         """
 
 
@@ -186,7 +184,6 @@ rule docs_index:
         nblinks,
         rulegraph=rules.make_graphs.output.rulegraph,
         filegraph=rules.make_graphs.output.filegraph,
-        dag=rules.make_graphs.output.dag,
         **(
             {
                 "muteffects_observed": config["muteffects_observed_heatmap"],

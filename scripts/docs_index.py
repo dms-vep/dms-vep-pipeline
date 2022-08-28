@@ -17,7 +17,6 @@ blob_path = f"{github_url}/blob/{github_branch}"
 docs_source_relpath = snakemake.params.docs_source_relpath
 rulegraph = os.path.join(docs_source_relpath, snakemake.input.rulegraph)
 filegraph = os.path.join(docs_source_relpath, snakemake.input.filegraph)
-dag = os.path.join(docs_source_relpath, snakemake.input.dag)
 
 nbs_for_index = snakemake.params.nbs_for_index
 analysis_nbs = "\n   ".join(nbs_for_index)
@@ -46,8 +45,7 @@ Study by {authors}.
 Workflow
 --------
 Below is the rulegraph for the `snakemake <https://snakemake.readthedocs.io/>`_ workflow.
-Click :download:`here <{filegraph}>` for the more detailed filegraph,
-and :download:`here <{dag}>` for the even more detailed DAG (directed acyclic graph).
+Click :download:`here <{filegraph}>` for the more detailed filegraph.
 
 .. image:: {rulegraph}
    :width: 800
