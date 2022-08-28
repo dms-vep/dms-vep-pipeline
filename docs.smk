@@ -216,6 +216,17 @@ rule sphinx_build:
         rules.docs_index.input,
         index=rules.docs_index.output.index,
         conf=os.path.join(config["pipeline_path"], "conf.py"),
+        html_extra_path_files=[
+            *(
+                [
+                    config["muteffects_observed_heatmap"],
+                    config["muteffects_latent_heatmap"],
+                ]
+                if len(func_selections)
+                else []
+            ),
+            *antibody_escape_plots,
+        ],
     output:
         docs=directory(config["docs"]),
     params:
@@ -225,19 +236,16 @@ rule sphinx_build:
         author=config["authors"],
         copyright=f"{config['authors']} ({config['year']})",
         # include HTML altair plots: https://stackoverflow.com/q/48889270
-        html_extra_path=",".join(
-            os.path.relpath(f, config["pipeline_path"])
-            for f in [
-                *(
-                    [
-                        config["muteffects_observed_heatmap"],
-                        config["muteffects_latent_heatmap"],
-                    ]
-                    if len(func_selections)
-                    else []
-                ),
-                *antibody_escape_plots,
-            ]
+        html_extra_path=lambda _, input: (
+            "-D html_extra_path="
+            + '"'
+            + ",".join(
+                os.path.relpath(f, config["pipeline_path"])
+                for f in input.html_extra_path_files
+            )
+            + '"'
+            if input.html_extra_path_files
+            else ""
         ),
     log:
         os.path.join(config["logdir"], "sphinx_build.txt"),
@@ -254,7 +262,7 @@ rule sphinx_build:
             -D project="{params.project}" \
             -D author="{params.author}" \
             -D copyright="{params.copyright}" \
-            -D html_extra_path="{params.html_extra_path}" \
+            {params.html_extra_path} \
             {params.docs_source} \
             {output.docs} \
             &> {log}
