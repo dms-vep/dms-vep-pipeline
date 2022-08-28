@@ -187,6 +187,13 @@ rule docs_index:
         rulegraph=rules.make_graphs.output.rulegraph,
         filegraph=rules.make_graphs.output.filegraph,
         dag=rules.make_graphs.output.dag,
+        **(
+            {
+                "muteffects_observed": config["muteffects_observed_heatmap"],
+                "muteffects_latent": config["muteffects_latent_heatmap"],
+            }
+            if len(func_selections) else {}
+        ),
     output:
         index=os.path.join(config["docs_source_dir"], "index.rst"),
     params:
@@ -194,6 +201,7 @@ rule docs_index:
         results_relpath=os.path.relpath(".", start=f"{config['docs']}/.."),
         data_files=data_files,
         nbs_for_index=nbs_for_index,
+        have_func_selections=len(func_selections) > 0,
     log:
         os.path.join(config["logdir"], "docs_index.txt"),
     conda:
@@ -216,6 +224,19 @@ rule sphinx_build:
         project=config["description"],
         author=config["authors"],
         copyright=f"{config['authors']} ({config['year']})",
+        # include HTML altair plots: https://stackoverflow.com/q/48889270
+        html_extra_path=",".join(
+            os.path.relpath(f, config["pipeline_path"])
+            for f in [
+                *(
+                    [
+                        config["muteffects_observed_heatmap"],
+                        config["muteffects_latent_heatmap"],
+                    ]
+                    if len(func_selections) else []
+                )
+            ]
+        ),
     log:
         os.path.join(config["logdir"], "sphinx_build.txt"),
     conda:
@@ -231,6 +252,7 @@ rule sphinx_build:
             -D project="{params.project}" \
             -D author="{params.author}" \
             -D copyright="{params.copyright}" \
+            -D html_extra_path="{params.html_extra_path}" \
             {params.docs_source} \
             {output.docs} \
             &> {log}

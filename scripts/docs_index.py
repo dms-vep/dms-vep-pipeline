@@ -67,6 +67,18 @@ Data files
 {data_file_links}
 
 
-
 """
     )
+
+    # link HTML plots: https://stackoverflow.com/a/67997311
+    if snakemake.params.have_func_selections:
+        f_obj.write(
+            f"""\
+
+Interactive plots of mutation functional effects
+------------------------------------------------
+- `Observed phenotype effects <{os.path.basename(snakemake.input.muteffects_observed)}>`_
+- `Latent phenotype effects <{os.path.basename(snakemake.input.muteffects_latent)}>`_
+
+"""
+        )
