@@ -81,7 +81,7 @@ Interactive plots of mutation functional effects
 
     if snakemake.params.have_antibody_selections:
         f_obj.write(
-            f"""\
+            """\
 Interactive plots of mutation antibody escape
 ---------------------------------------------
 """

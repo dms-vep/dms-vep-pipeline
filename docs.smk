@@ -182,15 +182,16 @@ rule docs_index:
         nbs,
         nb_subindices,
         nblinks,
-        rulegraph=rules.make_graphs.output.rulegraph,
-        filegraph=rules.make_graphs.output.filegraph,
         **(
             {
                 "muteffects_observed": config["muteffects_observed_heatmap"],
                 "muteffects_latent": config["muteffects_latent_heatmap"],
             }
-            if len(func_selections) else {}
+            if len(func_selections)
+            else {}
         ),
+        rulegraph=rules.make_graphs.output.rulegraph,
+        filegraph=rules.make_graphs.output.filegraph,
         antibody_escape_plots=antibody_escape_plots,
     output:
         index=os.path.join(config["docs_source_dir"], "index.rst"),
@@ -232,7 +233,8 @@ rule sphinx_build:
                         config["muteffects_observed_heatmap"],
                         config["muteffects_latent_heatmap"],
                     ]
-                    if len(func_selections) else []
+                    if len(func_selections)
+                    else []
                 ),
                 *antibody_escape_plots,
             ]
