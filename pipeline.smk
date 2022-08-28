@@ -65,7 +65,7 @@ prob_escape_files = [
 antibody_escape_files = [
     os.path.join(config["escape_dir"], f"{antibody}_{suffix}")
     for antibody in antibody_selections["antibody"].unique()
-    for suffix in ["avg.csv", "rep.csv", "heatmap.html", "lineplot.html"]
+    for suffix in ["avg.csv", "rep.csv", "escape_plot.html"]
 ]
 
 func_selections = get_functional_selections(barcode_runs)
@@ -557,10 +557,10 @@ rule fit_polyclonal:
             &> {log}
         """
 
-
 rule avg_antibody_escape:
     """Average escape for an antibody or serum."""
     input:
+        site_numbering_map=config["site_numbering_map"],
         polyclonal_config=config["polyclonal_config"],
         selection_group_pickles=lambda wc: expand(
             rules.fit_polyclonal.output.pickle,
@@ -575,8 +575,7 @@ rule avg_antibody_escape:
         avg_pickle=os.path.join(config["escape_dir"], "{antibody}.pickle"),
         avg_escape=os.path.join(config["escape_dir"], "{antibody}_avg.csv"),
         rep_escape=os.path.join(config["escape_dir"], "{antibody}_rep.csv"),
-        heatmap=os.path.join(config["escape_dir"], "{antibody}_heatmap.html"),
-        lineplot=os.path.join(config["escape_dir"], "{antibody}_lineplot.html"),
+        escape_plot=os.path.join(config["escape_dir"], "{antibody}_escape_plot.html"),
         nb="results/notebooks/avg_antibody_escape_{antibody}.ipynb",
     params:
         escape_avg_method=config["escape_avg_method"],
@@ -616,10 +615,10 @@ rule avg_antibody_escape:
             -p antibody {wildcards.antibody} \
             -p escape_avg_method {params.escape_avg_method} \
             -p polyclonal_config {input.polyclonal_config} \
+            -p site_numbering_map {input.site_numbering_map} \
             -p avg_pickle {output.avg_pickle} \
             -p avg_escape {output.avg_escape} \
             -p rep_escape {output.rep_escape} \
-            -p heatmap {output.heatmap} \
-            -p lineplot {output.lineplot} \
+            -p escape_plot {output.escape_plot} \
             -y "{params.selection_groups_yaml}"
         """
