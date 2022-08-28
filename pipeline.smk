@@ -536,6 +536,7 @@ rule fit_polyclonal:
     input:
         config["polyclonal_config"],
         config["site_numbering_map"],
+        config["muteffects_observed"],
         prob_escape_csv=rules.prob_escape.output.prob_escape,
         nb=os.path.join(config["pipeline_path"], "notebooks/fit_polyclonal.ipynb"),
     output:
@@ -560,6 +561,7 @@ rule fit_polyclonal:
 rule avg_antibody_escape:
     """Average escape for an antibody or serum."""
     input:
+        muteffects=config["muteffects_observed"],
         site_numbering_map=config["site_numbering_map"],
         polyclonal_config=config["polyclonal_config"],
         selection_group_pickles=lambda wc: expand(
@@ -615,6 +617,7 @@ rule avg_antibody_escape:
             -p antibody {wildcards.antibody} \
             -p escape_avg_method {params.escape_avg_method} \
             -p polyclonal_config {input.polyclonal_config} \
+            -p muteffects_csv {input.muteffects} \
             -p site_numbering_map {input.site_numbering_map} \
             -p avg_pickle {output.avg_pickle} \
             -p avg_escape {output.avg_escape} \
