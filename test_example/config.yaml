@@ -64,9 +64,14 @@ func_scores_min_wt_frac:  0.001  # require this fraction of all counts for wildt
 func_scores_min_preselection_counts: 10  # maybe make larger for real expts, say 20 to 50
 func_scores_min_preselection_frac: 0.00005  # make smaller for large libraries, say 0.1 / (library size)
 # when plotting mut effects on viral entry, initially require mutation seen in this many variants:
-plot_muteffects_min_times_seen: 3
-# when averaging mutation effects on viral entry, take the "median" or "mean"?
 muteffects_avg_method: median
+# keyword arguments to `polyclonal.plot.lineplot_and_heatmap` for plotting functional effects
+muteffects_plot_kwargs:
+  addtl_slider_stats:
+    times_seen: 3
+  heatmap_max_at_least: 1
+  heatmap_min_at_least: -1
+  init_floor_at_zero: False
 
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline

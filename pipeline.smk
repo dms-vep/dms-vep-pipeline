@@ -381,7 +381,7 @@ rule fit_globalepistasis:
         ),
         nb="results/notebooks/fit_globalepistasis_{func_selection}.ipynb",
     params:
-        min_times_seen=config["plot_muteffects_min_times_seen"],
+        plot_kwargs_yaml=yaml.dump({"plot_kwargs": config["muteffects_plot_kwargs"]}),
         likelihood=config["epistasis_model_likelihood"] if "epistasis_model_likelihood" in config else "Gaussian",
         ftol=config["epistasis_model_ftol"] if "epistasis_model_ftol" in config else .0000001,
     conda:
@@ -396,9 +396,9 @@ rule fit_globalepistasis:
             -p pickle_file {output.pickle} \
             -p muteffects_latent_csv {output.muteffects_latent} \
             -p muteffects_observed_csv {output.muteffects_observed} \
-            -p min_times_seen {params.min_times_seen} \
             -p likelihood {params.likelihood} \
             -p ftol {params.ftol} \
+            -y "{params.plot_kwargs_yaml}" \
             &> {log}
         """
 
@@ -428,7 +428,7 @@ rule avg_muteffects:
             else {}
         ),
     params:
-        config["plot_muteffects_min_times_seen"],
+        config["muteffects_plot_kwargs"],
         config["muteffects_avg_method"],
     conda:
         "environment.yml"
