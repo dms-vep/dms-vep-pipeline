@@ -194,6 +194,7 @@ rule docs_index:
             }
             if len(func_selections) else {}
         ),
+        antibody_escape_plots=antibody_escape_plots,
     output:
         index=os.path.join(config["docs_source_dir"], "index.rst"),
     params:
@@ -202,6 +203,7 @@ rule docs_index:
         data_files=data_files,
         nbs_for_index=nbs_for_index,
         have_func_selections=len(func_selections) > 0,
+        have_antibody_selections=len(antibody_selections) > 0,
     log:
         os.path.join(config["logdir"], "docs_index.txt"),
     conda:
@@ -234,7 +236,8 @@ rule sphinx_build:
                         config["muteffects_latent_heatmap"],
                     ]
                     if len(func_selections) else []
-                )
+                ),
+                *antibody_escape_plots,
             ]
         ),
     log:

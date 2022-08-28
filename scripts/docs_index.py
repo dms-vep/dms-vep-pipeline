@@ -66,7 +66,6 @@ Data files
 ----------
 {data_file_links}
 
-
 """
     )
 
@@ -74,7 +73,6 @@ Data files
     if snakemake.params.have_func_selections:
         f_obj.write(
             f"""\
-
 Interactive plots of mutation functional effects
 ------------------------------------------------
 - `Observed phenotype effects <{os.path.basename(snakemake.input.muteffects_observed)}>`_
@@ -82,3 +80,15 @@ Interactive plots of mutation functional effects
 
 """
         )
+
+    if snakemake.params.have_antibody_selections:
+        f_obj.write(
+            f"""\
+Interactive plots of mutation antibody escape
+---------------------------------------------
+"""
+        )
+        for html_plot in sorted(snakemake.input.antibody_escape_plots):
+            base_plot = os.path.basename(html_plot)
+            label = os.path.splitext(base_plot)[0].replace("_", " ")
+            f_obj.write(f"- `{label} <{base_plot}>`_\n")

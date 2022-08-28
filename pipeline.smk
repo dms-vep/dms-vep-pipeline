@@ -65,7 +65,12 @@ prob_escape_files = [
 antibody_escape_files = [
     os.path.join(config["escape_dir"], f"{antibody}_{suffix}")
     for antibody in antibody_selections["antibody"].unique()
-    for suffix in ["avg.csv", "rep.csv", "escape_plot.html"]
+    for suffix in ["avg.csv", "rep.csv"]
+]
+
+antibody_escape_plots = [
+    os.path.join(config["escape_dir"], f"{antibody}_escape_plot.html")
+    for antibody in antibody_selections["antibody"].unique()
 ]
 
 func_selections = get_functional_selections(barcode_runs)
