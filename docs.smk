@@ -108,7 +108,7 @@ data_files.update(extra_data_files)
 
 
 rule make_graphs:
-    """Build ``snakemake`` rulegraph, filegraph, and dag."""
+    """Build ``snakemake`` rulegraph and filegraph."""
     input:
         glob.glob("Snakefile*"),
         glob.glob("*.smk"),
@@ -117,7 +117,6 @@ rule make_graphs:
     output:
         rulegraph=os.path.join(config["docs_source_dir"], "rulegraph.svg"),
         filegraph=os.path.join(config["docs_source_dir"], "filegraph.svg"),
-        dag=os.path.join(config["docs_source_dir"], "dag.svg"),
     log:
         os.path.join(config["logdir"], "make_graphs.txt"),
     conda:
@@ -126,7 +125,6 @@ rule make_graphs:
         """
         snakemake -F --rulegraph | dot -Tsvg > {output.rulegraph} 2> {log}
         snakemake -F --filegraph | dot -Tsvg > {output.filegraph} 2>> {log}
-        snakemake -F --dag | dot -Tsvg > {output.dag} 2>> {log}
         """
 
 
@@ -184,9 +182,17 @@ rule docs_index:
         nbs,
         nb_subindices,
         nblinks,
+        **(
+            {
+                "muteffects_observed": config["muteffects_observed_heatmap"],
+                "muteffects_latent": config["muteffects_latent_heatmap"],
+            }
+            if len(func_selections)
+            else {}
+        ),
         rulegraph=rules.make_graphs.output.rulegraph,
         filegraph=rules.make_graphs.output.filegraph,
-        dag=rules.make_graphs.output.dag,
+        antibody_escape_plots=antibody_escape_plots,
     output:
         index=os.path.join(config["docs_source_dir"], "index.rst"),
     params:
@@ -194,6 +200,8 @@ rule docs_index:
         results_relpath=os.path.relpath(".", start=f"{config['docs']}/.."),
         data_files=data_files,
         nbs_for_index=nbs_for_index,
+        have_func_selections=len(func_selections) > 0,
+        have_antibody_selections=len(antibody_selections) > 0,
     log:
         os.path.join(config["logdir"], "docs_index.txt"),
     conda:
@@ -208,6 +216,17 @@ rule sphinx_build:
         rules.docs_index.input,
         index=rules.docs_index.output.index,
         conf=os.path.join(config["pipeline_path"], "conf.py"),
+        html_extra_path_files=[
+            *(
+                [
+                    config["muteffects_observed_heatmap"],
+                    config["muteffects_latent_heatmap"],
+                ]
+                if len(func_selections)
+                else []
+            ),
+            *antibody_escape_plots,
+        ],
     output:
         docs=directory(config["docs"]),
     params:
@@ -216,6 +235,18 @@ rule sphinx_build:
         project=config["description"],
         author=config["authors"],
         copyright=f"{config['authors']} ({config['year']})",
+        # include HTML altair plots: https://stackoverflow.com/q/48889270
+        html_extra_path=lambda _, input: (
+            "-D html_extra_path="
+            + '"'
+            + ",".join(
+                os.path.relpath(f, config["pipeline_path"])
+                for f in input.html_extra_path_files
+            )
+            + '"'
+            if input.html_extra_path_files
+            else ""
+        ),
     log:
         os.path.join(config["logdir"], "sphinx_build.txt"),
     conda:
@@ -231,6 +262,7 @@ rule sphinx_build:
             -D project="{params.project}" \
             -D author="{params.author}" \
             -D copyright="{params.copyright}" \
+            {params.html_extra_path} \
             {params.docs_source} \
             {output.docs} \
             &> {log}

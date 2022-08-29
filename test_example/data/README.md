@@ -35,6 +35,7 @@ It has the following columns:
 
 ## Site numbering
 [site_numbering_map.csv](site_numbering_map.csv): Maps sequential 1, 2, ... numbering of the gene to a "reference" numbering scheme that represents the standard naming of sites for this gene.
+Also assigns each site to a region (domain) of the protein.
 
 ## Mutation-type classification
 [data/mutation_design_classification.csv](data/mutation_design_classification.csv) classifies mutations into the different categories of designed mutations.
@@ -48,8 +49,6 @@ Should have columns *sequential_site*, *amino_acid*, and *mutation_type*.
 For each antibody listed in [barcode_runs.csv](barcode_runs.csv), specify:
 
  - *max_epitopes*: the maximum number of epitopes to test. The fitting keeps testing more epitopes up to this max until additional epitopes don't improve fitting anymore.
- - *reg_escape_weight*: regularization weight for mutation-escape values.
- - *reg_spread_weight*: regularization weight for spread of escape values at each site.
- - *reg_activity_weight*: regularization weight for epitope activities.
- - *times_seen*: the `times_seen` value used for plotting the results (number of variants a mutation must be found in).
  - *min_epitope_activity_to_include*: keep adding epitopes until activity <= this.
+ - *fit_kwargs*: keyword arguments passed to `Polyclonal.fit`
+ - *plot_kwargs*: keyword arguments passed to `Polyclonal.plot_mut_escape`.

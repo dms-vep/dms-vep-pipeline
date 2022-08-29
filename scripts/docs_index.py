@@ -17,7 +17,6 @@ blob_path = f"{github_url}/blob/{github_branch}"
 docs_source_relpath = snakemake.params.docs_source_relpath
 rulegraph = os.path.join(docs_source_relpath, snakemake.input.rulegraph)
 filegraph = os.path.join(docs_source_relpath, snakemake.input.filegraph)
-dag = os.path.join(docs_source_relpath, snakemake.input.dag)
 
 nbs_for_index = snakemake.params.nbs_for_index
 analysis_nbs = "\n   ".join(nbs_for_index)
@@ -46,8 +45,7 @@ Study by {authors}.
 Workflow
 --------
 Below is the rulegraph for the `snakemake <https://snakemake.readthedocs.io/>`_ workflow.
-Click :download:`here <{filegraph}>` for the more detailed filegraph,
-and :download:`here <{dag}>` for the even more detailed DAG (directed acyclic graph).
+Click :download:`here <{filegraph}>` for the more detailed filegraph.
 
 .. image:: {rulegraph}
    :width: 800
@@ -66,7 +64,29 @@ Data files
 ----------
 {data_file_links}
 
-
-
 """
     )
+
+    # link HTML plots: https://stackoverflow.com/a/67997311
+    if snakemake.params.have_func_selections:
+        f_obj.write(
+            f"""\
+Interactive plots of mutation functional effects
+------------------------------------------------
+- `Observed phenotype effects <{os.path.basename(snakemake.input.muteffects_observed)}>`_
+- `Latent phenotype effects <{os.path.basename(snakemake.input.muteffects_latent)}>`_
+
+"""
+        )
+
+    if snakemake.params.have_antibody_selections:
+        f_obj.write(
+            """\
+Interactive plots of mutation antibody escape
+---------------------------------------------
+"""
+        )
+        for html_plot in sorted(snakemake.input.antibody_escape_plots):
+            base_plot = os.path.basename(html_plot)
+            label = os.path.splitext(base_plot)[0].replace("_", " ")
+            f_obj.write(f"- `{label} <{base_plot}>`_\n")

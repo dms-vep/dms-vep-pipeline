@@ -43,4 +43,3 @@ results/muteffects_functional/*
 !results/antibody_escape
 results/antibody_escape/*
 !results/antibody_escape/*.csv
-!results/antibody_escape/*.html
