@@ -1,32 +1,39 @@
 # How to do `polyclonal` fitting for antibodies / sera.
 
-# default configuration for monoclonal antibodies (mAbs)
-mAb_default: &mAb_default
-  max_epitopes: 1
+# overall default (contains some shared options)
+overall_default: &overall_default
   min_epitope_activity_to_include: 0.2
-  fit_kwargs:
-    reg_escape_weight: 0.1
-    reg_spread_weight: 0.25
-    reg_activity_weight: 1.0
   plot_kwargs:
     addtl_slider_stats:
       times_seen: 3
+    slider_binding_range_kwargs:
+      n_models:
+        step: 1
+      times_seen:
+        step: 1
+        min: 1
+        max: 25
     heatmap_max_at_least: 2
     heatmap_min_at_least: -2
 
+# default configuration for monoclonal antibodies (mAbs)
+mAb_default: &mAb_default
+  <<: *overall_default
+  max_epitopes: 1
+  fit_kwargs:
+    reg_escape_weight: 0.1
+    reg_spread_weight: 0.25
+    reg_activity_weight: 1.0
+
 # default configuration of polyclonal sera
 sera_default: &sera_default
-  max_epitopes: 4
+  <<: *overall_default
+  max_epitopes: 2
   min_epitope_activity_to_include: 0.2
   fit_kwargs:
     reg_escape_weight: 0.1
     reg_spread_weight: 0.25
     reg_activity_weight: 1.0
-  plot_kwargs:
-    addtl_slider_stats:
-      times_seen: 3
-    heatmap_max_at_least: 2
-    heatmap_min_at_least: -2
 
 # define configuration for specific monoclonal antibodies, merging above defaults
 REGN10933:
