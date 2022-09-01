@@ -386,9 +386,17 @@ rule fit_globalepistasis:
         ),
         nb="results/notebooks/fit_globalepistasis_{func_selection}.ipynb",
     params:
+        func_scores_floor=(
+            config["func_scores_floor"] if "func_scores_floor" in config else None
+        ),
         plot_kwargs_yaml=yaml.dump({"plot_kwargs": config["muteffects_plot_kwargs"]}),
-        likelihood=config["epistasis_model_likelihood"] if "epistasis_model_likelihood" in config else "Gaussian",
-        ftol=config["epistasis_model_ftol"] if "epistasis_model_ftol" in config else .0000001,
+        likelihood=(
+            config["epistasis_model_likelihood"]
+            if "epistasis_model_likelihood" in config else "Gaussian"
+        ),
+        ftol=(
+            config["epistasis_model_ftol"] if "epistasis_model_ftol" in config else 1e-7
+        ),
     conda:
         "environment.yml"
     log:
@@ -401,6 +409,7 @@ rule fit_globalepistasis:
             -p pickle_file {output.pickle} \
             -p muteffects_latent_csv {output.muteffects_latent} \
             -p muteffects_observed_csv {output.muteffects_observed} \
+            -p func_scores_floor {params.func_scores_floor} \
             -p likelihood {params.likelihood} \
             -p ftol {params.ftol} \
             -y "{params.plot_kwargs_yaml}" \
