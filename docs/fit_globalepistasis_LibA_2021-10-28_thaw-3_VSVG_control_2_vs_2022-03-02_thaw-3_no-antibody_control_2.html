@@ -329,7 +329,7 @@ div.rendered_html tbody tr:hover {
 <span class="n">pickle_file</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">muteffects_latent_csv</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">muteffects_observed_csv</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">min_times_seen</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">func_scores_floor</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">likelihood</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">ftol</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">plot_kwargs</span> <span class="o">=</span> <span class="kc">None</span>
@@ -352,6 +352,7 @@ div.rendered_html tbody tr:hover {
 <span class="n">pickle_file</span> <span class="o">=</span> <span class="s2">&quot;results/globalepistasis_fits/LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-03-02_thaw-3_no-antibody_control_2.pickle&quot;</span>
 <span class="n">muteffects_latent_csv</span> <span class="o">=</span> <span class="s2">&quot;results/globalepistasis_fits/LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-03-02_thaw-3_no-antibody_control_2_muteffects_latent.csv&quot;</span>
 <span class="n">muteffects_observed_csv</span> <span class="o">=</span> <span class="s2">&quot;results/globalepistasis_fits/LibA_2021-10-28_thaw-3_VSVG_control_2_vs_2022-03-02_thaw-3_no-antibody_control_2_muteffects_observed.csv&quot;</span>
+<span class="n">func_scores_floor</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">likelihood</span> <span class="o">=</span> <span class="s2">&quot;Gaussian&quot;</span>
 <span class="n">ftol</span> <span class="o">=</span> <span class="mf">1e-07</span>
 <br/></pre></div>
@@ -365,6 +366,10 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">func_scores</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">func_scores_csv</span><span class="p">,</span> <span class="n">na_filter</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
     <span class="s2">&quot;pre_count &gt;= pre_count_threshold&quot;</span>
 <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">func_scores_floor</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Applying functional scores floor of </span><span class="si">{</span><span class="n">func_scores_floor</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">func_scores</span><span class="p">[</span><span class="s2">&quot;func_score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">func_scores</span><span class="p">[</span><span class="s2">&quot;func_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="n">func_scores_floor</span><span class="p">)</span>
 
 <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">func_scores</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;pre_sample&quot;</span><span class="p">,</span> <span class="s2">&quot;post_sample&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="mi">1</span>
 </pre></div>
@@ -446,7 +451,7 @@ div.rendered_html tbody tr:hover {
       <td>21628.1</td>
       <td>5149</td>
       <td>-5665.0</td>
-      <td>22.5</td>
+      <td>20.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -454,7 +459,7 @@ div.rendered_html tbody tr:hover {
       <td>21824.8</td>
       <td>5143</td>
       <td>-5769.4</td>
-      <td>3.2</td>
+      <td>2.9</td>
     </tr>
   </tbody>
 </table>
@@ -629,13 +634,13 @@ latent phenotype
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-771e75e9502646e1b2256df82c59ea6d"></div>
+<div id="altair-viz-0664d6d6e1a14ec186f8a494f8af8530"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-771e75e9502646e1b2256df82c59ea6d") {
-      outputDiv = document.getElementById("altair-viz-771e75e9502646e1b2256df82c59ea6d");
+    if (outputDiv.id !== "altair-viz-0664d6d6e1a14ec186f8a494f8af8530") {
+      outputDiv = document.getElementById("altair-viz-0664d6d6e1a14ec186f8a494f8af8530");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -698,13 +703,13 @@ observed phenotype
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-95281020c9f44f21a0da9a1ca37c31f8"></div>
+<div id="altair-viz-6fab324c29f04bbfaf43e5551f81418b"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-95281020c9f44f21a0da9a1ca37c31f8") {
-      outputDiv = document.getElementById("altair-viz-95281020c9f44f21a0da9a1ca37c31f8");
+    if (outputDiv.id !== "altair-viz-6fab324c29f04bbfaf43e5551f81418b") {
+      outputDiv = document.getElementById("altair-viz-6fab324c29f04bbfaf43e5551f81418b");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
