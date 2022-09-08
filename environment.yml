@@ -33,6 +33,7 @@ dependencies:
   - snakemake=7.8.1
   - sphinx=4.3
   - upsetplot=0.6
+  - markdown=3.3.4
   - pip:
     - alignparse==0.5.0
     - dms_variants==1.4.2
