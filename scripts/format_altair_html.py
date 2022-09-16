@@ -1,7 +1,15 @@
-#!/usr/bin/env python
+"""Annotate ``altair`` chart with Twitter card and markdown summary.
+
+You can either use function in module or run as command-line tool.
+
+"""
+
+
 import argparse
-import markdown
+
 from bs4 import BeautifulSoup as bs
+
+import markdown
 
 
 def annotate_altair_chart(chart_html, annotation_md, twitter_card):
@@ -43,7 +51,7 @@ def annotate_altair_chart(chart_html, annotation_md, twitter_card):
     # Make and add the twitter card
     if not all(key in twitter_card.keys() for key in ["site", "title", "description"]):
         raise ValueError(
-            "You are missing one of the required fields for the twitter card: site, title, or description"
+            "Missing required fields for twitter card: site, title, or description"
         )
     summary = page.new_tag("meta", attrs={"name": "twitter:card", "content": "summary"})
     page.head.append(summary)
@@ -56,8 +64,8 @@ def annotate_altair_chart(chart_html, annotation_md, twitter_card):
         "link",
         attrs={
             "rel": "stylesheet",
-            "href": "https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css",
-            "integrity": "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
+            "href": "https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css",  # noqa: E501
+            "integrity": "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",  # noqa: E501
             "crossorigin": "anonymous",
         },
     )
@@ -78,7 +86,7 @@ if __name__ == "__main__":
 
     # Command line interface
     parser = argparse.ArgumentParser(
-        description="Format an HTML file containing an embeded Vega spec saved with Altiar."
+        description="Format HTML file containing embeded Vega spec saved with Altaiar."
     )
 
     parser.add_argument(
