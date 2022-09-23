@@ -19,6 +19,7 @@ dependencies:
   - jupyterlab
   - mafft=7.505
   - mamba
+  - matplotlib=3.5
   - minimap2=2.24
   - nbdime
   - nbstripout
