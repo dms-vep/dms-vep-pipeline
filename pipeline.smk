@@ -8,11 +8,35 @@ in the upstream file that includes this one.
 # Imports ---------------------------------------------------------------------
 import glob
 import os
+import re
 
 import yaml
 
 
 include: "funcs.smk"  # import functions
+
+
+# Check to make sure Github repo information correct in config ----------------
+if ("no_github_check" not in config) or (not config["no_github_check"]):
+    git_remote_res = subprocess.run(
+        ["git", "remote", "-v"],
+        capture_output=True,
+        text=True,
+    )
+    git_remote_regex = re.match(
+        "origin\thttps://github.com/(?P<user>[\-\w]+)/(?P<repo>[\-\w]+)\.git",
+        git_remote_res.stdout,
+    )
+    if not git_remote_regex:
+        raise ValueError(f"cannot match git repo from\n{git_remote_res}")
+    for attr in ["repo", "user"]:
+        regex_attr = git_remote_regex.group(attr)
+        config_attr = config[f"github_{attr}"]
+        if regex_attr != config_attr:
+            raise ValueError(
+                f"github_{attr} in `config.yaml` does not match actual git remote:\n"
+                f"{regex_attr} versus {config_attr}"
+            )
 
 
 # Global variables and processing before pipeline -----------------------------
@@ -392,10 +416,13 @@ rule fit_globalepistasis:
         plot_kwargs_yaml=yaml.dump({"plot_kwargs": config["muteffects_plot_kwargs"]}),
         likelihood=(
             config["epistasis_model_likelihood"]
-            if "epistasis_model_likelihood" in config else "Gaussian"
+            if "epistasis_model_likelihood" in config
+            else "Gaussian"
         ),
         ftol=(
-            config["epistasis_model_ftol"] if "epistasis_model_ftol" in config else 1e-7
+            config["epistasis_model_ftol"]
+            if "epistasis_model_ftol" in config
+            else 1e-7
         ),
     conda:
         "environment.yml"
@@ -571,6 +598,7 @@ rule fit_polyclonal:
             &> {log}
         """
 
+
 rule avg_antibody_escape:
     """Average escape for an antibody or serum."""
     input:
@@ -597,20 +625,20 @@ rule avg_antibody_escape:
         selection_groups_yaml=lambda wc: yaml.dump(
             {
                 "selection_groups_dict": (
-                    antibody_selections.query("antibody == @wc.antibody")[
-                        [
-                            "library",
-                            "virus_batch",
-                            "date",
-                            "replicate",
-                            "selection_group",
-                        ]
-                    ]
-                    .drop_duplicates()
-                    .assign(
-                        pickle_file=lambda x: (
-                            config["polyclonal_dir"]
-                            + "/"
+        antibody_selections.query("antibody == @wc.antibody")[
+            [
+                "library",
+                "virus_batch",
+                "date",
+                "replicate",
+                "selection_group",
+            ]
+        ]
+        .drop_duplicates()
+        .assign(
+            pickle_file=lambda x: (
+                config["polyclonal_dir"]
+        + "/"
                             + x["selection_group"]
                             + ".pickle"
                         )
