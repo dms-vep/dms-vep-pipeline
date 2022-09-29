@@ -56,7 +56,9 @@ def annotate_altair_chart(chart_html, annotation_md, twitter_card):
     summary = page.new_tag("meta", attrs={"name": "twitter:card", "content": "summary"})
     page.head.append(summary)
     for name, content in twitter_card.items():
-        card_tag = page.new_tag("meta", attrs={"name": name, "content": content})
+        card_tag = page.new_tag(
+            "meta", attrs={"name": f"twitter:{name}", "content": content}
+        )
         page.head.append(card_tag)
 
     # Add some default styling with bootstrap
@@ -86,7 +88,7 @@ if __name__ == "__main__":
 
     # Command line interface
     parser = argparse.ArgumentParser(
-        description="Format HTML file containing embeded Vega spec saved with Altaiar."
+        description="Format HTML file containing embeded Vega spec saved with Altair."
     )
 
     parser.add_argument(
