@@ -182,14 +182,7 @@ rule docs_index:
         nbs,
         nb_subindices,
         nblinks,
-        **(
-            {
-                "muteffects_observed": config["muteffects_observed_heatmap"],
-                "muteffects_latent": config["muteffects_latent_heatmap"],
-            }
-            if len(func_selections)
-            else {}
-        ),
+        **muteffects_plots,
         rulegraph=rules.make_graphs.output.rulegraph,
         filegraph=rules.make_graphs.output.filegraph,
         antibody_escape_plots=antibody_escape_plots,
@@ -216,17 +209,7 @@ rule sphinx_build:
         rules.docs_index.input,
         index=rules.docs_index.output.index,
         conf=os.path.join(config["pipeline_path"], "conf.py"),
-        html_extra_path_files=[
-            *(
-                [
-                    config["muteffects_observed_heatmap"],
-                    config["muteffects_latent_heatmap"],
-                ]
-                if len(func_selections)
-                else []
-            ),
-            *antibody_escape_plots,
-        ],
+        html_extra_path_files=[*muteffects_plots.values(), *antibody_escape_plots],
     output:
         docs=directory(config["docs"]),
     params:

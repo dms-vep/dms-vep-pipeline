@@ -78,9 +78,10 @@ muteffects_plot_kwargs:
 
 # do we add formatting to the antibody escape and functional effects plots
 format_antibody_escape_plots: true  # if option, missing defaults to true
-# to override, provide a value for antibody_escape_legend
-default_antibody_escape_legend: plot_legends/antibody_escape_legend.md
+format_muteffects_plots: true  # if option, missing defaults to true
+# to override default, provide a value for antibody_escape_legend / muteffects_legend
 antibody_escape_legend: null
+muteffects_legend: null
 
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
@@ -168,8 +169,6 @@ globalepistasis_dir: results/globalepistasis_fits
 # mutation effects on function (viral entry) averaged over replicates
 muteffects_observed: results/muteffects_functional/muteffects_observed.csv
 muteffects_latent: results/muteffects_functional/muteffects_latent.csv
-muteffects_observed_heatmap: results/muteffects_functional/muteffects_observed_heatmap.html
-muteffects_latent_heatmap: results/muteffects_functional/muteffects_latent_heatmap.html
 
 # html documentation
 docs_source_dir: results/docs_source

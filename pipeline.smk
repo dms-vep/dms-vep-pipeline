@@ -121,6 +121,15 @@ func_score_files = [
     for func_selection in func_selections["selection_name"]
 ]
 
+if len(func_selections):
+    muteffects_plots = {
+        f"muteffects_{pheno}_heatmap":
+            os.path.splitext(config[f"muteffects_{pheno}"])[0] + "_heatmap.html"
+        for pheno in ["observed", "latent"]
+    }
+else:
+    muteffects_plots = {}
+
 muteffects_files = [
     os.path.join(
         config["globalepistasis_dir"],
@@ -472,8 +481,7 @@ rule avg_muteffects:
     output:
         config["muteffects_observed"],
         config["muteffects_latent"],
-        config["muteffects_observed_heatmap"],
-        config["muteffects_latent_heatmap"],
+        *muteffects_plots.values(),
         # only make a notebook output for docs if there are functional selections
         **(
             {"nb": "results/notebooks/avg_muteffects.ipynb"}

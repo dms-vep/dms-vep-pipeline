@@ -73,8 +73,8 @@ Data files
             f"""\
 Interactive plots of mutation functional effects
 ------------------------------------------------
-- `Observed phenotype effects <{os.path.basename(snakemake.input.muteffects_observed)}>`_
-- `Latent phenotype effects <{os.path.basename(snakemake.input.muteffects_latent)}>`_
+- `Observed phenotype effects <{os.path.basename(snakemake.input.muteffects_observed_heatmap)}>`_
+- `Latent phenotype effects <{os.path.basename(snakemake.input.muteffects_latent_heatmap)}>`_
 
 """
         )
