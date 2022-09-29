@@ -69,12 +69,14 @@ Data files
 
     # link HTML plots: https://stackoverflow.com/a/67997311
     if snakemake.params.have_func_selections:
+        observed_heatmap = os.path.basename(snakemake.input.muteffects_observed_heatmap)
+        latent_heatmap = os.path.basename(snakemake.input.muteffects_latent_heatmap)
         f_obj.write(
             f"""\
 Interactive plots of mutation functional effects
 ------------------------------------------------
-- `Observed phenotype effects <{os.path.basename(snakemake.input.muteffects_observed_heatmap)}>`_
-- `Latent phenotype effects <{os.path.basename(snakemake.input.muteffects_latent_heatmap)}>`_
+- `Observed phenotype effects <{observed_heatmap}>`_
+- `Latent phenotype effects <{latent_heatmap}>`_
 
 """
         )

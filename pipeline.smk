@@ -104,7 +104,7 @@ antibody_escape_plots = [
                 and config["format_antibody_escape_plots"]
             )
             else f"{antibody}_escape_plot.html"
-        )
+        ),
     )
     for antibody in antibody_selections["antibody"].unique()
 ]
@@ -128,8 +128,10 @@ if len(func_selections):
         else "_heatmap.html"
     )
     muteffects_plots = {
-        f"muteffects_{pheno}_heatmap":
-            os.path.splitext(config[f"muteffects_{pheno}"])[0] + suffix
+        f"muteffects_{pheno}_heatmap": os.path.splitext(config[f"muteffects_{pheno}"])[
+            0
+        ]
+        + suffix
         for pheno in ["observed", "latent"]
     }
 else:
@@ -711,7 +713,8 @@ rule format_muteffects_plot:
         chart="results/muteffects_functional/muteffects_{pheno}_heatmap_formatted.html",
     params:
         site=lambda _, output: os.path.join(
-            github_pages_url, os.path.basename(output.chart),
+            github_pages_url,
+            os.path.basename(output.chart),
         ),
         title=f"mutation effects for {config['github_repo']}",
     conda:
@@ -745,11 +748,13 @@ rule format_antibody_escape_plot:
         pyscript=os.path.join(config["pipeline_path"], "scripts/format_altair_html.py"),
     output:
         chart=os.path.join(
-            config["escape_dir"], "{antibody}_escape_plot_formatted.html",
+            config["escape_dir"],
+            "{antibody}_escape_plot_formatted.html",
         ),
     params:
         site=lambda _, output: os.path.join(
-            github_pages_url, os.path.basename(output.chart),
+            github_pages_url,
+            os.path.basename(output.chart),
         ),
         title=lambda wc: f"{wc.antibody} for {config['github_repo']}",
     conda:
