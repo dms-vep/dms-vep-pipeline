@@ -713,7 +713,7 @@ rule format_muteffects_plot:
         site=lambda _, output: os.path.join(
             github_pages_url, os.path.basename(output.chart),
         ),
-        title="mutation effects for {config['github_repo']}",
+        title=f"mutation effects for {config['github_repo']}",
     conda:
         "environment.yml"
     log:
