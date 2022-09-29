@@ -76,6 +76,12 @@ muteffects_plot_kwargs:
   heatmap_min_at_least: -1
   init_floor_at_zero: False
 
+# do we add formatting to the antibody escape and functional effects plots
+format_antibody_escape_plots: true  # if option, missing defaults to true
+# to override, provide a value for antibody_escape_legend
+default_antibody_escape_legend: plot_legends/antibody_escape_legend.md
+antibody_escape_legend: null
+
 # ----------------------------------------------------------------------------
 # Input data to dms-vep-pipeline
 # ----------------------------------------------------------------------------

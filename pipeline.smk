@@ -38,6 +38,8 @@ if ("no_github_check" not in config) or (not config["no_github_check"]):
                 f"{regex_attr} versus {config_attr}"
             )
 
+github_pages_url = f"https://{config['github_user']}.github.io/{config['github_repo']}"
+
 
 # Global variables and processing before pipeline -----------------------------
 
@@ -93,7 +95,17 @@ antibody_escape_files = [
 ]
 
 antibody_escape_plots = [
-    os.path.join(config["escape_dir"], f"{antibody}_escape_plot.html")
+    os.path.join(
+        config["escape_dir"],
+        (
+            f"{antibody}_escape_plot_formatted.html"
+            if (
+                "format_antibody_escape_plots" in config
+                and config["format_antibody_escape_plots"]
+            )
+            else f"{antibody}_escape_plot.html"
+        )
+    )
     for antibody in antibody_selections["antibody"].unique()
 ]
 
@@ -664,5 +676,44 @@ rule avg_antibody_escape:
             -p avg_escape {output.avg_escape} \
             -p rep_escape {output.rep_escape} \
             -p escape_plot {output.escape_plot} \
-            -y "{params.selection_groups_yaml}"
+            -y "{params.selection_groups_yaml}" \
+            &> {log}
+        """
+
+
+rule format_antibody_escape_plot:
+    """Add formatting to antibody escape plots."""
+    input:
+        chart=rules.avg_antibody_escape.output.escape_plot,
+        md=(
+            config["antibody_escape_legend"]
+            if "antibody_escape_legend" in config and config["antibody_escape_legend"]
+            else os.path.join(
+                config["pipeline_path"], "plot_legends/antibody_escape_legend.md"
+            )
+        ),
+        pyscript=os.path.join(config["pipeline_path"], "scripts/format_altair_html.py"),
+    output:
+        chart=os.path.join(
+            config["escape_dir"], "{antibody}_escape_plot_formatted.html",
+        ),
+    params:
+        site=lambda _, output: os.path.join(
+            github_pages_url, os.path.basename(output.chart),
+        ),
+        title=lambda wc: f"{wc.antibody} for {config['github_repo']}",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "format_antibody_escape_plot_{antibody}.txt"),
+    shell:
+        """
+        python {input.pyscript} \
+            --chart {input.chart} \
+            --markdown {input.md} \
+            --site "{params.site}" \
+            --title "{params.title}" \
+            --description "Interactive plot of antibody escape" \
+            --output {output} \
+            &> {log}
         """
