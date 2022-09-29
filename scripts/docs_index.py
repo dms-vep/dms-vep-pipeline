@@ -69,12 +69,14 @@ Data files
 
     # link HTML plots: https://stackoverflow.com/a/67997311
     if snakemake.params.have_func_selections:
+        observed_heatmap = os.path.basename(snakemake.input.muteffects_observed_heatmap)
+        latent_heatmap = os.path.basename(snakemake.input.muteffects_latent_heatmap)
         f_obj.write(
             f"""\
 Interactive plots of mutation functional effects
 ------------------------------------------------
-- `Observed phenotype effects <{os.path.basename(snakemake.input.muteffects_observed)}>`_
-- `Latent phenotype effects <{os.path.basename(snakemake.input.muteffects_latent)}>`_
+- `Observed phenotype effects <{observed_heatmap}>`_
+- `Latent phenotype effects <{latent_heatmap}>`_
 
 """
         )
@@ -88,5 +90,9 @@ Interactive plots of mutation antibody escape
         )
         for html_plot in sorted(snakemake.input.antibody_escape_plots):
             base_plot = os.path.basename(html_plot)
-            label = os.path.splitext(base_plot)[0].replace("_", " ")
+            label = (
+                os.path.splitext(base_plot)[0]
+                .replace("_formatted", " ")
+                .replace("_", " ")
+            )
             f_obj.write(f"- `{label} <{base_plot}>`_\n")

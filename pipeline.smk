@@ -8,11 +8,37 @@ in the upstream file that includes this one.
 # Imports ---------------------------------------------------------------------
 import glob
 import os
+import re
 
 import yaml
 
 
 include: "funcs.smk"  # import functions
+
+
+# Check to make sure Github repo information correct in config ----------------
+if ("no_github_check" not in config) or (not config["no_github_check"]):
+    git_remote_res = subprocess.run(
+        ["git", "remote", "-v"],
+        capture_output=True,
+        text=True,
+    )
+    git_remote_regex = re.match(
+        "origin\thttps://github.com/(?P<user>[\-\w]+)/(?P<repo>[\-\w]+)\.git",
+        git_remote_res.stdout,
+    )
+    if not git_remote_regex:
+        raise ValueError(f"cannot match git repo from\n{git_remote_res}")
+    for attr in ["repo", "user"]:
+        regex_attr = git_remote_regex.group(attr)
+        config_attr = config[f"github_{attr}"]
+        if regex_attr != config_attr:
+            raise ValueError(
+                f"github_{attr} in `config.yaml` does not match actual git remote:\n"
+                f"{regex_attr} versus {config_attr}"
+            )
+
+github_pages_url = f"https://{config['github_user']}.github.io/{config['github_repo']}"
 
 
 # Global variables and processing before pipeline -----------------------------
@@ -69,7 +95,17 @@ antibody_escape_files = [
 ]
 
 antibody_escape_plots = [
-    os.path.join(config["escape_dir"], f"{antibody}_escape_plot.html")
+    os.path.join(
+        config["escape_dir"],
+        (
+            f"{antibody}_escape_plot_formatted.html"
+            if (
+                "format_antibody_escape_plots" in config
+                and config["format_antibody_escape_plots"]
+            )
+            else f"{antibody}_escape_plot.html"
+        ),
+    )
     for antibody in antibody_selections["antibody"].unique()
 ]
 
@@ -84,6 +120,22 @@ func_score_files = [
     os.path.join(config["func_score_dir"], f"{func_selection}_func_scores.csv")
     for func_selection in func_selections["selection_name"]
 ]
+
+if len(func_selections):
+    suffix = (
+        "_heatmap_formatted.html"
+        if "format_muteffects_plots" in config and config["format_muteffects_plots"]
+        else "_heatmap.html"
+    )
+    muteffects_plots = {
+        f"muteffects_{pheno}_heatmap": os.path.splitext(config[f"muteffects_{pheno}"])[
+            0
+        ]
+        + suffix
+        for pheno in ["observed", "latent"]
+    }
+else:
+    muteffects_plots = {}
 
 muteffects_files = [
     os.path.join(
@@ -392,10 +444,13 @@ rule fit_globalepistasis:
         plot_kwargs_yaml=yaml.dump({"plot_kwargs": config["muteffects_plot_kwargs"]}),
         likelihood=(
             config["epistasis_model_likelihood"]
-            if "epistasis_model_likelihood" in config else "Gaussian"
+            if "epistasis_model_likelihood" in config
+            else "Gaussian"
         ),
         ftol=(
-            config["epistasis_model_ftol"] if "epistasis_model_ftol" in config else 1e-7
+            config["epistasis_model_ftol"]
+            if "epistasis_model_ftol" in config
+            else 1e-7
         ),
     conda:
         "environment.yml"
@@ -433,8 +488,8 @@ rule avg_muteffects:
     output:
         config["muteffects_observed"],
         config["muteffects_latent"],
-        config["muteffects_observed_heatmap"],
-        config["muteffects_latent_heatmap"],
+        os.path.splitext(config["muteffects_observed"])[0] + "_heatmap.html",
+        os.path.splitext(config["muteffects_latent"])[0] + "_heatmap.html",
         # only make a notebook output for docs if there are functional selections
         **(
             {"nb": "results/notebooks/avg_muteffects.ipynb"}
@@ -571,6 +626,7 @@ rule fit_polyclonal:
             &> {log}
         """
 
+
 rule avg_antibody_escape:
     """Average escape for an antibody or serum."""
     input:
@@ -597,20 +653,20 @@ rule avg_antibody_escape:
         selection_groups_yaml=lambda wc: yaml.dump(
             {
                 "selection_groups_dict": (
-                    antibody_selections.query("antibody == @wc.antibody")[
-                        [
-                            "library",
-                            "virus_batch",
-                            "date",
-                            "replicate",
-                            "selection_group",
-                        ]
-                    ]
-                    .drop_duplicates()
-                    .assign(
-                        pickle_file=lambda x: (
-                            config["polyclonal_dir"]
-                            + "/"
+        antibody_selections.query("antibody == @wc.antibody")[
+            [
+                "library",
+                "virus_batch",
+                "date",
+                "replicate",
+                "selection_group",
+            ]
+        ]
+        .drop_duplicates()
+        .assign(
+            pickle_file=lambda x: (
+                config["polyclonal_dir"]
+        + "/"
                             + x["selection_group"]
                             + ".pickle"
                         )
@@ -636,5 +692,83 @@ rule avg_antibody_escape:
             -p avg_escape {output.avg_escape} \
             -p rep_escape {output.rep_escape} \
             -p escape_plot {output.escape_plot} \
-            -y "{params.selection_groups_yaml}"
+            -y "{params.selection_groups_yaml}" \
+            &> {log}
+        """
+
+
+rule format_muteffects_plot:
+    """Format muteffects plot."""
+    input:
+        chart="results/muteffects_functional/muteffects_{pheno}_heatmap.html",
+        md=(
+            config["muteffects_legend"]
+            if "muteffects_legend" in config and config["muteffects_legend"]
+            else os.path.join(
+                config["pipeline_path"], "plot_legends/muteffects_legend.md"
+            )
+        ),
+        pyscript=os.path.join(config["pipeline_path"], "scripts/format_altair_html.py"),
+    output:
+        chart="results/muteffects_functional/muteffects_{pheno}_heatmap_formatted.html",
+    params:
+        site=lambda _, output: os.path.join(
+            github_pages_url,
+            os.path.basename(output.chart),
+        ),
+        title=f"mutation effects for {config['github_repo']}",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "format_muteffects_plot_{pheno}.txt"),
+    shell:
+        """
+        python {input.pyscript} \
+            --chart {input.chart} \
+            --markdown {input.md} \
+            --site "{params.site}" \
+            --title "{params.title}" \
+            --description "Mutational effects on {wildcards.pheno} phenotype" \
+            --output {output} \
+            &> {log}
+        """
+
+
+rule format_antibody_escape_plot:
+    """Add formatting to antibody escape plots."""
+    input:
+        chart=rules.avg_antibody_escape.output.escape_plot,
+        md=(
+            config["antibody_escape_legend"]
+            if "antibody_escape_legend" in config and config["antibody_escape_legend"]
+            else os.path.join(
+                config["pipeline_path"], "plot_legends/antibody_escape_legend.md"
+            )
+        ),
+        pyscript=os.path.join(config["pipeline_path"], "scripts/format_altair_html.py"),
+    output:
+        chart=os.path.join(
+            config["escape_dir"],
+            "{antibody}_escape_plot_formatted.html",
+        ),
+    params:
+        site=lambda _, output: os.path.join(
+            github_pages_url,
+            os.path.basename(output.chart),
+        ),
+        title=lambda wc: f"{wc.antibody} for {config['github_repo']}",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "format_antibody_escape_plot_{antibody}.txt"),
+    shell:
+        """
+        python {input.pyscript} \
+            --chart {input.chart} \
+            --markdown {input.md} \
+            --site "{params.site}" \
+            --title "{params.title}" \
+            --description "Interactive plot of antibody escape" \
+            --output {output} \
+            &> {log}
         """
