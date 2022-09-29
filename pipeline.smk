@@ -702,7 +702,7 @@ rule format_antibody_escape_plot:
             github_pages_url, os.path.basename(output.chart),
         ),
         title=lambda wc: f"{wc.antibody} for {config['github_repo']}",
-        image=f"https://github.com/{config['github_user']}.png",
+        image="https://raw.githubusercontent.com/dms-vep/dms-vep-pipeline/format-interactive-plots/images/twitter_card.png",
     conda:
         "environment.yml"
     log:
