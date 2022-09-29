@@ -122,9 +122,14 @@ func_score_files = [
 ]
 
 if len(func_selections):
+    suffix = (
+        "_heatmap_formatted.html"
+        if "format_muteffects_plots" in config and config["format_muteffects_plots"]
+        else "_heatmap.html"
+    )
     muteffects_plots = {
         f"muteffects_{pheno}_heatmap":
-            os.path.splitext(config[f"muteffects_{pheno}"])[0] + "_heatmap.html"
+            os.path.splitext(config[f"muteffects_{pheno}"])[0] + suffix
         for pheno in ["observed", "latent"]
     }
 else:
@@ -481,7 +486,8 @@ rule avg_muteffects:
     output:
         config["muteffects_observed"],
         config["muteffects_latent"],
-        *muteffects_plots.values(),
+        os.path.splitext(config["muteffects_observed"])[0] + "_heatmap.html",
+        os.path.splitext(config["muteffects_latent"])[0] + "_heatmap.html",
         # only make a notebook output for docs if there are functional selections
         **(
             {"nb": "results/notebooks/avg_muteffects.ipynb"}
@@ -685,6 +691,42 @@ rule avg_antibody_escape:
             -p rep_escape {output.rep_escape} \
             -p escape_plot {output.escape_plot} \
             -y "{params.selection_groups_yaml}" \
+            &> {log}
+        """
+
+
+rule format_muteffects_plot:
+    """Format muteffects plot."""
+    input:
+        chart="results/muteffects_functional/muteffects_{pheno}_heatmap.html",
+        md=(
+            config["muteffects_legend"]
+            if "muteffects_legend" in config and config["muteffects_legend"]
+            else os.path.join(
+                config["pipeline_path"], "plot_legends/muteffects_legend.md"
+            )
+        ),
+        pyscript=os.path.join(config["pipeline_path"], "scripts/format_altair_html.py"),
+    output:
+        chart="results/muteffects_functional/muteffects_{pheno}_heatmap_formatted.html",
+    params:
+        site=lambda _, output: os.path.join(
+            github_pages_url, os.path.basename(output.chart),
+        ),
+        title="mutation effects for {config['github_repo']}",
+    conda:
+        "environment.yml"
+    log:
+        os.path.join(config["logdir"], "format_muteffects_plot_{pheno}.txt"),
+    shell:
+        """
+        python {input.pyscript} \
+            --chart {input.chart} \
+            --markdown {input.md} \
+            --site "{params.site}" \
+            --title "{params.title}" \
+            --description "Mutational effects on {wildcards.pheno} phenotype" \
+            --output {output} \
             &> {log}
         """
 

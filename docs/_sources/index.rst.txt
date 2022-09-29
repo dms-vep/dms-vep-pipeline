@@ -50,8 +50,8 @@ Data files
 
 Interactive plots of mutation functional effects
 ------------------------------------------------
-- `Observed phenotype effects <muteffects_observed_heatmap.html>`_
-- `Latent phenotype effects <muteffects_latent_heatmap.html>`_
+- `Observed phenotype effects <muteffects_observed_heatmap_formatted.html>`_
+- `Latent phenotype effects <muteffects_latent_heatmap_formatted.html>`_
 
 Interactive plots of mutation antibody escape
 ---------------------------------------------
