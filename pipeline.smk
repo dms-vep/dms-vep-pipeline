@@ -702,6 +702,7 @@ rule format_antibody_escape_plot:
             github_pages_url, os.path.basename(output.chart),
         ),
         title=lambda wc: f"{wc.antibody} for {config['github_repo']}",
+        image=f"https://github.com/{config['github_user']}.png",
     conda:
         "environment.yml"
     log:
@@ -713,6 +714,7 @@ rule format_antibody_escape_plot:
             --markdown {input.md} \
             --site "{params.site}" \
             --title "{params.title}" \
+            --image {params.image} \
             --description "Interactive plot of antibody escape" \
             --output {output} \
             &> {log}

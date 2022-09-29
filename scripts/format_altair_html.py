@@ -25,7 +25,7 @@ def annotate_altair_chart(chart_html, annotation_md, twitter_card):
     annotation_md: str
         Path to a text file with markdown description to appended to body.
     twitter_card: dict
-        Site name, site title, and site description for twitter card.
+        Site name, title, description and optionally image for Twitter card.
 
     Returns
     -------
@@ -109,14 +109,14 @@ if __name__ == "__main__":
         "--site",
         type=str,
         required=True,
-        help="URL for the the Twitter card.",
+        help="URL for the Twitter card.",
     )
 
     parser.add_argument(
         "--title",
         type=str,
         required=True,
-        help="Title of the the Twitter card.",
+        help="Title of the Twitter card.",
     )
 
     parser.add_argument(
@@ -124,6 +124,13 @@ if __name__ == "__main__":
         type=str,
         required=True,
         help="Description in the Twitter card.",
+    )
+
+    parser.add_argument(
+        "--image",
+        type=str,
+        required=False,
+        help="Image for Twitter card.",
     )
 
     parser.add_argument(
@@ -141,6 +148,8 @@ if __name__ == "__main__":
         "title": args.title,
         "description": args.description,
     }
+    if args.image:
+        twitter_dictionary["image"] = args.image
     # Get the formated HTML as a string
     annotated_chart = annotate_altair_chart(
         args.chart, args.markdown, twitter_dictionary
