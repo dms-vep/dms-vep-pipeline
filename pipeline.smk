@@ -31,6 +31,8 @@ if ("no_github_check" not in config) or (not config["no_github_check"]):
         raise ValueError(f"cannot match git repo from\n{git_remote_res}")
     for attr in ["repo", "user"]:
         regex_attr = git_remote_regex.group(attr)
+        if attr == "repo" and regex_attr.endswith(".git"):
+            regex_attr = regex_attr[: -4]
         config_attr = config[f"github_{attr}"]
         if regex_attr != config_attr:
             raise ValueError(
