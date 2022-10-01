@@ -212,6 +212,9 @@ rule build_pacbio_consensus:
     output:
         config["nt_variants"],
         nb="results/notebooks/build_pacbio_consensus.ipynb",
+    params:
+        config["max_ccs_error_rate"],
+        config["consensus_params"],
     conda:
         "environment.yml"
     log:
