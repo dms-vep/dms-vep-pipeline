@@ -12,6 +12,12 @@ import re
 
 # Variables and processing before building docs -------------------------------
 
+# in case `extra_html_docs` variable not defined
+try:
+    extra_html_docs
+except NameError:
+    extra_html_docs = {}
+
 # Get outputs of rules with `nb` as output (assumed Jupyter notebook) for docs.
 rule_wildcards = {
     # for each rule with wildcards in nb output, define wildcards
@@ -186,6 +192,7 @@ rule docs_index:
         rulegraph=rules.make_graphs.output.rulegraph,
         filegraph=rules.make_graphs.output.filegraph,
         antibody_escape_plots=antibody_escape_plots,
+        extra_html_docs=extra_html_docs.values(),
     output:
         index=os.path.join(config["docs_source_dir"], "index.rst"),
     params:
@@ -195,6 +202,7 @@ rule docs_index:
         nbs_for_index=nbs_for_index,
         have_func_selections=len(func_selections) > 0,
         have_antibody_selections=len(antibody_selections) > 0,
+        extra_html_names=list(extra_html_docs.keys()),
     log:
         os.path.join(config["logdir"], "docs_index.txt"),
     conda:
@@ -209,7 +217,11 @@ rule sphinx_build:
         rules.docs_index.input,
         index=rules.docs_index.output.index,
         conf=os.path.join(config["pipeline_path"], "conf.py"),
-        html_extra_path_files=[*muteffects_plots.values(), *antibody_escape_plots],
+        html_extra_path_files=[
+            *muteffects_plots.values(),
+            *antibody_escape_plots,
+            *extra_html_docs.values(),
+        ],
     output:
         docs=directory(config["docs"]),
     params:

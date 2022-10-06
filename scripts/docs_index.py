@@ -31,6 +31,10 @@ for label, link in snakemake.params.data_files.items():
     data_file_links.append(f"- `{label} <{blob_path}/{results_relpath}/{link}>`_")
 data_file_links = "\n".join(data_file_links)
 
+extra_html_docs = dict(
+    zip(snakemake.params.extra_html_names, snakemake.input.extra_html_docs)
+)
+
 with open(snakemake.output.index, "w") as f_obj:
     f_obj.write(
         f"""\
@@ -96,3 +100,14 @@ Interactive plots of mutation antibody escape
                 .replace("_", " ")
             )
             f_obj.write(f"- `{label} <{base_plot}>`_\n")
+        f_obj.write("\n")
+
+    if extra_html_docs:
+        f_obj.write(
+            """\
+Additional plots
+----------------
+"""
+        )
+        for name, plot in extra_html_docs.items():
+            f_obj.write(f" - `{name} <{os.path.basename(plot)}>`_\n")

@@ -32,6 +32,9 @@ rule all:
 # Add any extra data/results files for docs with name: file
 extra_data_files = {}
 
+# Add any extra HTML documents to display here with name: file
+extra_html_docs = {}
+
 
 # include `dms-vep-pipeline` docs building Snakemake file
 include: os.path.join(config["pipeline_path"], "docs.smk")
