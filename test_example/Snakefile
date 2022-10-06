@@ -35,6 +35,12 @@ extra_data_files = {}
 # Add any extra HTML documents to display here with name: file
 extra_html_docs = {}
 
+# If you add rules with "nb" output that have wildcards, specify the rule name
+# and subindex titles for the wildcards as in "docs.smk" for `nb_rule_wildcards`
+# and `subindex_titles`
+extra_nb_rule_wildcards = {}
+extra_subindex_titles = {}
+
 
 # include `dms-vep-pipeline` docs building Snakemake file
 include: os.path.join(config["pipeline_path"], "docs.smk")
