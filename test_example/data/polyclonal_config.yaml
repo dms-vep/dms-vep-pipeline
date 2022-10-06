@@ -6,6 +6,7 @@ overall_default: &overall_default
   plot_kwargs:
     addtl_slider_stats:
       times_seen: 3
+      functional effect: -4
     slider_binding_range_kwargs:
       n_models:
         step: 1
