@@ -30,7 +30,6 @@ nb_rule_wildcards = {
     "avg_antibody_escape": {
         "antibody": antibody_selections["antibody"].unique(),
     },
-    **extra_nb_rule_wildcards,
 }
 try:
     nb_rule_wildcards.update(extra_nb_rule_wildcards)
