@@ -12,14 +12,14 @@ import re
 
 # Variables and processing before building docs -------------------------------
 
-# in case `extra_html_docs` variable not defined
+# in case `extra_html_docs` and `extra_nb_rule_wildcards` not defined
 try:
     extra_html_docs
 except NameError:
     extra_html_docs = {}
 
 # Get outputs of rules with `nb` as output (assumed Jupyter notebook) for docs.
-rule_wildcards = {
+nb_rule_wildcards = {
     # for each rule with wildcards in nb output, define wildcards
     "fit_polyclonal": {
         "antibody_selection_group": antibody_selections["selection_group"].unique(),
@@ -30,13 +30,22 @@ rule_wildcards = {
     "avg_antibody_escape": {
         "antibody": antibody_selections["antibody"].unique(),
     },
+    **extra_nb_rule_wildcards,
 }
+try:
+    nb_rule_wildcards.update(extra_nb_rule_wildcards)
+except NameError:
+    pass  # no extras to update with
 subindex_titles = {
     # name for each rule outputting wildcard notebooks
     "fit_polyclonal": "Fit ``polyclonal`` models",
     "fit_globalepistasis": "Fit global epistasis models",
     "avg_antibody_escape": "Antibody-escape averaged across replicates",
 }
+try:
+    subindex_titles.update(extra_subindex_titles)
+except NameError:
+    pass  # no extras to update with
 nbs = []
 nblinks = {}
 nbs_for_index = []
@@ -45,16 +54,16 @@ for name, ruleproxy in rules.__dict__.items():
     rule_nb = ruleproxy.output.get("nb")
     if rule_nb:
         if ruleproxy.rule.has_wildcards():
-            assert set(rule_wildcards[name]) == set(ruleproxy.rule.wildcard_names)
-            if len(rule_wildcards[name]) != 1:
+            assert set(nb_rule_wildcards[name]) == set(ruleproxy.rule.wildcard_names)
+            if len(nb_rule_wildcards[name]) != 1:
                 raise ValueError("currently only handles one wildcard per rule")
             else:
-                wcs = list(rule_wildcards[name].values())[0]
+                wcs = list(nb_rule_wildcards[name].values())[0]
                 if len(wcs) == 0:
                     continue
             subindex = os.path.join(config["docs_source_dir"], f"{name}.rst")
             nb_subindices[subindex] = []
-            for wc, nb in zip(wcs, expand(rule_nb, **rule_wildcards[name])):
+            for wc, nb in zip(wcs, expand(rule_nb, **nb_rule_wildcards[name])):
                 nbs.append(nb)
                 nblink = os.path.join(config["docs_source_dir"], f"{name}_{wc}.nblink")
                 nblinks[nblink] = nb
