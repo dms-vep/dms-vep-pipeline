@@ -50,11 +50,11 @@ Data files
 
 Interactive plots of mutation functional effects
 ------------------------------------------------
-- `Observed phenotype effects <muteffects_observed_heatmap_formatted.html>`_
-- `Latent phenotype effects <muteffects_latent_heatmap_formatted.html>`_
+- `Observed phenotype effects <muteffects_observed_heatmap.html>`_
+- `Latent phenotype effects <muteffects_latent_heatmap.html>`_
 
 Interactive plots of mutation antibody escape
 ---------------------------------------------
-- `REGN10933 escape plot  <REGN10933_escape_plot_formatted.html>`_
-- `S2M11 escape plot  <S2M11_escape_plot_formatted.html>`_
+- `REGN10933 escape plot <REGN10933_escape_plot.html>`_
+- `S2M11 escape plot <S2M11_escape_plot.html>`_
 
