@@ -97,17 +97,7 @@ antibody_escape_files = [
 ]
 
 antibody_escape_plots = [
-    os.path.join(
-        config["escape_dir"],
-        (
-            f"{antibody}_escape_plot_formatted.html"
-            if (
-                "format_antibody_escape_plots" in config
-                and config["format_antibody_escape_plots"]
-            )
-            else f"{antibody}_escape_plot.html"
-        ),
-    )
+    os.path.join(config["escape_dir"], f"{antibody}_escape_plot.html")
     for antibody in antibody_selections["antibody"].unique()
 ]
 
@@ -124,16 +114,11 @@ func_score_files = [
 ]
 
 if len(func_selections):
-    suffix = (
-        "_heatmap_formatted.html"
-        if "format_muteffects_plots" in config and config["format_muteffects_plots"]
-        else "_heatmap.html"
-    )
     muteffects_plots = {
         f"muteffects_{pheno}_heatmap": os.path.splitext(config[f"muteffects_{pheno}"])[
             0
         ]
-        + suffix
+        + "_heatmap.html"
         for pheno in ["observed", "latent"]
     }
 else:
@@ -493,8 +478,8 @@ rule avg_muteffects:
     output:
         config["muteffects_observed"],
         config["muteffects_latent"],
-        os.path.splitext(config["muteffects_observed"])[0] + "_heatmap.html",
-        os.path.splitext(config["muteffects_latent"])[0] + "_heatmap.html",
+        os.path.splitext(config["muteffects_observed"])[0] + "_heatmap_unformatted.html",
+        os.path.splitext(config["muteffects_latent"])[0] + "_heatmap_unformatted.html",
         # only make a notebook output for docs if there are functional selections
         **(
             {"nb": "results/notebooks/avg_muteffects.ipynb"}
@@ -651,7 +636,10 @@ rule avg_antibody_escape:
         avg_pickle=os.path.join(config["escape_dir"], "{antibody}.pickle"),
         avg_escape=os.path.join(config["escape_dir"], "{antibody}_avg.csv"),
         rep_escape=os.path.join(config["escape_dir"], "{antibody}_rep.csv"),
-        escape_plot=os.path.join(config["escape_dir"], "{antibody}_escape_plot.html"),
+        escape_plot=os.path.join(
+            config["escape_dir"],
+            "{antibody}_escape_plot_unformatted.html",
+        ),
         nb="results/notebooks/avg_antibody_escape_{antibody}.ipynb",
     params:
         escape_avg_method=config["escape_avg_method"],
@@ -705,7 +693,9 @@ rule avg_antibody_escape:
 rule format_muteffects_plot:
     """Format muteffects plot."""
     input:
-        chart="results/muteffects_functional/muteffects_{pheno}_heatmap.html",
+        chart=(
+            "results/muteffects_functional/muteffects_{pheno}_heatmap_unformatted.html"
+        ),
         md=(
             config["muteffects_legend"]
             if "muteffects_legend" in config and config["muteffects_legend"]
@@ -715,8 +705,12 @@ rule format_muteffects_plot:
         ),
         pyscript=os.path.join(config["pipeline_path"], "scripts/format_altair_html.py"),
     output:
-        chart="results/muteffects_functional/muteffects_{pheno}_heatmap_formatted.html",
+        chart="results/muteffects_functional/muteffects_{pheno}_heatmap.html",
     params:
+        format_plot=int(
+            ("format_muteffects_plots" not in config)
+            or config["format_muteffects_plots"]
+        ),
         site=lambda _, output: os.path.join(
             github_pages_url,
             os.path.basename(output.chart),
@@ -728,14 +722,18 @@ rule format_muteffects_plot:
         os.path.join(config["logdir"], "format_muteffects_plot_{pheno}.txt"),
     shell:
         """
-        python {input.pyscript} \
-            --chart {input.chart} \
-            --markdown {input.md} \
-            --site "{params.site}" \
-            --title "{params.title}" \
-            --description "Mutational effects on {wildcards.pheno} phenotype" \
-            --output {output} \
-            &> {log}
+        if [[ {params.format_plot} -eq 1 ]]; then
+            python {input.pyscript} \
+                --chart {input.chart} \
+                --markdown {input.md} \
+                --site "{params.site}" \
+                --title "{params.title}" \
+                --description "Mutational effects on {wildcards.pheno} phenotype" \
+                --output {output} \
+                &> {log}
+        else
+            cp {input.chart} {output.chart}
+        fi
         """
 
 
@@ -754,9 +752,13 @@ rule format_antibody_escape_plot:
     output:
         chart=os.path.join(
             config["escape_dir"],
-            "{antibody}_escape_plot_formatted.html",
+            "{antibody}_escape_plot.html",
         ),
     params:
+        format_plot=int(
+            ("format_antibody_escape_plots" not in config)
+            or config["format_antibody_escape_plots"]
+        ),
         site=lambda _, output: os.path.join(
             github_pages_url,
             os.path.basename(output.chart),
@@ -768,12 +770,16 @@ rule format_antibody_escape_plot:
         os.path.join(config["logdir"], "format_antibody_escape_plot_{antibody}.txt"),
     shell:
         """
-        python {input.pyscript} \
-            --chart {input.chart} \
-            --markdown {input.md} \
-            --site "{params.site}" \
-            --title "{params.title}" \
-            --description "Interactive plot of antibody escape" \
-            --output {output} \
-            &> {log}
+        if [[ {params.format_plot} -eq 1 ]]; then
+            python {input.pyscript} \
+                --chart {input.chart} \
+                --markdown {input.md} \
+                --site "{params.site}" \
+                --title "{params.title}" \
+                --description "Interactive plot of antibody escape" \
+                --output {output} \
+                &> {log}
+        else
+            cp {input.chart} {output.chart}
+        fi
         """

@@ -545,13 +545,13 @@ antibody_config={&#39;min_epitope_activity_to_include&#39;: 0.2, &#39;plot_kwarg
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-a52e77302e1f40c88e413a6bdfc73c59"></div>
+<div id="altair-viz-42057680b7184a67bb6bc1ab7f975867"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-a52e77302e1f40c88e413a6bdfc73c59") {
-      outputDiv = document.getElementById("altair-viz-a52e77302e1f40c88e413a6bdfc73c59");
+    if (outputDiv.id !== "altair-viz-42057680b7184a67bb6bc1ab7f975867") {
+      outputDiv = document.getElementById("altair-viz-42057680b7184a67bb6bc1ab7f975867");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -691,16 +691,16 @@ min_epitope_activity_to_include=0.2
 
 Fitting model with n_epitopes=1
 # First fitting site-level model.
-# Starting optimization of 992 parameters at Thu Oct  6 10:21:34 2022.
+# Starting optimization of 992 parameters at Fri Oct  7 14:06:01 2022.
          step     time_sec         loss     fit_loss   reg_escape   reg_spread reg_activity
-            0     0.029294       2080.2       2079.3            0            0      0.90499
-          121       3.6792       94.436       81.498       7.9162            0       5.0214
-# Successfully finished at Thu Oct  6 10:21:38 2022.
-# Starting optimization of 3535 parameters at Thu Oct  6 10:21:38 2022.
+            0     0.030549       2080.2       2079.3            0            0      0.90499
+          121       3.8215       94.436       81.498       7.9162            0       5.0214
+# Successfully finished at Fri Oct  7 14:06:05 2022.
+# Starting optimization of 3535 parameters at Fri Oct  7 14:06:05 2022.
          step     time_sec         loss     fit_loss   reg_escape   reg_spread reg_activity
-            0     0.025372       144.34         89.3       50.019   1.0482e-30       5.0214
-          113       3.2375       109.44       84.838       17.675       2.2012       4.7232
-# Successfully finished at Thu Oct  6 10:21:41 2022.
+            0     0.026595       144.34         89.3       50.019   1.0482e-30       5.0214
+          113       3.3819       109.44       84.838       17.675       2.2012       4.7232
+# Successfully finished at Fri Oct  7 14:06:08 2022.
 Activities of epitopes:
 </pre></div></div>
 </div>
@@ -821,13 +821,13 @@ The selected model has 1 epitopes
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-d7bb9e4bacb34d7db71a503087a6d3a1"></div>
+<div id="altair-viz-a71c3803642a4f2a9c961e1364c5b7a5"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-d7bb9e4bacb34d7db71a503087a6d3a1") {
-      outputDiv = document.getElementById("altair-viz-d7bb9e4bacb34d7db71a503087a6d3a1");
+    if (outputDiv.id !== "altair-viz-a71c3803642a4f2a9c961e1364c5b7a5") {
+      outputDiv = document.getElementById("altair-viz-a71c3803642a4f2a9c961e1364c5b7a5");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -893,7 +893,7 @@ The selected model has 1 epitopes
 <span class="k">elif</span> <span class="s2">&quot;times_seen&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">]:</span>
     <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">][</span><span class="s2">&quot;times_seen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="k">if</span> <span class="s2">&quot;functional effect&quot;</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">]:</span>
-    <span class="k">del</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">][</span><span class="s2">&quot;functional effect&quot;</span><span class="p">]</span>  <span class="c1"># only for antibody averages</span>
+    <span class="k">del</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">][</span><span class="s2">&quot;functional effect&quot;</span><span class="p">]</span>  <span class="c1"># only antibody averages</span>
 <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">site_numbering_map</span><span class="p">[</span><span class="s2">&quot;sequential_site&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">site_numbering_map</span><span class="p">[</span><span class="s2">&quot;reference_site&quot;</span><span class="p">]):</span>
     <span class="k">if</span> <span class="s2">&quot;addtl_tooltip_stats&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">:</span>
         <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_tooltip_stats&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sequential_site&quot;</span><span class="p">]</span>
@@ -918,13 +918,13 @@ The selected model has 1 epitopes
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-a776681835ad4a05b18f7bfdda5f2fa1"></div>
+<div id="altair-viz-8e7db2f6a5c2416581ed8bd911df822e"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-a776681835ad4a05b18f7bfdda5f2fa1") {
-      outputDiv = document.getElementById("altair-viz-a776681835ad4a05b18f7bfdda5f2fa1");
+    if (outputDiv.id !== "altair-viz-8e7db2f6a5c2416581ed8bd911df822e") {
+      outputDiv = document.getElementById("altair-viz-8e7db2f6a5c2416581ed8bd911df822e");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
