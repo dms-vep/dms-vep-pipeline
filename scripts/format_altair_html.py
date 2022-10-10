@@ -80,6 +80,10 @@ def annotate_altair_chart(chart_html, annotation_md, twitter_card):
     page.head.style.append(
         "#markdown {margin-left: 2.5%; margin-right: 2.5%; margin-top: 10px; }"
     )
+    # Fix the defaul of no margins around the inputs
+    page.head.style.append(
+        "input {margin: 3px !important;}"
+    )
 
     return page.prettify()
 
