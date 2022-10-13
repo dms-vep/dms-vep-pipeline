@@ -80,6 +80,10 @@ def annotate_altair_chart(chart_html, annotation_md, twitter_card):
     page.head.style.append(
         "#markdown {margin-left: 2.5%; margin-right: 2.5%; margin-top: 10px; }"
     )
+    # Fix the margins and font size for selectors within the vega vis
+    page.head.style.append(
+        "#vis input, #vis label, #vis span {font-size: 14px; margin: 0px 3px 1px 0px;}"
+    )
 
     return page.prettify()
 
