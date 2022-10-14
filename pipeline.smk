@@ -24,7 +24,7 @@ if ("no_github_check" not in config) or (not config["no_github_check"]):
         text=True,
     )
     git_remote_regex = re.match(
-        "origin\thttps://github.com/(?P<user>[\-\w]+)/(?P<repo>[\-\w\.]+)(?: |\.git)",
+        "origin\t(https://|git@)github.com(/|:)(?P<user>[\-\w]+)/(?P<repo>[\-\w\.]+)(?: |\.git)",
         git_remote_res.stdout,
     )
     if not git_remote_regex:
