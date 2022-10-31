@@ -31,7 +31,7 @@ dependencies:
   - pandas=1.5
   - papermill=2.3
   - pip
-  - python=3.9
+  - python=3.10
   - snakefmt
   - snakemake=7.8.1
   - sphinx=4.3

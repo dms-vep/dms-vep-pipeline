@@ -1,6 +1,7 @@
 # Change log
 
 ### version 1.dev2
+- Upgrade `python` from 3.9 to 3.10
 - Improve text formatting in plots with text added by `format_altair_html.py`.
 - Regex check for correct repo in snakemake pipeline checks ssh repo origins.
 
