@@ -1,5 +1,9 @@
 # Change log
 
+### version 1.dev2
+- Improve text formatting in plots with text added by `format_altair_html.py`.
+- Regex check for correct repo in snakemake pipeline checks ssh repo origins.
+
 ### version 1.1
 - Change handling of formatted antibody-escape and functional effect plots. Format the plots **by default** unless config specifies not to, and do not suffix the formatted plots.
 
