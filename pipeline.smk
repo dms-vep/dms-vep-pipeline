@@ -620,7 +620,11 @@ rule fit_polyclonal:
 rule avg_antibody_escape:
     """Average escape for an antibody or serum."""
     input:
-        muteffects=config["muteffects_observed"],
+        **(
+            {"muteffects": config["muteffects_observed"]}
+            if len(func_selections)
+            else {}
+        ),
         site_numbering_map=config["site_numbering_map"],
         polyclonal_config=config["polyclonal_config"],
         selection_group_pickles=lambda wc: expand(
@@ -669,6 +673,7 @@ rule avg_antibody_escape:
                 )
             }
         ),
+        muteffects=lambda _, input: input.muteffects if len(func_selections) else "none",
     conda:
         "environment.yml"
     log:
@@ -679,7 +684,7 @@ rule avg_antibody_escape:
             -p antibody {wildcards.antibody} \
             -p escape_avg_method {params.escape_avg_method} \
             -p polyclonal_config {input.polyclonal_config} \
-            -p muteffects_csv {input.muteffects} \
+            -p muteffects_csv {params.muteffects} \
             -p site_numbering_map {input.site_numbering_map} \
             -p avg_pickle {output.avg_pickle} \
             -p avg_escape {output.avg_escape} \
