@@ -470,13 +470,13 @@ Averaging the following models for antibody=&#39;S2M11&#39;
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-cc834af63ca544dfb20a3a7c4acbe26f"></div>
+<div id="altair-viz-0c426b083f3545079e7aac87a050c048"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-cc834af63ca544dfb20a3a7c4acbe26f") {
-      outputDiv = document.getElementById("altair-viz-cc834af63ca544dfb20a3a7c4acbe26f");
+    if (outputDiv.id !== "altair-viz-0c426b083f3545079e7aac87a050c048") {
+      outputDiv = document.getElementById("altair-viz-0c426b083f3545079e7aac87a050c048");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -548,13 +548,13 @@ Averaging the following models for antibody=&#39;S2M11&#39;
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-6638e09d5a35498ebf687c6f0a91e2d1"></div>
+<div id="altair-viz-8c6c21852b5f407b8d43ddd74e5dc964"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-6638e09d5a35498ebf687c6f0a91e2d1") {
-      outputDiv = document.getElementById("altair-viz-6638e09d5a35498ebf687c6f0a91e2d1");
+    if (outputDiv.id !== "altair-viz-8c6c21852b5f407b8d43ddd74e5dc964") {
+      outputDiv = document.getElementById("altair-viz-8c6c21852b5f407b8d43ddd74e5dc964");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -610,10 +610,6 @@ Averaging the following models for antibody=&#39;S2M11&#39;
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">site_map</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">site_numbering_map</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;reference_site&quot;</span><span class="p">:</span> <span class="s2">&quot;site&quot;</span><span class="p">})</span>
 
-<span class="n">muteffects</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">muteffects_csv</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-    <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;reference_site&quot;</span><span class="p">:</span> <span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="s2">&quot;functional effect&quot;</span><span class="p">}</span>
-<span class="p">)[[</span><span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="s2">&quot;mutant&quot;</span><span class="p">,</span> <span class="s2">&quot;functional effect&quot;</span><span class="p">]]</span>
-
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">polyclonal_config</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">antibody_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="n">antibody</span><span class="p">]</span>
 
@@ -626,18 +622,28 @@ Averaging the following models for antibody=&#39;S2M11&#39;
     <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;times_seen&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 <span class="k">elif</span> <span class="s2">&quot;times_seen&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">]:</span>
     <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">][</span><span class="s2">&quot;times_seen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="k">if</span> <span class="s2">&quot;functional effect&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">]:</span>
-    <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">][</span><span class="s2">&quot;functional effect&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muteffects</span><span class="p">[</span>
-        <span class="s2">&quot;functional effect&quot;</span>
-    <span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">site_map</span><span class="p">[</span><span class="s2">&quot;sequential_site&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">site_map</span><span class="p">[</span><span class="s2">&quot;site&quot;</span><span class="p">]):</span>
     <span class="k">if</span> <span class="s2">&quot;addtl_tooltip_stats&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">:</span>
         <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_tooltip_stats&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sequential_site&quot;</span><span class="p">]</span>
     <span class="k">elif</span> <span class="s2">&quot;sequential_site&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_tooltip_stats&quot;</span><span class="p">]:</span>
         <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_tooltip_stats&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;sequential_site&quot;</span><span class="p">)</span>
 
+<span class="n">df_to_merge</span> <span class="o">=</span> <span class="p">[</span><span class="n">site_map</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="n">muteffects_csv</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+    <span class="n">muteffects</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">muteffects_csv</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;reference_site&quot;</span><span class="p">:</span> <span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="s2">&quot;effect&quot;</span><span class="p">:</span> <span class="s2">&quot;functional effect&quot;</span><span class="p">}</span>
+    <span class="p">)[[</span><span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="s2">&quot;mutant&quot;</span><span class="p">,</span> <span class="s2">&quot;functional effect&quot;</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="s2">&quot;functional effect&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">]:</span>
+        <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">][</span><span class="s2">&quot;functional effect&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muteffects</span><span class="p">[</span>
+            <span class="s2">&quot;functional effect&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">df_to_merge</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">muteffects</span><span class="p">)</span>
+<span class="k">elif</span> <span class="s2">&quot;functional effect&quot;</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">]:</span>
+    <span class="k">del</span> <span class="n">plot_kwargs</span><span class="p">[</span><span class="s2">&quot;addtl_slider_stats&quot;</span><span class="p">][</span><span class="s2">&quot;functional effect&quot;</span><span class="p">]</span>
+
 <span class="n">escape_chart</span> <span class="o">=</span> <span class="n">avg_model</span><span class="o">.</span><span class="n">mut_escape_plot</span><span class="p">(</span>
-    <span class="n">df_to_merge</span><span class="o">=</span><span class="p">[</span><span class="n">site_map</span><span class="p">,</span> <span class="n">muteffects</span><span class="p">],</span>
+    <span class="n">df_to_merge</span><span class="o">=</span><span class="n">df_to_merge</span><span class="p">,</span>
     <span class="o">**</span><span class="n">plot_kwargs</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -670,13 +676,13 @@ Saving plot to escape_plot=&#39;results/antibody_escape/S2M11_escape_plot_unform
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-7c0759721cc84088ab4ea712caf5fd7d"></div>
+<div id="altair-viz-b9c7af7cdcaf490bacf30f02b5702954"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-7c0759721cc84088ab4ea712caf5fd7d") {
-      outputDiv = document.getElementById("altair-viz-7c0759721cc84088ab4ea712caf5fd7d");
+    if (outputDiv.id !== "altair-viz-b9c7af7cdcaf490bacf30f02b5702954") {
+      outputDiv = document.getElementById("altair-viz-b9c7af7cdcaf490bacf30f02b5702954");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
