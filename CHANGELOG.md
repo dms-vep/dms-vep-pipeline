@@ -1,5 +1,8 @@
 # Change log
 
+### version 1.3
+- Upgraded `polyclonal` to version 2.5.
+
 ### version 1.2
 - Upgrade `python` from 3.9 to 3.10
 - Improve text formatting in plots with text added by `format_altair_html.py`.
