@@ -1,5 +1,8 @@
 # Change log
 
+### version 1.3.1
+- A FASTQ can be repeated in `barcode_runs.csv` if the *notes* column has the word "repeated" for each repeated row.
+
 ### version 1.3
 - Upgraded `polyclonal` to version 2.5.
 

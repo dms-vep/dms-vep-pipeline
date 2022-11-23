@@ -103,16 +103,22 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
         n_occurrences=lambda x: x.groupby("fastq_R1")["library_sample"].transform(
             "count"
         ),
-    )[["library_sample", "fastq_R1", "found_file", "n_occurrences"]]
+    )[["library_sample", "fastq_R1", "found_file", "n_occurrences", "notes"]]
     if not fastqs["found_file"].all():
         raise ValueError(
             f"Failed to find some fastqs:\n{fastqs.query('not found_file')}"
         )
     dup_fastqs = fastqs.query("n_occurrences != 1")
-    if any(fastqs["n_occurrences"] != 1):
+    if (
+        (fastqs["n_occurrences"] != 1)
+        & (~fastqs["notes"].str.contains("repeated", na=False))
+    ).any():
         pd.set_option("display.max_colwidth", None)
         raise ValueError(
-            f"FASTQs repeated:\n{dup_fastqs[['fastq_R1', 'n_occurrences']]}"
+            "FASTQs repeated for multiple samples. You can only repeat a FASTQ "
+            "in multiple rows of `barcode_runs` if each row has a note explaining "
+            "the repetition that includes the word 'repeated'. Here are the repeats:\n"
+            + str(dup_fastqs[["fastq_R1", "n_occurrences", "notes"]])
         )
 
     if set(expected_cols) != set(barcode_runs.columns):
