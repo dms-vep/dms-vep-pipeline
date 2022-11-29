@@ -122,6 +122,14 @@ barcode_runs: data/barcode_runs.csv
 fit_polyclonal_threads: 1  # larger values makes faster if bootstrapping
 polyclonal_config: data/polyclonal_config.yaml
 
+# Spatial distances for polyclonal regularization. Set to "null" or just don't provide
+# if you don't want spatial regularization. Should be data frame with columns
+# "site_1", "site_2", and "distance", with sites in reference numbering scheme.
+# Here we generate this file in `Snakefile` from a known PDB: you can do that,
+# or create it manually.
+spatial_distances: results/spatial_distances/7tov.csv
+
+
 # ----------------------------------------------------------------------------
 # Names of output directories / files
 # ----------------------------------------------------------------------------

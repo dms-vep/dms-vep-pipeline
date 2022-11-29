@@ -25,9 +25,28 @@ rule all:
         ),
         # HTML documentation output
         config["docs"],
+        config["spatial_distances"],
 
 
 # Arbitrary other rules should be added here
+rule spatial_distances:
+    """Get spatial distances from PDB."""
+    output:
+        csv=config["spatial_distances"],
+        pdb=os.path.splitext(config["spatial_distances"])[0] + ".pdb",
+    params:
+        url=lambda _, output: os.path.join(
+            "https://files.rcsb.org/download",
+            os.path.splitext(os.path.basename(output.csv))[0] + ".pdb",
+        ),
+        target_chains=["A", "B", "C"],
+    log:
+        log=os.path.join(config["logdir"], "spatial_distances.txt"),
+    conda:
+        os.path.join(config["pipeline_path"], "environment.yml")
+    script:
+        "scripts/spatial_distances.py"
+
 
 # Add any extra data/results files for docs with name: file
 extra_data_files = {}
