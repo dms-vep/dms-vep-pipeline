@@ -1,6 +1,14 @@
 # Change log
 
-### version 1.3.1
+### version 1.dev4
+- Changes to `conda` environment in `environment.yml`:
+ - Upgrade to `polyclonal` version 3.1
+ - Upgrade to `alignparse` version 0.6.0
+ - Upgrade `mafft` to 7.508
+ - Upgrade `snakemake` to 7.18.2
+ - No longer pin `tabulate` version (see #90)
+
+#### version 1.3.1
 - A FASTQ can be repeated in `barcode_runs.csv` if the *notes* column has the word "repeated" for each repeated row.
 
 ### version 1.3
