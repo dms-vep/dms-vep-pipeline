@@ -328,7 +328,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># papermill parameters cell (tagged as `parameters`)</span>
 <span class="n">prob_escape_csv</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">spatial_distances_csv</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">n_threads</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">pickle_file</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">antibody</span> <span class="o">=</span> <span class="kc">None</span>
@@ -343,7 +342,6 @@ div.rendered_html tbody tr:hover {
 <span class="n">prob_escape_csv</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">&quot;results/prob_escape/LibA_2022-02-10a_thaw-3_REGN10933_2_prob_escape.csv&quot;</span>
 <span class="p">)</span>
-<span class="n">spatial_distances_csv</span> <span class="o">=</span> <span class="s2">&quot;results/spatial_distances/7tov.csv&quot;</span>
 <span class="n">pickle_file</span> <span class="o">=</span> <span class="s2">&quot;results/polyclonal_fits/LibA_2022-02-10a_thaw-3_REGN10933_2.pickle&quot;</span>
 <span class="n">n_threads</span> <span class="o">=</span> <span class="mi">1</span>
 <br/></pre></div>
@@ -372,34 +370,9 @@ div.rendered_html tbody tr:hover {
 Reading probabilities of escape from results/prob_escape/LibA_2022-02-10a_thaw-3_REGN10933_2_prob_escape.csv
 </pre></div></div>
 </div>
-<p>Read spatial distances if relevant:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reading spatial distnaces from </span><span class="si">{</span><span class="n">spatial_distances_csv</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">spatial_distances_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">spatial_distances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">spatial_distances_csv</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Read spatial distances for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">spatial_distances</span><span class="p">)</span><span class="si">}</span><span class="s2"> residue pairs&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">spatial_distances</span> <span class="o">=</span> <span class="kc">None</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Reading spatial distnaces from results/spatial_distances/7tov.csv
-Read spatial distances for 529935 residue pairs
-</pre></div></div>
-</div>
 <p>Read the rest of the configuration and input data:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get information from config</span>
@@ -440,6 +413,30 @@ antibody=&#39;REGN10933&#39;
 n_threads=1
 pickle_file=&#39;results/polyclonal_fits/LibA_2022-02-10a_thaw-3_REGN10933_2.pickle&#39;
 antibody_config={&#39;min_epitope_activity_to_include&#39;: 0.2, &#39;plot_kwargs&#39;: {&#39;addtl_slider_stats&#39;: {&#39;times_seen&#39;: 3, &#39;functional effect&#39;: -4}, &#39;slider_binding_range_kwargs&#39;: {&#39;n_models&#39;: {&#39;step&#39;: 1}, &#39;times_seen&#39;: {&#39;step&#39;: 1, &#39;min&#39;: 1, &#39;max&#39;: 25}}, &#39;heatmap_max_at_least&#39;: 2, &#39;heatmap_min_at_least&#39;: -2}, &#39;max_epitopes&#39;: 1, &#39;fit_kwargs&#39;: {&#39;reg_escape_weight&#39;: 0.1, &#39;reg_spread_weight&#39;: 0.25, &#39;reg_activity_weight&#39;: 1.0}}
+</pre></div></div>
+</div>
+<p>Read spatial distances if relevant:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="s2">&quot;spatial_distances&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;spatial_distances&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reading spatial distances from </span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;spatial_distances&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">spatial_distances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;spatial_distances&quot;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Read spatial distances for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">spatial_distances</span><span class="p">)</span><span class="si">}</span><span class="s2"> residue pairs&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No spatial distances&quot;</span><span class="p">)</span>
+    <span class="n">spatial_distances</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Reading spatial distances from results/spatial_distances/7tov.csv
+Read spatial distances for 529935 residue pairs
 </pre></div></div>
 </div>
 </section>
@@ -575,13 +572,13 @@ antibody_config={&#39;min_epitope_activity_to_include&#39;: 0.2, &#39;plot_kwarg
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-68094494286d4c9e9b184c371da1f0da"></div>
+<div id="altair-viz-f3070524019546ab96036a688153561c"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-68094494286d4c9e9b184c371da1f0da") {
-      outputDiv = document.getElementById("altair-viz-68094494286d4c9e9b184c371da1f0da");
+    if (outputDiv.id !== "altair-viz-f3070524019546ab96036a688153561c") {
+      outputDiv = document.getElementById("altair-viz-f3070524019546ab96036a688153561c");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -722,16 +719,16 @@ min_epitope_activity_to_include=0.2
 
 Fitting model with n_epitopes=1
 # First fitting site-level model.
-# Starting optimization of 995 parameters at Tue Nov 29 14:47:37 2022.
+# Starting optimization of 995 parameters at Tue Nov 29 14:59:55 2022.
         step    time_sec        loss    fit_loss  reg_escape  reg_spread reg_spatial reg_uniqueness reg_uniqueness2 reg_activity
-           0    0.054149      2098.9        2098           0           0           0              0               0      0.95521
-         102      5.5727      93.735      84.863      3.3887           0      1.8799              0               0       3.6029
-# Successfully finished at Tue Nov 29 14:47:42 2022.
-# Starting optimization of 3451 parameters at Tue Nov 29 14:47:43 2022.
+           0    0.055184      2098.9        2098           0           0           0              0               0      0.95521
+         102      6.4068      93.735      84.863      3.3887           0      1.8799              0               0       3.6029
+# Successfully finished at Tue Nov 29 15:00:01 2022.
+# Starting optimization of 3451 parameters at Tue Nov 29 15:00:01 2022.
         step    time_sec        loss    fit_loss  reg_escape  reg_spread reg_spatial reg_uniqueness reg_uniqueness2 reg_activity
-           0    0.077242      125.16      102.95      16.728  1.8112e-32      1.8799              0               0       3.6029
-         131      11.675      106.09      83.991       14.54      1.7182      2.2333              0               0       3.6046
-# Successfully finished at Tue Nov 29 14:47:54 2022.
+           0    0.086076      125.16      102.95      16.728  1.8112e-32      1.8799              0               0       3.6029
+         131      12.597      106.09      83.991       14.54      1.7182      2.2333              0               0       3.6046
+# Successfully finished at Tue Nov 29 15:00:14 2022.
 Activities of epitopes:
 </pre></div></div>
 </div>
@@ -852,13 +849,13 @@ The selected model has 1 epitopes
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-ca897cba0bab4edbb438ef211b156191"></div>
+<div id="altair-viz-a922d1a0b75b46cdbe27be57001cbfb5"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-ca897cba0bab4edbb438ef211b156191") {
-      outputDiv = document.getElementById("altair-viz-ca897cba0bab4edbb438ef211b156191");
+    if (outputDiv.id !== "altair-viz-a922d1a0b75b46cdbe27be57001cbfb5") {
+      outputDiv = document.getElementById("altair-viz-a922d1a0b75b46cdbe27be57001cbfb5");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -949,13 +946,13 @@ The selected model has 1 epitopes
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-91151ac049de4892906f6ac780829834"></div>
+<div id="altair-viz-97a19ad6f7094efbbdde172a8be6e1e2"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-91151ac049de4892906f6ac780829834") {
-      outputDiv = document.getElementById("altair-viz-91151ac049de4892906f6ac780829834");
+    if (outputDiv.id !== "altair-viz-97a19ad6f7094efbbdde172a8be6e1e2") {
+      outputDiv = document.getElementById("altair-viz-97a19ad6f7094efbbdde172a8be6e1e2");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
