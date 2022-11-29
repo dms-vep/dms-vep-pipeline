@@ -596,6 +596,9 @@ rule fit_polyclonal:
         config["polyclonal_config"],
         config["site_numbering_map"],
         prob_escape_csv=rules.prob_escape.output.prob_escape,
+        spatial_distances=(
+            config["spatial_distances"] if "spatial_distances" in config else None
+        ),
         nb=os.path.join(config["pipeline_path"], "notebooks/fit_polyclonal.ipynb"),
     output:
         pickle=os.path.join(
@@ -611,6 +614,7 @@ rule fit_polyclonal:
         """
         papermill {input.nb} {output.nb} \
             -p prob_escape_csv {input.prob_escape_csv} \
+            -p spatial_distances_csv {input.spatial_distances} \
             -p pickle_file {output.pickle} \
             -p n_threads {threads} \
             &> {log}
