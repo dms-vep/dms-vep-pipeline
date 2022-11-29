@@ -25,7 +25,6 @@ rule all:
         ),
         # HTML documentation output
         config["docs"],
-        config["spatial_distances"],
 
 
 # Arbitrary other rules should be added here
