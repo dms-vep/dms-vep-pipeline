@@ -595,6 +595,11 @@ rule fit_polyclonal:
     input:
         config["polyclonal_config"],
         config["site_numbering_map"],
+        **(
+            {"spatial_distances": config["spatial_distances"]}
+            if "spatial_distances" in config
+            else {}
+        ),
         prob_escape_csv=rules.prob_escape.output.prob_escape,
         nb=os.path.join(config["pipeline_path"], "notebooks/fit_polyclonal.ipynb"),
     output:

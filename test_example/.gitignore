@@ -43,3 +43,6 @@ results/muteffects_functional/*
 !results/antibody_escape
 results/antibody_escape/*
 !results/antibody_escape/*.csv
+!results/spatial_distances
+results/spatial_distances/*
+!results/spatial_distances/*.csv

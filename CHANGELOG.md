@@ -1,6 +1,7 @@
 # Change log
 
-### version 1.dev4
+### version 1.4
+- Add `spatial_distances` to `config.yaml` to enable spatial regularization by `polyclonal`.
 - Changes to `conda` environment in `environment.yml`:
  - Upgrade to `polyclonal` version 3.1
  - Upgrade to `alignparse` version 0.6.0
