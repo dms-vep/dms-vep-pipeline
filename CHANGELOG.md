@@ -8,6 +8,7 @@
  - Upgrade `mafft` to 7.508
  - Upgrade `snakemake` to 7.18.2
  - No longer pin `tabulate` version (see #90)
+- Fix check for repeated FASTQs even when *notes* column in `barcode_runs.csv` is all *null*.
 
 #### version 1.3.1
 - A FASTQ can be repeated in `barcode_runs.csv` if the *notes* column has the word "repeated" for each repeated row.
