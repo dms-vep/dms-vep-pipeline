@@ -109,10 +109,10 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
             f"Failed to find some fastqs:\n{fastqs.query('not found_file')}"
         )
     dup_fastqs = fastqs.query("n_occurrences != 1")
-    if (
-        (fastqs["n_occurrences"] != 1)
-        & (~fastqs["notes"].str.contains("repeated", na=False))
-    ).any():
+    if (len(dup_fastqs) > 1) and (
+        (dup_fastqs["notes"].dtype == "float")
+        or not dup_fastqs["notes"].str.contains("repeated", na=False).all()
+    ):
         pd.set_option("display.max_colwidth", None)
         raise ValueError(
             "FASTQs repeated for multiple samples. You can only repeat a FASTQ "
