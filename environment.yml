@@ -21,7 +21,7 @@ dependencies:
   - mafft=7.508
   - mamba
   - markdown=3.3
-  - matplotlib=3.5
+  - matplotlib=3.6
   - minimap2=2.24
   - nbdime
   - nbstripout
@@ -35,7 +35,7 @@ dependencies:
   - snakefmt>=0.7
   - snakemake=7.18.2
   - sphinx=4.3  # cannot be updated to 5.3 until this resolved
-  - upsetplot=0.6
+  - upsetplot=0.7
   - pip:
     - alignparse==0.6.0
     - dms_variants==1.4.2
