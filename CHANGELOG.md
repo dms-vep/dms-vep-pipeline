@@ -1,5 +1,8 @@
 # Change log
 
+### version 1.4.1
+- Update `upsetplot` and `matplotlib` in `conda` environment.
+
 ### version 1.4
 - Add `spatial_distances` to `config.yaml` to enable spatial regularization by `polyclonal`.
 - Changes to `conda` environment in `environment.yml`:
