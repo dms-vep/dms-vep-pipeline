@@ -394,10 +394,10 @@ rule analyze_func_scores:
     input:
         func_score_files,
         config["functional_selections"],
+        config["mutation_design_classification"],
         nb=os.path.join(config["pipeline_path"], "notebooks/analyze_func_scores.ipynb"),
     output:
         # only make a notebook output for docs if there are functional selections
-        config["mutation_design_classification"],
         **(
             {"nb": "results/notebooks/analyze_func_scores.ipynb"}
             if len(func_selections)
