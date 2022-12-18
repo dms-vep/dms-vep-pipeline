@@ -1,6 +1,9 @@
 # Change log
 
-### version 1.4.1
+#### version 1.4.2
+- Plot of functional scores in `analyze_func_scores` separates variants by whether they have only intended or also unintended nonsynonymous mutations.
+
+#### version 1.4.1
 - Update `upsetplot` and `matplotlib` in `conda` environment.
 
 ### version 1.4
