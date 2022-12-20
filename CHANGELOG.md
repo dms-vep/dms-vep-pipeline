@@ -1,5 +1,8 @@
 # Change log
 
+#### version 1.4.3
+- Upgrade to `biopython` 1.80.
+
 #### version 1.4.2
 - Plot of functional scores in `analyze_func_scores` separates variants by whether they have only intended or also unintended nonsynonymous mutations.
 
