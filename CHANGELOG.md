@@ -1,5 +1,8 @@
 # Change log
 
+### version 1.5.0
+- The `fit_polyclonal` rule now pickles a list of all models (with one, two, etc epitopes) rather than the single model with most epitopes that fits stopping criteria.
+
 #### version 1.4.3
 - Upgrade to `biopython` 1.80.
 
