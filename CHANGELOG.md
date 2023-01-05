@@ -1,7 +1,9 @@
 # Change log
 
 ### version 1.5.0
-- The `fit_polyclonal` rule now pickles a list of all models (with one, two, etc epitopes) rather than the single model with most epitopes that fits stopping criteria.
+- Better harmonization of epitopes in `polyclonal` fits with multiple epitopes:
+ - The `fit_polyclonal` rule now pickles a list of all models (with one, two, etc epitopes) rather than the single model with most epitopes that fits stopping criteria.
+ - The `avg_antibody_escape` rule now tries to harmonize the models with the most epitopes, and then keeps decreasing number of epitopes until they can be harmonized.
 
 #### version 1.4.3
 - Upgrade to `biopython` 1.80.
