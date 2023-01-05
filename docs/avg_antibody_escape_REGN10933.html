@@ -304,6 +304,7 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">import</span> <span class="nn">polyclonal</span>
+<span class="kn">from</span> <span class="nn">polyclonal.polyclonal</span> <span class="kn">import</span> <span class="n">PolyclonalHarmonizeError</span>
 
 <span class="kn">import</span> <span class="nn">yaml</span>
 </pre></div>
@@ -368,7 +369,7 @@ div.rendered_html tbody tr:hover {
 <br/></pre></div>
 </div>
 </div>
-<p>Convert <code class="docutils literal notranslate"><span class="pre">selection_groups</span></code> into a data frame and get all of the pickled models:</p>
+<p>Convert <code class="docutils literal notranslate"><span class="pre">selection_groups</span></code> into a data frame and get all of the pickled models for each number of epitopes:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -378,10 +379,15 @@ div.rendered_html tbody tr:hover {
 <span class="n">display</span><span class="p">(</span><span class="n">models_df</span><span class="p">)</span>
 
 <span class="c1"># convert pickle files into models</span>
-<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">,</span> <span class="n">models_df</span><span class="p">[</span><span class="s2">&quot;pickle_file&quot;</span><span class="p">]))</span>
-<span class="n">models_df</span> <span class="o">=</span> <span class="n">models_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;pickle_file&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)))</span>
-<span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;pickle_file&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">,</span> <span class="n">models_df</span><span class="p">[</span><span class="s2">&quot;pickle_file&quot;</span><span class="p">])),</span> <span class="n">models_df</span><span class="p">[</span><span class="s2">&quot;pickle_file&quot;</span><span class="p">]</span>
+<span class="n">models_df</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">models_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;pickle_file&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)))</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">explode</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pickle_file&quot;</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">n_epitopes</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">epitopes</span><span class="p">)))</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -451,17 +457,34 @@ Averaging the following models for antibody=&#39;REGN10933&#39;
 </table>
 </div></div>
 </div>
-<p>Now build the average model:</p>
-<div class="nbinput nblast docutils container">
+<p>Now build the average model, starting with the max number of epitopes and continuing with fewer if we can’t get harmonization with the max number:</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">avg_model</span> <span class="o">=</span> <span class="n">polyclonal</span><span class="o">.</span><span class="n">PolyclonalAverage</span><span class="p">(</span>
-    <span class="n">models_df</span><span class="p">,</span>
-    <span class="n">default_avg_to_plot</span><span class="o">=</span><span class="n">escape_avg_method</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_epitopes</span> <span class="o">=</span> <span class="n">models_df</span><span class="p">[</span><span class="s2">&quot;n_epitopes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">n_epitopes</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trying to harmonize models with </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> epitopes...&quot;</span><span class="p">)</span>
+        <span class="n">avg_model</span> <span class="o">=</span> <span class="n">polyclonal</span><span class="o">.</span><span class="n">PolyclonalAverage</span><span class="p">(</span>
+            <span class="n">models_df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;n_epitopes == @n&quot;</span><span class="p">),</span>
+            <span class="n">default_avg_to_plot</span><span class="o">=</span><span class="n">escape_avg_method</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully harmonized models.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PolyclonalHarmonizeError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Harmonization failed with this error:</span><span class="se">\n</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Trying to harmonize models with 1 epitopes...
+Successfully harmonized models.
+</pre></div></div>
 </div>
 <p>Look at correlation in escape values across replicates:</p>
 <div class="nbinput docutils container">
@@ -486,13 +509,13 @@ Averaging the following models for antibody=&#39;REGN10933&#39;
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-9fd6942c81284c4481b7a1b6b5e2dcab"></div>
+<div id="altair-viz-c23e3429982b41ee8b47ebf6992409b8"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-9fd6942c81284c4481b7a1b6b5e2dcab") {
-      outputDiv = document.getElementById("altair-viz-9fd6942c81284c4481b7a1b6b5e2dcab");
+    if (outputDiv.id !== "altair-viz-c23e3429982b41ee8b47ebf6992409b8") {
+      outputDiv = document.getElementById("altair-viz-c23e3429982b41ee8b47ebf6992409b8");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -538,7 +561,7 @@ Averaging the following models for antibody=&#39;REGN10933&#39;
         .catch(showError)
         .then(() => displayChart(vegaEmbed));
     }
-  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "data": {"name": "data-31a3ca46d3a12a0fe0779c6e4d1114d0"}, "mark": {"type": "rect", "stroke": "black"}, "encoding": {"color": {"field": "r2", "scale": {"domain": [0, 1], "scheme": "yellowgreenblue"}, "type": "quantitative"}, "facet": {}, "tooltip": [{"field": "r", "format": ".3f", "type": "quantitative"}, {"field": "r2", "format": ".3f", "type": "quantitative"}, {"field": "epitope", "type": "nominal"}, {"field": "date_1", "type": "nominal"}, {"field": "library_1", "type": "nominal"}, {"field": "replicate_1", "type": "quantitative"}, {"field": "virus_batch_1", "type": "nominal"}, {"field": "date_2", "type": "nominal"}, {"field": "library_2", "type": "nominal"}, {"field": "replicate_2", "type": "quantitative"}, {"field": "virus_batch_2", "type": "nominal"}], "x": {"field": "_label_1", "title": null, "type": "nominal"}, "y": {"field": "_label_2", "title": null, "type": "nominal"}}, "height": {"step": 15}, "width": {"step": 15}, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-31a3ca46d3a12a0fe0779c6e4d1114d0": [{"r": 1.0, "r2": 1.0, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 1, "virus_batch_1": "thaw-3", "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 1, "virus_batch_2": "thaw-3", "_label_1": "2022-02-10a-LibA-1-thaw-3", "_label_2": "2022-02-10a-LibA-1-thaw-3"}, {"r": 0.6682234531720911, "r2": 0.4465225833692338, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 2, "virus_batch_1": "thaw-3", "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 1, "virus_batch_2": "thaw-3", "_label_1": "2022-02-10a-LibA-2-thaw-3", "_label_2": "2022-02-10a-LibA-1-thaw-3"}, {"r": 0.43515035855397716, "r2": 0.18935583454965488, "epitope": "1", "date_1": "2022-03-02", "library_1": "LibB", "replicate_1": 1, "virus_batch_1": "thaw-3", "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 1, "virus_batch_2": "thaw-3", "_label_1": "2022-03-02-LibB-1-thaw-3", "_label_2": "2022-02-10a-LibA-1-thaw-3"}, {"r": 0.6682234531720911, "r2": 0.4465225833692338, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 1, "virus_batch_1": "thaw-3", "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 2, "virus_batch_2": "thaw-3", "_label_1": "2022-02-10a-LibA-1-thaw-3", "_label_2": "2022-02-10a-LibA-2-thaw-3"}, {"r": 1.0, "r2": 1.0, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 2, "virus_batch_1": "thaw-3", "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 2, "virus_batch_2": "thaw-3", "_label_1": "2022-02-10a-LibA-2-thaw-3", "_label_2": "2022-02-10a-LibA-2-thaw-3"}, {"r": 0.4322590649342765, "r2": 0.18684789921785508, "epitope": "1", "date_1": "2022-03-02", "library_1": "LibB", "replicate_1": 1, "virus_batch_1": "thaw-3", "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 2, "virus_batch_2": "thaw-3", "_label_1": "2022-03-02-LibB-1-thaw-3", "_label_2": "2022-02-10a-LibA-2-thaw-3"}, {"r": 0.43515035855397716, "r2": 0.18935583454965488, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 1, "virus_batch_1": "thaw-3", "date_2": "2022-03-02", "library_2": "LibB", "replicate_2": 1, "virus_batch_2": "thaw-3", "_label_1": "2022-02-10a-LibA-1-thaw-3", "_label_2": "2022-03-02-LibB-1-thaw-3"}, {"r": 0.4322590649342765, "r2": 0.18684789921785508, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 2, "virus_batch_1": "thaw-3", "date_2": "2022-03-02", "library_2": "LibB", "replicate_2": 1, "virus_batch_2": "thaw-3", "_label_1": "2022-02-10a-LibA-2-thaw-3", "_label_2": "2022-03-02-LibB-1-thaw-3"}, {"r": 1.0, "r2": 1.0, "epitope": "1", "date_1": "2022-03-02", "library_1": "LibB", "replicate_1": 1, "virus_batch_1": "thaw-3", "date_2": "2022-03-02", "library_2": "LibB", "replicate_2": 1, "virus_batch_2": "thaw-3", "_label_1": "2022-03-02-LibB-1-thaw-3", "_label_2": "2022-03-02-LibB-1-thaw-3"}]}}, {"mode": "vega-lite"});
+  })({"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}, "axis": {"labelLimit": 500}}, "data": {"name": "data-3d0e4b7a80f221a91848cef9d2f3c694"}, "mark": {"type": "rect", "stroke": "black"}, "encoding": {"color": {"field": "r2", "scale": {"domain": [0, 1], "scheme": "yellowgreenblue"}, "type": "quantitative"}, "facet": {}, "tooltip": [{"field": "r", "format": ".3f", "type": "quantitative"}, {"field": "r2", "format": ".3f", "type": "quantitative"}, {"field": "epitope", "type": "nominal"}, {"field": "date_1", "type": "nominal"}, {"field": "library_1", "type": "nominal"}, {"field": "replicate_1", "type": "quantitative"}, {"field": "virus_batch_1", "type": "nominal"}, {"field": "n_epitopes_1", "type": "quantitative"}, {"field": "date_2", "type": "nominal"}, {"field": "library_2", "type": "nominal"}, {"field": "replicate_2", "type": "quantitative"}, {"field": "virus_batch_2", "type": "nominal"}, {"field": "n_epitopes_2", "type": "quantitative"}], "x": {"field": "_label_1", "title": null, "type": "nominal"}, "y": {"field": "_label_2", "title": null, "type": "nominal"}}, "height": {"step": 15}, "width": {"step": 15}, "$schema": "https://vega.github.io/schema/vega-lite/v5.2.0.json", "datasets": {"data-3d0e4b7a80f221a91848cef9d2f3c694": [{"r": 1.0, "r2": 1.0, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 1, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 1, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-02-10a-LibA-1-thaw-3-1", "_label_2": "2022-02-10a-LibA-1-thaw-3-1"}, {"r": 0.6682234531720911, "r2": 0.4465225833692338, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 2, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 1, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-02-10a-LibA-2-thaw-3-1", "_label_2": "2022-02-10a-LibA-1-thaw-3-1"}, {"r": 0.43515035855397716, "r2": 0.18935583454965488, "epitope": "1", "date_1": "2022-03-02", "library_1": "LibB", "replicate_1": 1, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 1, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-03-02-LibB-1-thaw-3-1", "_label_2": "2022-02-10a-LibA-1-thaw-3-1"}, {"r": 0.6682234531720911, "r2": 0.4465225833692338, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 1, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 2, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-02-10a-LibA-1-thaw-3-1", "_label_2": "2022-02-10a-LibA-2-thaw-3-1"}, {"r": 1.0, "r2": 1.0, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 2, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 2, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-02-10a-LibA-2-thaw-3-1", "_label_2": "2022-02-10a-LibA-2-thaw-3-1"}, {"r": 0.4322590649342765, "r2": 0.18684789921785508, "epitope": "1", "date_1": "2022-03-02", "library_1": "LibB", "replicate_1": 1, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-02-10a", "library_2": "LibA", "replicate_2": 2, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-03-02-LibB-1-thaw-3-1", "_label_2": "2022-02-10a-LibA-2-thaw-3-1"}, {"r": 0.43515035855397716, "r2": 0.18935583454965488, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 1, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-03-02", "library_2": "LibB", "replicate_2": 1, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-02-10a-LibA-1-thaw-3-1", "_label_2": "2022-03-02-LibB-1-thaw-3-1"}, {"r": 0.4322590649342765, "r2": 0.18684789921785508, "epitope": "1", "date_1": "2022-02-10a", "library_1": "LibA", "replicate_1": 2, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-03-02", "library_2": "LibB", "replicate_2": 1, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-02-10a-LibA-2-thaw-3-1", "_label_2": "2022-03-02-LibB-1-thaw-3-1"}, {"r": 1.0, "r2": 1.0, "epitope": "1", "date_1": "2022-03-02", "library_1": "LibB", "replicate_1": 1, "virus_batch_1": "thaw-3", "n_epitopes_1": 1, "date_2": "2022-03-02", "library_2": "LibB", "replicate_2": 1, "virus_batch_2": "thaw-3", "n_epitopes_2": 1, "_label_1": "2022-03-02-LibB-1-thaw-3-1", "_label_2": "2022-03-02-LibB-1-thaw-3-1"}]}}, {"mode": "vega-lite"});
 </script></div>
 </div>
 <p>Plot the activities:</p>
@@ -564,13 +587,13 @@ Averaging the following models for antibody=&#39;REGN10933&#39;
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-ef1667111754431ea830ce74d323b534"></div>
+<div id="altair-viz-9e619fc713c54ffe8608b647b2ed43e6"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-ef1667111754431ea830ce74d323b534") {
-      outputDiv = document.getElementById("altair-viz-ef1667111754431ea830ce74d323b534");
+    if (outputDiv.id !== "altair-viz-9e619fc713c54ffe8608b647b2ed43e6") {
+      outputDiv = document.getElementById("altair-viz-9e619fc713c54ffe8608b647b2ed43e6");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -692,13 +715,13 @@ Saving plot to escape_plot=&#39;results/antibody_escape/REGN10933_escape_plot_un
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-3b5697cf64994c88b3b5299569f73a9c"></div>
+<div id="altair-viz-e61b7b0aa66146929cbbb3316bb5e33c"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-3b5697cf64994c88b3b5299569f73a9c") {
-      outputDiv = document.getElementById("altair-viz-3b5697cf64994c88b3b5299569f73a9c");
+    if (outputDiv.id !== "altair-viz-e61b7b0aa66146929cbbb3316bb5e33c") {
+      outputDiv = document.getElementById("altair-viz-e61b7b0aa66146929cbbb3316bb5e33c");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -780,13 +803,22 @@ Saving model to avg_pickle=&#39;results/antibody_escape/REGN10933.pickle&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Saving average escape values to avg_escape=&#39;results/antibody_escape/REGN10933_avg.csv&#39;
 Saving per-replicate escape values to rep_escape=&#39;results/antibody_escape/REGN10933_rep.csv&#39;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/fh/fast/bloom_j/software/miniconda3/envs/dms-vep-pipeline/lib/python3.10/site-packages/pandas/core/internals/blocks.py:2323: RuntimeWarning: invalid value encountered in cast
+  values = values.astype(str)
 </pre></div></div>
 </div>
 </section>
