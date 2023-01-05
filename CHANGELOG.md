@@ -1,5 +1,8 @@
 # Change log
 
+#### version 1.5.1
+- Update `polyclonal` to 3.2
+
 ### version 1.5.0
 - Better harmonization of epitopes in `polyclonal` fits with multiple epitopes:
  - The `fit_polyclonal` rule now pickles a list of all models (with one, two, etc epitopes) rather than the single model with most epitopes that fits stopping criteria.
