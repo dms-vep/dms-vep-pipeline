@@ -344,7 +344,7 @@ div.rendered_html tbody tr:hover {
 <span class="p">)</span>
 <span class="n">pickle_file</span> <span class="o">=</span> <span class="s2">&quot;results/polyclonal_fits/LibA_2022-02-10a_thaw-3_REGN10933_1.pickle&quot;</span>
 <span class="n">n_threads</span> <span class="o">=</span> <span class="mi">1</span>
-<br/></pre></div>
+</pre></div>
 </div>
 </div>
 <p>Read the probabilities of escape, and filter for those with sufficient no-antibody counts:</p>
@@ -572,13 +572,13 @@ Read spatial distances for 529935 residue pairs
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-9b9fd9aba7f3434f9881e44538fd9196"></div>
+<div id="altair-viz-6e74bbe178f34881ae8ec136d43d9bda"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-9b9fd9aba7f3434f9881e44538fd9196") {
-      outputDiv = document.getElementById("altair-viz-9b9fd9aba7f3434f9881e44538fd9196");
+    if (outputDiv.id !== "altair-viz-6e74bbe178f34881ae8ec136d43d9bda") {
+      outputDiv = document.getElementById("altair-viz-6e74bbe178f34881ae8ec136d43d9bda");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -701,8 +701,7 @@ min_epitope_activity_to_include=0.2
         <span class="n">model</span><span class="o">.</span><span class="n">activity_wt_df</span><span class="p">[</span><span class="s2">&quot;activity&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">min_epitope_activity_to_include</span>
     <span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stop fitting, epitope has activity &lt;=</span><span class="si">{</span><span class="n">min_epitope_activity_to_include</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># get previous model</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># get previous model</span>
         <span class="k">break</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
@@ -719,16 +718,16 @@ min_epitope_activity_to_include=0.2
 
 Fitting model with n_epitopes=1
 # First fitting site-level model.
-# Starting optimization of 990 parameters at Sun Dec 18 14:00:19 2022.
+# Starting optimization of 990 parameters at Wed Jan  4 16:14:09 2023.
         step    time_sec        loss    fit_loss  reg_escape  reg_spread reg_spatial reg_uniqueness reg_uniqueness2 reg_activity
-           0    0.052433      2136.6      2135.6           0           0           0              0               0      0.95521
-         156      7.5547       99.67      91.236      3.2971           0      1.4875              0               0       3.6497
-# Successfully finished at Sun Dec 18 14:00:27 2022.
-# Starting optimization of 3475 parameters at Sun Dec 18 14:00:27 2022.
+           0     0.21052      2136.6      2135.6           0           0           0              0               0      0.95521
+         156      9.4447       99.67      91.236      3.2971           0      1.4875              0               0       3.6497
+# Successfully finished at Wed Jan  4 16:14:18 2023.
+# Starting optimization of 3475 parameters at Wed Jan  4 16:14:18 2023.
         step    time_sec        loss    fit_loss  reg_escape  reg_spread reg_spatial reg_uniqueness reg_uniqueness2 reg_activity
-           0    0.072682      132.04         112      14.907  6.4588e-33      1.4875              0               0       3.6497
-         127      10.334      116.02       95.31      13.878      1.2111      1.9692              0               0       3.6547
-# Successfully finished at Sun Dec 18 14:00:37 2022.
+           0     0.54342      132.04         112      14.907  6.4588e-33      1.4875              0               0       3.6497
+         127      30.284      116.02       95.31      13.878      1.2111      1.9692              0               0       3.6547
+# Successfully finished at Wed Jan  4 16:14:48 2023.
 Activities of epitopes:
 </pre></div></div>
 </div>
@@ -849,13 +848,13 @@ The selected model has 1 epitopes
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-c94cb29045ac40b7a7368015dd9eda90"></div>
+<div id="altair-viz-8f1f50e7de4f4402b3721346956cd7af"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-c94cb29045ac40b7a7368015dd9eda90") {
-      outputDiv = document.getElementById("altair-viz-c94cb29045ac40b7a7368015dd9eda90");
+    if (outputDiv.id !== "altair-viz-8f1f50e7de4f4402b3721346956cd7af") {
+      outputDiv = document.getElementById("altair-viz-8f1f50e7de4f4402b3721346956cd7af");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -946,13 +945,13 @@ The selected model has 1 epitopes
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-9b5c449b937049d099335fdf5129b81e"></div>
+<div id="altair-viz-b718d68af93e448d9f4746420dadb5fd"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-9b5c449b937049d099335fdf5129b81e") {
-      outputDiv = document.getElementById("altair-viz-9b5c449b937049d099335fdf5129b81e");
+    if (outputDiv.id !== "altair-viz-b718d68af93e448d9f4746420dadb5fd") {
+      outputDiv = document.getElementById("altair-viz-b718d68af93e448d9f4746420dadb5fd");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -1006,9 +1005,9 @@ The selected model has 1 epitopes
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving model to </span><span class="si">{</span><span class="n">pickle_file</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span><span class="si">}</span><span class="s2"> models to </span><span class="si">{</span><span class="n">pickle_file</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1017,7 +1016,7 @@ The selected model has 1 epitopes
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Saving model to pickle_file=&#39;results/polyclonal_fits/LibA_2022-02-10a_thaw-3_REGN10933_1.pickle&#39;
+Saving 1 models to pickle_file=&#39;results/polyclonal_fits/LibA_2022-02-10a_thaw-3_REGN10933_1.pickle&#39;
 </pre></div></div>
 </div>
 </section>
