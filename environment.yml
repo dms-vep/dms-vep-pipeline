@@ -40,4 +40,4 @@ dependencies:
     - alignparse==0.6.0
     - dms_variants==1.4.2
     - git+https://github.com/altair-viz/altair@0217b2e73703d3b7b529b73b4dec9c17e7fb09bb
-    - git+https://github.com/jbloomlab/polyclonal/@3.2
+    - git+https://github.com/jbloomlab/polyclonal/@3.3
