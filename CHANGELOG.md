@@ -1,5 +1,8 @@
 # Change log
 
+#### version 1.5.2
+- Update `polyclonal` to 3.3
+
 #### version 1.5.1
 - Update `polyclonal` to 3.2
 
