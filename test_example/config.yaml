@@ -59,7 +59,39 @@ variant_tags:  # variant tags in PacBio amplicon, or "null" if no tags
     wildtype: A
 
 # ----------------------------------------------------------------------------
-# Parameters for analyses downstream of building the codon variants
+# Parameters related to computing functional scores
+# ----------------------------------------------------------------------------
+
+# If you want to use prebuilt functional scores just taken from another repo, then
+# set the `prebuilt_muteffects` variable below to the URL for pre-built effects of
+# mutations on the observed phenotype. In that case, all other variables specified in this
+# section will be ignored and can be deleted.
+# prebuilt_muteffects: https://raw.githubusercontent.com/dms-vep/dms-vep-pipeline/main/test_example/results/muteffects_functional/muteffects_observed.csv
+
+# Parameters for functional scores and global epistasis analysis, only needed if not using
+# `prebuilt_muteffects`.
+func_scores_pseudocount: 0.5  # pseudocount when computing functional scores
+func_scores_min_wt_count: 1000  # require this many wildtype counts or error
+func_scores_min_wt_frac:  0.001  # require this fraction of all counts for wildtype or error
+# Only fit global epistasis models for variants with at least this many
+# pre-selection counts and this fraction of total pre-selection counts
+func_scores_min_preselection_counts: 10  # maybe make larger for real expts, say 20 to 50
+func_scores_min_preselection_frac: 0.00005  # make smaller for large libraries, say 0.1 / (library size)
+# when fitting global epistasis models, put this floor on functional scores. "null" or not specifying
+# parameter means no floor.
+func_scores_floor: null
+# when plotting mut effects on viral entry, initially require mutation seen in this many variants:
+muteffects_avg_method: median
+# keyword arguments to `polyclonal.plot.lineplot_and_heatmap` for plotting functional effects
+muteffects_plot_kwargs:
+  addtl_slider_stats:
+    times_seen: 3
+  heatmap_max_at_least: 1
+  heatmap_min_at_least: -1
+  init_floor_at_zero: False
+
+# ----------------------------------------------------------------------------
+# Analysis parameters
 # ----------------------------------------------------------------------------
 
 # Parameters for processing Illumina barcodes
@@ -86,27 +118,6 @@ prob_escape_min_no_antibody_frac: 0.00005  # make smaller for large libraries, s
 # when averaging antibody escape values, take the "median" or "mean"?
 escape_avg_method: median
 
-# Parameters for functional scores and global epistasis analysis
-func_scores_pseudocount: 0.5  # pseudocount when computing functional scores
-func_scores_min_wt_count: 1000  # require this many wildtype counts or error
-func_scores_min_wt_frac:  0.001  # require this fraction of all counts for wildtype or error
-# Only fit global epistasis models for variants with at least this many
-# pre-selection counts and this fraction of total pre-selection counts
-func_scores_min_preselection_counts: 10  # maybe make larger for real expts, say 20 to 50
-func_scores_min_preselection_frac: 0.00005  # make smaller for large libraries, say 0.1 / (library size)
-# when fitting global epistasis models, put this floor on functional scores. "null" or not specifying
-# parameter means no floor.
-func_scores_floor: null
-# when plotting mut effects on viral entry, initially require mutation seen in this many variants:
-muteffects_avg_method: median
-# keyword arguments to `polyclonal.plot.lineplot_and_heatmap` for plotting functional effects
-muteffects_plot_kwargs:
-  addtl_slider_stats:
-    times_seen: 3
-  heatmap_max_at_least: 1
-  heatmap_min_at_least: -1
-  init_floor_at_zero: False
-
 # do we add formatting to the antibody escape and functional effects plots
 format_antibody_escape_plots: true  # if option missing defaults to true
 format_muteffects_plots: true  # if option missing defaults to true
@@ -115,7 +126,7 @@ antibody_escape_legend: null
 muteffects_legend: null
 
 # ----------------------------------------------------------------------------
-# Input data to dms-vep-pipeline downstream of building codon variants
+# Input data
 # ----------------------------------------------------------------------------
 
 # Map sequential 1, 2, numbering of the protein to the desired
@@ -147,7 +158,6 @@ polyclonal_config: data/polyclonal_config.yaml
 # Here we generate this file in `Snakefile` from a known PDB: you can do that,
 # or create it manually.
 spatial_distances: results/spatial_distances/7tov.csv
-
 
 # ----------------------------------------------------------------------------
 # Names of output directories / files
