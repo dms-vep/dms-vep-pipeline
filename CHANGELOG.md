@@ -1,5 +1,11 @@
 # Change log
 
+### version 1.6.0
+- add option to use pre-built variants
+ - Enables use of pre-built codon-variant table rather than having to rebuild every time.
+ - Add `prebuilt_variants` and `prebuilt_geneseq` options
+ - Move variant building from `pipeline.smk` to `build_variants.smk`
+
 #### version 1.5.2
 - Update `polyclonal` to 3.3
 
