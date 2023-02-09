@@ -35,7 +35,7 @@ Running the `Snakefile` in [./test_example](test_example) performs the whole ana
 ## Running the pipeline
 The `Snakefile` you create will include [pipeline.smk](pipeline.smk) (which has the analysis pipeline) and [docs.smk](docs.smk) (which builds the [sphinx](https://www.sphinx-doc.org/) HTML documentation).
 You can also optionally add other rules into your `Snakefile`.
-If they define an `output` named `nb` that is a Jupyter notebook (like some of the rules in [pipeline.smk](pipeline.smk)), then that will be included into the HTML documentation.
+If they define an `output` named `nb` that is a Jupyter notebook (like some of the rules in [pipeline.smk](pipeline.smk) and its included `.smk` files), then that will be included into the HTML documentation.
 
 You then run the pipeline with:
 
@@ -83,6 +83,7 @@ Here are the different contents of this repo:
  - [funcs.smk](funcs.smk) functions used in [snakemake](https://snakemake.readthedocs.io/) pipeline.
  - [LICENSE.txt](LICENSE.txt): license for pipeline.
  - [pipeline.smk](pipeline.smk): [snakemake](https://snakemake.readthedocs.io/) rules that run pipeline.
+ - [build_variants.smk](build_variants.smk): [snakemake](https://snakemake.readthedocs.io/) rules for pipeline specific to building variants, included in [pipeline.smk](pipeline.smk).
  - [./scripts](scripts): subdirectory with scripts used by [snakemake](https://snakemake.readthedocs.io/) rules.
  - [./docs](docs): HTML documentation for the test example.
  - [environment.yml](environment.yml): the [conda](https://docs.conda.io/) environment for the pipeline.
