@@ -16,12 +16,25 @@ github_repo: dms-vep-pipeline
 github_user: dms-vep
 github_branch: main  # main branch for repo, assume renamed from master -> main
 description: Deep mutational scanning (DMS) pipeline for a viral entry protein (VEP)
-year: 2022
+year: 2023
 authors: Jesse Bloom
 
 # ----------------------------------------------------------------------------
-# Parameters for analysis
+# Parameters related to building the codon variants
 # ----------------------------------------------------------------------------
+
+# There are two ways you can get the codon variants: download a pre-built codon
+# variant table, or build them from PacBio CCSs yourself. If you are using
+# pre-built ones, then specify the links to URLs giving the codon variants,
+# gene sequence, and protein sequence for the pre-built table under `prebuilt_variants`.
+# Otherwise, specify the other variables. If `prebuilt_variants` is specified, all
+# other variables in this section are ignored (and do not need to be specified at all).
+
+# If using pre-built variants specify URL for pre-built codon-variant table
+# and gene (codon) sequence.
+# prebuilt_variants: https://raw.githubusercontent.com/dms-vep/dms-vep-pipeline/main/test_example/results/variants/codon_variants.csv
+# prebuilt_geneseq: https://raw.githubusercontent.com/dms-vep/dms-vep-pipeline/main/test_example/results/gene_sequence/codon.fasta
+
 # Parameters for building PacBio CCS consensuses
 max_ccs_error_rate: 1.0e-4  # only keep CCS if gene/barcode error rate <= this
 consensus_params:  # parameters for building PacBio consensus sequences
@@ -30,6 +43,24 @@ consensus_params:  # parameters for building PacBio consensus sequences
   max_minor_sub_frac: 0.2
   max_minor_indel_frac: 0.2
   min_support: 2
+
+# PacBio sequencing
+pacbio_runs: data/PacBio_runs.csv  # PacBio sequencing data
+pacbio_amplicon: data/PacBio_amplicon.gb  # Genbank file with PacBio amplicon
+pacbio_amplicon_specs: data/PacBio_feature_parse_specs.yaml  # alignparse feature parsing
+variant_tags:  # variant tags in PacBio amplicon, or "null" if no tags
+  variant_tag5:
+    variant_1: G
+    variant_2: C
+    wildtype: A
+  variant_tag3:
+    variant_1: G
+    variant_2: C
+    wildtype: A
+
+# ----------------------------------------------------------------------------
+# Parameters for analyses downstream of building the codon variants
+# ----------------------------------------------------------------------------
 
 # Parameters for processing Illumina barcodes
 illumina_barcode_parser_params:
@@ -77,30 +108,17 @@ muteffects_plot_kwargs:
   init_floor_at_zero: False
 
 # do we add formatting to the antibody escape and functional effects plots
-format_antibody_escape_plots: true  # if option, missing defaults to true
-format_muteffects_plots: true  # if option, missing defaults to true
+format_antibody_escape_plots: true  # if option missing defaults to true
+format_muteffects_plots: true  # if option missing defaults to true
 # to override default, provide a value for antibody_escape_legend / muteffects_legend
 antibody_escape_legend: null
 muteffects_legend: null
 
 # ----------------------------------------------------------------------------
-# Input data to dms-vep-pipeline
+# Input data to dms-vep-pipeline downstream of building codon variants
 # ----------------------------------------------------------------------------
-# PacBio sequencing
-pacbio_runs: data/PacBio_runs.csv  # PacBio sequencing data
-pacbio_amplicon: data/PacBio_amplicon.gb  # Genbank file with PacBio amplicon
-pacbio_amplicon_specs: data/PacBio_feature_parse_specs.yaml  # alignparse feature parsing
-variant_tags:  # variant tags in PacBio amplicon, or "null" if no tags
-  variant_tag5:
-    variant_1: G
-    variant_2: C
-    wildtype: A
-  variant_tag3:
-    variant_1: G
-    variant_2: C
-    wildtype: A
 
-# Map sequential 1, 2, numbering of gene in PacBio amplicon to the desired
+# Map sequential 1, 2, numbering of the protein to the desired
 # final reference numbering scheme. Required to have columns named
 # "sequential_site" and "reference_site". If you just want to number in
 # sequential numbering for everything, just make both entries sequential.

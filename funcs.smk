@@ -32,7 +32,7 @@ SAMPLE_TYPES = frozendict.frozendict(
 """frozendict.frozendict: Map sample type synonyms in barcode runs to sample type."""
 
 
-def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
+def barcode_runs_from_config(barcode_runs_csv):
     """Data frame of barcode runs from input CSV."""
 
     # expected columns in final output
@@ -57,8 +57,6 @@ def barcode_runs_from_config(barcode_runs_csv, valid_libraries):
 
     def process_sample(row):
         """Internal function that processes rows in data frame."""
-        if row["library"] not in valid_libraries:
-            raise ValueError(f"{row['library']=} not in {valid_libraries=}\n{row=}")
         label_cols = ["date", "virus_batch", "sample_type"]
         if SAMPLE_TYPES[row["sample_type"]] == "antibody":
             label_cols += ["antibody", "antibody_concentration"]
