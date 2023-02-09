@@ -1,5 +1,8 @@
 # Change log
 
+#### version 1.6.1
+- Fix bug in using pre-built variants when no `pacbio_runs` file provided.
+
 ### version 1.6.0
 - add option to use pre-built variants
  - Enables use of pre-built codon-variant table rather than having to rebuild every time.
