@@ -1,5 +1,11 @@
 # Change log
 
+### version 1.7.0
+- add option to use pre-built mutational effects.
+ - Enables use of functional scores from another repo, do not calculate here. Useful for small repos that for instance might add another antibody to an already extensively studied library.
+ - Add `prebuilt_muteffects` option in `config.yaml`.
+ - Move functional score computation from `pipeline.smk` to `func_scores.smk`
+
 #### version 1.6.1
 - Fix bug in using pre-built variants when no `pacbio_runs` file provided.
 

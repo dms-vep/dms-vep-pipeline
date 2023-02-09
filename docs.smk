@@ -25,7 +25,11 @@ nb_rule_wildcards = {
         "antibody_selection_group": antibody_selections["selection_group"].unique(),
     },
     "fit_globalepistasis": {
-        "func_selection": func_selections["selection_name"].unique(),
+        "func_selection": (
+            func_selections["selection_name"].unique()
+            if len(func_selections) > 0
+            else []
+        ),
     },
     "avg_antibody_escape": {
         "antibody": antibody_selections["antibody"].unique(),
@@ -170,8 +174,8 @@ rule subindex:
     wildcard_constraints:
         subindex=(
             "|".join(re.escape(subindex) for subindex in nb_subindices)
-        if nb_subindices
-        else "a^"
+            if nb_subindices
+            else "a^"
         ),
     input:
         lambda wc: nb_subindices[wc.subindex],
