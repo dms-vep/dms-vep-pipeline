@@ -19,6 +19,7 @@ script:
   - cd test_example && snakemake --lint && cd ..
   - rm -rf docs && cd test_example && rm -rf results && snakemake -j 2 --use-conda && cd ..
   - rm -rf docs && cd test_example && rm -rf results && snakemake -j 2 --use-conda --config barcode_runs=null && cd ..
+  - rm -rf docs && cd test_example && rm -rf results && snakemake -j 2 --use-conda --config prebuilt_variants=https://raw.githubusercontent.com/dms-vep/dms-vep-pipeline/main/test_example/results/variants/codon_variants.csv prebuilt_geneseq=https://raw.githubusercontent.com/dms-vep/dms-vep-pipeline/main/test_example/results/gene_sequence/codon.fasta
 
 branches:
   only:
