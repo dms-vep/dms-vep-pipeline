@@ -1,6 +1,5 @@
 """``snakemake`` file that includes the pipeline code for building variants."""
 
-pacbio_runs = pacbio_runs_from_config(config["pacbio_runs"])
 
 if "prebuilt_variants" in config and config["prebuilt_variants"]:
     if not (("prebuilt_geneseq" in config) and config["prebuilt_geneseq"]):
@@ -44,6 +43,8 @@ else:
         raise ValueError(
             "specify both or neither of `prebuilt_geneseq` and `prebuilt_variants`"
         )
+            
+    pacbio_runs = pacbio_runs_from_config(config["pacbio_runs"])
 
     rule gene_sequence:
         """Get sequence of gene from PacBio amplicon."""
