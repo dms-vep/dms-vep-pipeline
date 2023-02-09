@@ -89,7 +89,6 @@ def annotate_altair_chart(chart_html, annotation_md, twitter_card):
 
 
 if __name__ == "__main__":
-
     # Command line interface
     parser = argparse.ArgumentParser(
         description="Format HTML file containing embeded Vega spec saved with Altair."
