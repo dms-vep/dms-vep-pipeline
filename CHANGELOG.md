@@ -1,5 +1,9 @@
 # Change log
 
+### version 1.8.0
+- Upgrade to `polyclonal` version 3.4. This version has improved plotting including showing individual libraries on tooltips, better handling NaN values in heatmap tooltips, and hiding rather than filtering mutations based on functional effect.
+- Also updated versions of other software in `conda` environment, although updates other than `polyclonal` should not change output.
+
 ### version 1.7.0
 - add option to use pre-built mutational effects.
  - Enables use of functional scores from another repo, do not calculate here. Useful for small repos that for instance might add another antibody to an already extensively studied library.
