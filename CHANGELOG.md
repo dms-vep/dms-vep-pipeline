@@ -1,5 +1,8 @@
 # Change log
 
+#### version 1.8.1
+- Fix bug in `avg_antibody_escape.ipynb` that was making it always take the model with fewest epitopes. Now takes model with most that can harmonize as intended.
+
 ### version 1.8.0
 - Upgrade to `polyclonal` version 3.4. This version has improved plotting including showing individual libraries on tooltips, better handling NaN values in heatmap tooltips, and hiding rather than filtering mutations based on functional effect.
 - Also updated versions of other software in `conda` environment, although updates other than `polyclonal` should not change output.
