@@ -1,5 +1,8 @@
 # Change log
 
+#### version 2.0.1
+- Update `polyclonal` to 4.1.
+
 ## version 2.0.0
 - Update `polyclonal` to version 4.0. This is a new major version of `dms-vep-pipeline` as it will change the results of running model fits if default parameters are used (they can always be adjusted by setting the keyword arguments to `Polyclonal.fit` via `fit_kwargs` in `polyclonal_config`.) See [here](https://github.com/jbloomlab/polyclonal/pull/151#issuecomment-1440892895) for more details.
 - Update notebooks with `polyclonal` fitting results to show `curves_plot` rather than `activity_wt_barplot`.
