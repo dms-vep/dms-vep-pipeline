@@ -8,6 +8,9 @@ You can mouse over points to get details about individual measurements.
 
 The options at the bottom of the plot let you modify the display, such as by selecting how many different variants a mutation must be seen in to be shown (*minimum times seen*), how many different experimental replicates the mutation was measured in (*minimum n_models*), what site summary statistic to show, etc.
 
+You can also filter by the functional effects of mutations.
+Mutations removed by this filter are shown as dark gray squares in the heat map to distinguish unmeasured mutations from ones measured to be deleterious.
+
 The *minimum max of escape at site* is useful to select the sites where mutations confer the most escape.
 
 For more details on the escape values and what they mean, see the documentation for the *polyclonal* software package at [https://jbloomlab.github.io/polyclonal/](https://jbloomlab.github.io/polyclonal/)
