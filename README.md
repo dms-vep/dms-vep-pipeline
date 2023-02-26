@@ -53,7 +53,7 @@ To display the HTML documentation via GitHub pages, set up your repo to serve do
 The documentation will then be at `https://dms-vep.github.io/<my_dms_repo>` (assuming you are using the [https://github.com/dms-vep](https://github.com/dms-vep) organization; otherwise replace `dms-vep` with whatever account contains your repo).
 
 Note that [dms-vep-pipeline](https://github.com/dms-vep/dms-vep-pipeline) has its own [conda](https://docs.conda.io/) environment specified in [environment.yml](environment.yml).
-Hopefully you can just use this environment for your top-level `Snakefile` too, but if not you can specify rule-specific environments for any additional rules you use.
+There is a separate environment, [environment_align_parse_PacBio_ccs.yml](environment_align_parse_PacBio_ccs.yml), for aligning and parsing the PacBio CCSs so that isn't re-run every time main environment is updated.
 
 ## Setting up the pipeline as a submodule
 To add [dms-vep-pipeline](https://github.com/dms-vep/dms-vep-pipeline) as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in your repo (`<my_dms_repo>`), do as follows.
