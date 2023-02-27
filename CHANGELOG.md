@@ -2,6 +2,7 @@
 
 ### version 2.1.0
 - Added `environment_align_parse_PacBio_ccs.yml` environment specific to the `align_parse_PacBio_ccs` rule so that long-running rule isn't re-run every time main environment in `environment.yml` is updated.
+- Update to `polyclonal` version 5.0. This will again change results of fitting models.
 
 #### version 2.0.1
 - Update `polyclonal` to 4.1.
