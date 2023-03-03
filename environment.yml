@@ -38,6 +38,6 @@ dependencies:
   - upsetplot=0.7
   - pip:
     - alignparse==0.6.0
+    - altair==5.0.0rc1
     - dms_variants==1.4.2
-    - git+https://github.com/altair-viz/altair@f8912bad75d4247ab726b639968b13315161660a
-    - git+https://github.com/jbloomlab/polyclonal/@5.0
+    - polyclonal==5.1
