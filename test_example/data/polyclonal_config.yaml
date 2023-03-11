@@ -39,5 +39,6 @@ sera_default: &sera_default
 # define configuration for specific monoclonal antibodies, merging above defaults
 REGN10933:
   <<: *mAb_default
+  epitope_colors: [green]
 S2M11:
   <<: *mAb_default

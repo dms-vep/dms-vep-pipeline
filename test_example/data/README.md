@@ -52,3 +52,4 @@ For each antibody listed in [barcode_runs.csv](barcode_runs.csv), specify:
  - *min_epitope_activity_to_include*: keep adding epitopes until activity <= this.
  - *fit_kwargs*: keyword arguments passed to `Polyclonal.fit`
  - *plot_kwargs*: keyword arguments passed to `Polyclonal.plot_mut_escape`.
+ - *epitope_colors*: epitope colors used to initialize `Polyclonal` objects.
