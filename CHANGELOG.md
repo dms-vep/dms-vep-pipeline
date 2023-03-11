@@ -1,5 +1,8 @@
 # Change log
 
+### version 2.2.0
+- Add `epitope_colors` option in `polyclonal_config` to specify epitope colors.
+
 #### version 2.1.1
 - Update to `polyclonal` 5.1 and `altair` 5.0.0rc1
 
