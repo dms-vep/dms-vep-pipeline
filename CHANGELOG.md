@@ -1,5 +1,8 @@
 # Change log
 
+#### version 2.2.1
+- Fix bug in `analyze_variant_counts` when neutralization standard has zero counts.
+
 ### version 2.2.0
 - Add `epitope_colors` option in `polyclonal_config` to specify epitope colors.
 
