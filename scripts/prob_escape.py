@@ -70,6 +70,7 @@ prob_escape, neut_standard_fracs, neutralization = variants.prob_escape(
     neut_standard_target=neut_standard,
     min_neut_standard_frac=snakemake.params.min_neut_standard_frac,
     min_neut_standard_count=snakemake.params.min_neut_standard_count,
+    primary_target_only=True,
 )
 
 # get the no-antibody count threshold and flag which prob_escape values meet it
