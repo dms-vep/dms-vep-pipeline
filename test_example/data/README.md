@@ -43,7 +43,7 @@ Also assigns each site to a region (domain) of the protein.
 Should have columns *sequential_site*, *amino_acid*, and *mutation_type*.
 
 ## Neutralization standard barcodes
-[neutralization_standard_barcodes.csv](neutralization_standard_barcodes.csv) barcodes for the neutralization standard.
+[neutralization_standard_barcodes.csv](neutralization_standard_barcodes.csv) barcodes for the neutralization standards in a column named "barcode". If specifying "neutralization_standard_name" in `barcode_runs`, should also have column "name".
 
 ## Configuration for `polyclonal` fitting
 [polyclonal_config.yaml](polyclonal_config.yaml) specifies how the analysis with [polyclonal](https://jbloomlab.github.io/polyclonal/) is done.
