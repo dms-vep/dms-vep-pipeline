@@ -60,8 +60,14 @@ selections_df = pd.DataFrame(
     }
 )
 
+neut_standard = sorted(set(snakemake.params.neut_standard))
+if len(neut_standard) != 1:
+    raise ValueError(f"{neut_standard=} not unique for\n{selections_df=}")
+neut_standard = neut_standard[0]
+
 prob_escape, neut_standard_fracs, neutralization = variants.prob_escape(
     selections_df=selections_df,
+    neut_standard_target=neut_standard,
     min_neut_standard_frac=snakemake.params.min_neut_standard_frac,
     min_neut_standard_count=snakemake.params.min_neut_standard_count,
 )

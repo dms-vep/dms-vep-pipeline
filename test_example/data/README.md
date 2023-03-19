@@ -31,6 +31,7 @@ It has the following columns:
  - *replicate*: experimental replicate.
  - *fastq_R1*: path to R1 FASTQ file, or semi-colon de-limited list of multiple FASTQs
  - *exclude_after_counts*: set to *yes* if barcode run should be excluded after counting barcodes
+ - *neut_standard_name*: optional column, if present specifies the name of the neutralization standard to use. If not specified, this defaults to "neut_standard"
  - *notes*: any other notes about the sample.
 
 ## Site numbering
