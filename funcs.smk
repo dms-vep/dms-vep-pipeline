@@ -265,8 +265,10 @@ def get_antibody_selections(
 
     if antibody_selections.isnull().any().any():
         raise ValueError(
-            "null antibody selections:\n"
+            "null antibody selections rows:\n"
             + str(antibody_selections[antibody_selections.isnull().any(axis=1)])
+            + "\n\nnull antibody select columns:\n"
+            + str(antibody_selections.isnull().any(axis=0))
         )
 
     assert (
