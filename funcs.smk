@@ -47,6 +47,7 @@ def barcode_runs_from_config(barcode_runs_csv):
         "fastq_R1",
         "exclude_after_counts",
         "notes",
+        "neut_standard_name",
         "sample",
         "library_sample",
     ]
@@ -85,6 +86,9 @@ def barcode_runs_from_config(barcode_runs_csv):
         ),
         exclude_after_counts=lambda x: x["exclude_after_counts"].map(process_exclude),
     )
+
+    if "neut_standard_name" not in barcode_runs.columns:
+        barcode_runs["neut_standard_name"] = "neut_standard"
 
     # check no duplicate samples
     dups = (
@@ -205,7 +209,7 @@ def get_functional_selections(
 
 def get_antibody_selections(
     barcode_runs,
-    pair_on=("library", "virus_batch", "date", "replicate"),
+    pair_on=("library", "virus_batch", "date", "replicate", "neut_standard_name"),
 ):
     """Data frame of antibody selections from data frame of barcode runs.
 
@@ -261,8 +265,10 @@ def get_antibody_selections(
 
     if antibody_selections.isnull().any().any():
         raise ValueError(
-            "null antibody selections:\n"
+            "null antibody selections rows:\n"
             + str(antibody_selections[antibody_selections.isnull().any(axis=1)])
+            + "\n\nnull antibody select columns:\n"
+            + str(antibody_selections.isnull().any(axis=0))
         )
 
     assert (
@@ -278,6 +284,20 @@ def get_antibody_selections(
             lambda r: "_".join(r.values.astype(str)), axis=1
         ),
     )
+
+    dup_neut_standard = (
+        antibody_selections
+       .groupby("selection_group")
+       .aggregate(
+            neut_standard_names=pd.NamedAgg("neut_standard_name", "unique"),
+            n_neut_standard_names=pd.NamedAgg("neut_standard_name", "nunique"),
+        )
+       .query("n_neut_standard_names > 1")
+    )
+    if len(dup_neut_standard):
+        raise ValueError(
+            f"antibody selections with non-unique neut standard\n{dup_neut_standard}"
+        )
 
     assert len(antibody_selections) == len(
         antibody_selections.groupby([*selection_cols, "antibody_concentration"])

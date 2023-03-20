@@ -31,6 +31,7 @@ It has the following columns:
  - *replicate*: experimental replicate.
  - *fastq_R1*: path to R1 FASTQ file, or semi-colon de-limited list of multiple FASTQs
  - *exclude_after_counts*: set to *yes* if barcode run should be excluded after counting barcodes
+ - *neut_standard_name*: optional column, if present specifies the name of the neutralization standard to use. If not specified, this defaults to "neut_standard"
  - *notes*: any other notes about the sample.
 
 ## Site numbering
@@ -42,7 +43,7 @@ Also assigns each site to a region (domain) of the protein.
 Should have columns *sequential_site*, *amino_acid*, and *mutation_type*.
 
 ## Neutralization standard barcodes
-[neutralization_standard_barcodes.csv](neutralization_standard_barcodes.csv) barcodes for the neutralization standard.
+[neutralization_standard_barcodes.csv](neutralization_standard_barcodes.csv) barcodes for the neutralization standards in a column named "barcode". If specifying "neutralization_standard_name" in `barcode_runs`, should also have column "name".
 
 ## Configuration for `polyclonal` fitting
 [polyclonal_config.yaml](polyclonal_config.yaml) specifies how the analysis with [polyclonal](https://jbloomlab.github.io/polyclonal/) is done.

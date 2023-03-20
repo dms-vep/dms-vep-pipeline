@@ -279,6 +279,11 @@ rule prob_escape:
                 "selection_group == @wc.antibody_selection_group"
             )["antibody_concentration"]
         ),
+        neut_standard=lambda wc: tuple(
+            antibody_selections.query(
+                "selection_group == @wc.antibody_selection_group"
+            )["neut_standard_name"]
+        ),
         min_neut_standard_frac=config["prob_escape_min_neut_standard_frac"],
         min_neut_standard_count=config["prob_escape_min_neut_standard_count"],
         min_no_antibody_frac=config["prob_escape_min_no_antibody_frac"],

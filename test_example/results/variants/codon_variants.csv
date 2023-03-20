@@ -14091,3 +14091,17 @@ neut_standard,LibB,GCGATTCACGCGTTGG,18,neut_standard,neut_standard,0,0
 neut_standard,LibB,GTGCAGTAGTAAAGTA,18,neut_standard,neut_standard,0,0
 neut_standard,LibB,TACCCATGGATACGAT,18,neut_standard,neut_standard,0,0
 neut_standard,LibB,TACGTCGCAATGGTCC,18,neut_standard,neut_standard,0,0
+neut_standard_2,LibA,GAGTAGACTCCCTCCA,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibA,GCCATCTAGTGGCTAG,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibA,GCGTGGCGTTTACACT,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibA,GGCGATTCACGCGTTG,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibA,GGTGCAGTAGTAAAGT,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibA,GTACGTCGCAATGGTC,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibA,TTACCCATGGATACGA,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibB,GAGTAGACTCCCTCCA,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibB,GCCATCTAGTGGCTAG,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibB,GCGTGGCGTTTACACT,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibB,GGCGATTCACGCGTTG,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibB,GGTGCAGTAGTAAAGT,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibB,GTACGTCGCAATGGTC,18,neut_standard_2,neut_standard_2,0,0
+neut_standard_2,LibB,TTACCCATGGATACGA,18,neut_standard_2,neut_standard_2,0,0

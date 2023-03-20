@@ -1,5 +1,9 @@
 # Change log
 
+### version 2.3.0
+- Enable multiple neutralization standards, with option in `barcode_runs` specifying "neut_standard_name" and a "name" column in `neutralization_standard_barcodes`. If not specified, retain old behavior.
+- Update `dms_variants` to version 1.4.3.
+
 #### version 2.2.1
 - Fix bug in `analyze_variant_counts` when neutralization standard has zero counts.
 
