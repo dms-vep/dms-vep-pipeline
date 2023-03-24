@@ -344,7 +344,7 @@ div.rendered_html tbody tr:hover {
 <br/></pre></div>
 </div>
 </div>
-<p>Read the probabilities of escape, and filter for those with sufficient no-antibody counts:</p>
+<p>Read the probabilities of escape, and filter for only those specified to be retained (adequate counts):</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -353,8 +353,8 @@ div.rendered_html tbody tr:hover {
 
 <span class="n">prob_escape</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
     <span class="n">prob_escape_csv</span><span class="p">,</span> <span class="n">keep_default_na</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;nan&quot;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;`no-antibody_count` &gt;= no_antibody_count_threshold&quot;</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">prob_escape</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;retain&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">prob_escape</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;antibody_count_threshold&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -560,13 +560,13 @@ Read spatial distances for 529935 residue pairs
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-567a0f8f15634ec9915ae1b49b5762cf"></div>
+<div id="altair-viz-811b2c59f84a4082a1acd516f73e0d11"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-567a0f8f15634ec9915ae1b49b5762cf") {
-      outputDiv = document.getElementById("altair-viz-567a0f8f15634ec9915ae1b49b5762cf");
+    if (outputDiv.id !== "altair-viz-811b2c59f84a4082a1acd516f73e0d11") {
+      outputDiv = document.getElementById("altair-viz-811b2c59f84a4082a1acd516f73e0d11");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -712,25 +712,25 @@ min_epitope_activity_to_include=0.2
 Fitting model with n_epitopes=1
 #
 # Fitting site-level fixed Hill coefficient and non-neutralized frac model.
-# Starting optimization of 1025 parameters at Sun Mar 19 13:49:17 2023.
+# Starting optimization of 1025 parameters at Fri Mar 24 15:45:27 2023.
         step    time_sec        loss    fit_loss  reg_escape  reg_spread reg_spatial reg_uniqueness reg_uniqueness2 reg_activity reg_hill_coefficient reg_non_neutralized_frac
-           0     0.06875        2167      2155.9           0           0           0              0               0       11.134                    0                        0
-         150      9.8603      157.24      104.58      4.2566           0      1.5345              0               0        46.86                    0                        0
-# Successfully finished at Sun Mar 19 13:49:27 2023.
+           0    0.075392        2167      2155.9           0           0           0              0               0       11.134                    0                        0
+         150      11.862      157.24      104.58      4.2566           0      1.5345              0               0        46.86                    0                        0
+# Successfully finished at Fri Mar 24 15:45:39 2023.
 #
 # Fitting fixed Hill coefficient and non-neutralized frac model.
-# Starting optimization of 3609 parameters at Sun Mar 19 13:49:27 2023.
+# Starting optimization of 3609 parameters at Fri Mar 24 15:45:39 2023.
         step    time_sec        loss    fit_loss  reg_escape  reg_spread reg_spatial reg_uniqueness reg_uniqueness2 reg_activity reg_hill_coefficient reg_non_neutralized_frac
-           0     0.10746      198.06      113.69      35.972  9.9723e-32      1.5345              0               0        46.86                    0                        0
-         193      20.168      169.51      104.09      15.415      1.8424      1.5295              0               0       46.639                    0                        0
-# Successfully finished at Sun Mar 19 13:49:47 2023.
+           0     0.12441      198.06      113.69      35.972  9.9723e-32      1.5345              0               0        46.86                    0                        0
+         193      24.734      169.51      104.09      15.415      1.8424      1.5295              0               0       46.639                    0                        0
+# Successfully finished at Fri Mar 24 15:46:04 2023.
 #
 # Fitting model.
-# Starting optimization of 3611 parameters at Sun Mar 19 13:49:47 2023.
+# Starting optimization of 3611 parameters at Fri Mar 24 15:46:04 2023.
         step    time_sec        loss    fit_loss  reg_escape  reg_spread reg_spatial reg_uniqueness reg_uniqueness2 reg_activity reg_hill_coefficient reg_non_neutralized_frac
-           0    0.096582      127.54      104.09      15.415      1.8424      1.5295              0               0       4.6639                    0                        0
-          58      6.8156      125.27      100.84      15.727       1.942      1.6056              0               0       4.8005              0.32101                 0.035339
-# Successfully finished at Sun Mar 19 13:49:54 2023.
+           0     0.12285      127.54      104.09      15.415      1.8424      1.5295              0               0       4.6639                    0                        0
+          58       8.402      125.27      100.84      15.727       1.942      1.6056              0               0       4.8005              0.32101                 0.035339
+# Successfully finished at Fri Mar 24 15:46:12 2023.
 Curve fits for epitopes:
 </pre></div></div>
 </div>
@@ -846,13 +846,13 @@ The selected model has 1 epitopes
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-481734dbf6f2455bab545eee6dd40ccb"></div>
+<div id="altair-viz-f0c44ff2d5aa4f6a8e092e97c1aa2d0a"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-481734dbf6f2455bab545eee6dd40ccb") {
-      outputDiv = document.getElementById("altair-viz-481734dbf6f2455bab545eee6dd40ccb");
+    if (outputDiv.id !== "altair-viz-f0c44ff2d5aa4f6a8e092e97c1aa2d0a") {
+      outputDiv = document.getElementById("altair-viz-f0c44ff2d5aa4f6a8e092e97c1aa2d0a");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -934,13 +934,13 @@ The selected model has 1 epitopes
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id="altair-viz-7df0bdc73bce43ba917bf161866b1323"></div>
+<div id="altair-viz-09364b22e90042fd8cb9da134315a904"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-7df0bdc73bce43ba917bf161866b1323") {
-      outputDiv = document.getElementById("altair-viz-7df0bdc73bce43ba917bf161866b1323");
+    if (outputDiv.id !== "altair-viz-09364b22e90042fd8cb9da134315a904") {
+      outputDiv = document.getElementById("altair-viz-09364b22e90042fd8cb9da134315a904");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",

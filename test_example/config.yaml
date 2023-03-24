@@ -117,8 +117,8 @@ prob_escape_min_neut_standard_frac: 0.001
 # counts, if unspecified or set to null then we don't use that threshold.
 prob_escape_min_no_antibody_counts: 5  # maybe make bigger for real expts, say 20
 prob_escape_min_no_antibody_frac: 0.00005  # make smaller for large libraries, say 0.1 / (library size)
-#prob_escape_min_antibody_counts: 10  # make bigger for real expts, say twice `prob_escape_min_no_antibody_counts`
-#prob_escape_min_antibody_frac: 0.005  # make smaller for real experiments, say 10 / (library size)
+prob_escape_min_antibody_counts: 10  # make bigger for real expts, say twice `prob_escape_min_no_antibody_counts`
+prob_escape_min_antibody_frac: 0.005  # make smaller for real experiments, say 10 / (library size)
 # when averaging antibody escape values, take the "median" or "mean"?
 escape_avg_method: median
 
