@@ -139,10 +139,19 @@ prob_escape = (
                 allow_stop=True,
             )
         ),
+        retain=lambda x: (
+            (x["no-antibody_count"] >= x["no_antibody_count_threshold"])
+            | (
+                x["antibody_count_threshold"].notnull()
+                & (x["antibody_count"] >= x["antibody_count_threshold"])
+            )
+        ),
     )
     .merge(selections_df, how="left", validate="many_to_one")
     .drop(columns=["total_no_antibody_count", "total_antibody_count"])
 )
+
+
 
 prob_escape.to_csv(
     snakemake.output.prob_escape, index=False, float_format="%.4f", na_rep="nan"
