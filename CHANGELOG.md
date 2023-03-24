@@ -1,5 +1,8 @@
 # Change log
 
+### version 2.4.0
+- Added `prob_escape_min_antibody_counts` and `prob_escape_min_antibody_frac` parameters to `config.yaml`.
+
 ### version 2.3.0
 - Enable multiple neutralization standards, with option in `barcode_runs` specifying "neut_standard_name" and a "name" column in `neutralization_standard_barcodes`. If not specified, retain old behavior.
 - Update `dms_variants` to version 1.4.3.

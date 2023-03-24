@@ -73,21 +73,44 @@ prob_escape, neut_standard_fracs, neutralization = variants.prob_escape(
     primary_target_only=True,
 )
 
-# get the no-antibody count threshold and flag which prob_escape values meet it
+# get the count thresholds
 threshold = (
     prob_escape.groupby(
         ["library", "antibody_sample", "no-antibody_sample"], as_index=False
     )
-    .aggregate(total_no_antibody_count=pd.NamedAgg("no-antibody_count", "sum"))
+    .aggregate(
+        total_no_antibody_count=pd.NamedAgg("no-antibody_count", "sum"),
+        total_antibody_count=pd.NamedAgg("antibody_count", "sum"),
+    )
     .assign(
         no_antibody_count_threshold=lambda x: (
-            x["total_no_antibody_count"] * snakemake.params.min_no_antibody_frac
-        )
-        .clip(lower=snakemake.params.min_no_antibody_counts)
+            (x["total_no_antibody_count"] * snakemake.params.min_no_antibody_frac)
+            .clip(lower=snakemake.params.min_no_antibody_counts)
+            .round()
+            .astype(int)
+        ),
+    )
+)
+min_antibody_frac = snakemake.params.min_antibody_frac
+min_antibody_counts = snakemake.params.min_antibody_counts
+if (min_antibody_frac is not None) and (min_antibody_counts is not None):
+    threshold["antibody_count_threshold"] = (
+        (threshold["total_antibody_count"] * min_antibody_frac)
+        .clip(lower=min_antibody_counts)
         .round()
         .astype(int)
     )
-)
+elif min_antibody_frac is not None:
+    threshold["antibody_count_threshold"] = min_antibody_counts
+elif min_antibody_counts is not None:
+    threshold["antibody_count_threshold"] = (
+        (threshold["total_antibody_count"] * min_antibody_frac)
+        .round()
+        .astype(int)
+    )
+else:
+    threshold["antibody_count_threshold"] = pd.NA
+
 prob_escape = prob_escape.merge(
     threshold,
     on=["library", "antibody_sample", "no-antibody_sample"],
@@ -118,6 +141,7 @@ prob_escape = (
         ),
     )
     .merge(selections_df, how="left", validate="many_to_one")
+    .drop(columns=["total_no_antibody_count", "total_antibody_count"])
 )
 
 prob_escape.to_csv(

@@ -288,6 +288,16 @@ rule prob_escape:
         min_neut_standard_count=config["prob_escape_min_neut_standard_count"],
         min_no_antibody_frac=config["prob_escape_min_no_antibody_frac"],
         min_no_antibody_counts=config["prob_escape_min_no_antibody_counts"],
+        min_antibody_frac=(
+            config["prob_escape_min_antibody_frac"]
+            if "prob_escape_min_antibody_frac" in config
+            else None
+        ),
+        min_antibody_counts=(
+            config["prob_escape_min_antibody_counts"]
+            if "prob_escape_min_antibody_counts" in config
+            else None
+        ),
     conda:
         "environment.yml"
     log:
