@@ -93,23 +93,22 @@ threshold = (
 )
 min_antibody_frac = snakemake.params.min_antibody_frac
 min_antibody_counts = snakemake.params.min_antibody_counts
-if (min_antibody_frac is not None) and (min_antibody_counts is not None):
+if (min_antibody_frac is not None) or (min_antibody_counts is not None):
+    if (min_antibody_frac is None) or (min_antibody_counts is None):
+        raise ValueError(
+            "for prob_escape must set neither or both of min_antibody_frac "
+            "and min_antibody_counts"
+        )
     threshold["antibody_count_threshold"] = (
         (threshold["total_antibody_count"] * min_antibody_frac)
         .clip(lower=min_antibody_counts)
         .round()
         .astype(int)
     )
-elif min_antibody_frac is not None:
-    threshold["antibody_count_threshold"] = min_antibody_counts
-elif min_antibody_counts is not None:
-    threshold["antibody_count_threshold"] = (
-        (threshold["total_antibody_count"] * min_antibody_frac)
-        .round()
-        .astype(int)
-    )
+    has_antibody_count_threshold = True
 else:
     threshold["antibody_count_threshold"] = pd.NA
+    has_antibody_count_threshold = False
 
 prob_escape = prob_escape.merge(
     threshold,
@@ -141,17 +140,18 @@ prob_escape = (
         ),
         retain=lambda x: (
             (x["no-antibody_count"] >= x["no_antibody_count_threshold"])
-            | (
-                x["antibody_count_threshold"].notnull()
-                & (x["antibody_count"] >= x["antibody_count_threshold"])
+            | x.apply(
+                lambda row: (
+                    has_antibody_count_threshold
+                    and (row["antibody_count"] >= row["antibody_count_threshold"])
+                ),
+                axis=1,
             )
         ),
     )
     .merge(selections_df, how="left", validate="many_to_one")
     .drop(columns=["total_no_antibody_count", "total_antibody_count"])
 )
-
-
 
 prob_escape.to_csv(
     snakemake.output.prob_escape, index=False, float_format="%.4f", na_rep="nan"
