@@ -131,6 +131,9 @@ prob_escape = (
     prob_escape.drop(columns=["codon_substitutions", "n_codon_substitutions"])
     .rename(columns={"aa_substitutions": "aa_substitutions_sequential"})
     .assign(
+        prob_escape_uncensored=lambda x: x["prob_escape_uncensored"].clip(
+            upper=snakemake.params.uncensored_max
+        ),
         aa_substitutions_reference=lambda x: (
             x["aa_substitutions_sequential"].apply(
                 renumber.renumber_muts,

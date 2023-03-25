@@ -99,8 +99,10 @@ antibody_escape_plots = [
 
 # Rules ---------------------------------------------------------------------
 
+
 include: "build_variants.smk"  # build variants with included rules
 include: "func_scores.smk"  # get functional scores with included rules
+
 
 rule count_barcodes:
     """Count barcodes for a specific library-sample."""
@@ -298,6 +300,11 @@ rule prob_escape:
             if "prob_escape_min_antibody_counts" in config
             else None
         ),
+        uncensored_max=(
+            config["prob_escape_uncensored_max"]
+            if "prob_escape_uncensored_max" in config
+            else 5
+        ),
     conda:
         "environment.yml"
     log:
@@ -388,20 +395,20 @@ rule avg_antibody_escape:
         selection_groups_yaml=lambda wc: yaml.dump(
             {
                 "selection_groups_dict": (
-        antibody_selections.query("antibody == @wc.antibody")[
-            [
-                "library",
-                "virus_batch",
-                "date",
-                "replicate",
-                "selection_group",
-            ]
-        ]
-        .drop_duplicates()
-        .assign(
-            pickle_file=lambda x: (
-                config["polyclonal_dir"]
-        + "/"
+                    antibody_selections.query("antibody == @wc.antibody")[
+                        [
+                            "library",
+                            "virus_batch",
+                            "date",
+                            "replicate",
+                            "selection_group",
+                        ]
+                    ]
+                    .drop_duplicates()
+                    .assign(
+                        pickle_file=lambda x: (
+                            config["polyclonal_dir"]
+                + "/"
                             + x["selection_group"]
                             + ".pickle"
                         )
