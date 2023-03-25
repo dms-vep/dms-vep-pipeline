@@ -286,13 +286,12 @@ def get_antibody_selections(
     )
 
     dup_neut_standard = (
-        antibody_selections
-       .groupby("selection_group")
-       .aggregate(
+        antibody_selections.groupby("selection_group")
+        .aggregate(
             neut_standard_names=pd.NamedAgg("neut_standard_name", "unique"),
             n_neut_standard_names=pd.NamedAgg("neut_standard_name", "nunique"),
         )
-       .query("n_neut_standard_names > 1")
+        .query("n_neut_standard_names > 1")
     )
     if len(dup_neut_standard):
         raise ValueError(

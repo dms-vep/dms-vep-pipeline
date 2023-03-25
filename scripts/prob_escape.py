@@ -73,21 +73,43 @@ prob_escape, neut_standard_fracs, neutralization = variants.prob_escape(
     primary_target_only=True,
 )
 
-# get the no-antibody count threshold and flag which prob_escape values meet it
+# get the count thresholds
 threshold = (
     prob_escape.groupby(
         ["library", "antibody_sample", "no-antibody_sample"], as_index=False
     )
-    .aggregate(total_no_antibody_count=pd.NamedAgg("no-antibody_count", "sum"))
+    .aggregate(
+        total_no_antibody_count=pd.NamedAgg("no-antibody_count", "sum"),
+        total_antibody_count=pd.NamedAgg("antibody_count", "sum"),
+    )
     .assign(
         no_antibody_count_threshold=lambda x: (
-            x["total_no_antibody_count"] * snakemake.params.min_no_antibody_frac
+            (x["total_no_antibody_count"] * snakemake.params.min_no_antibody_frac)
+            .clip(lower=snakemake.params.min_no_antibody_counts)
+            .round()
+            .astype(int)
+        ),
+    )
+)
+min_antibody_frac = snakemake.params.min_antibody_frac
+min_antibody_counts = snakemake.params.min_antibody_counts
+if (min_antibody_frac is not None) or (min_antibody_counts is not None):
+    if (min_antibody_frac is None) or (min_antibody_counts is None):
+        raise ValueError(
+            "for prob_escape must set neither or both of min_antibody_frac "
+            "and min_antibody_counts"
         )
-        .clip(lower=snakemake.params.min_no_antibody_counts)
+    threshold["antibody_count_threshold"] = (
+        (threshold["total_antibody_count"] * min_antibody_frac)
+        .clip(lower=min_antibody_counts)
         .round()
         .astype(int)
     )
-)
+    has_antibody_count_threshold = True
+else:
+    threshold["antibody_count_threshold"] = pd.NA
+    has_antibody_count_threshold = False
+
 prob_escape = prob_escape.merge(
     threshold,
     on=["library", "antibody_sample", "no-antibody_sample"],
@@ -109,6 +131,9 @@ prob_escape = (
     prob_escape.drop(columns=["codon_substitutions", "n_codon_substitutions"])
     .rename(columns={"aa_substitutions": "aa_substitutions_sequential"})
     .assign(
+        prob_escape_uncensored=lambda x: x["prob_escape_uncensored"].clip(
+            upper=snakemake.params.uncensored_max
+        ),
         aa_substitutions_reference=lambda x: (
             x["aa_substitutions_sequential"].apply(
                 renumber.renumber_muts,
@@ -116,8 +141,19 @@ prob_escape = (
                 allow_stop=True,
             )
         ),
+        retain=lambda x: (
+            (x["no-antibody_count"] >= x["no_antibody_count_threshold"])
+            | x.apply(
+                lambda row: (
+                    has_antibody_count_threshold
+                    and (row["antibody_count"] >= row["antibody_count_threshold"])
+                ),
+                axis=1,
+            )
+        ),
     )
     .merge(selections_df, how="left", validate="many_to_one")
+    .drop(columns=["total_no_antibody_count", "total_antibody_count"])
 )
 
 prob_escape.to_csv(
