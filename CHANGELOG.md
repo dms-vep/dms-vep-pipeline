@@ -1,5 +1,8 @@
 # Change log
 
+#### version 2.4.1
+- Fixed bug in `analyze_variant_counts` due to zero division error when a target only had counts for some samples.
+
 ### version 2.4.0
 - Added `prob_escape_min_antibody_counts` and `prob_escape_min_antibody_frac` parameters to `config.yaml`. This is accompanied by some changes in `analyze_prob_escape` notebook plots.
 - Added `prob_escape_uncensored_max` to `config.yaml` to set ceiling to uncensored `prob_escape` values.
