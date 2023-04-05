@@ -1,5 +1,8 @@
 # Change log
 
+#### version 2.4.2
+- Upgrade to `poyclonal` 5.2, which fixes bug in interaction between hiding mutations based on functional scores and then selecting sites with max escape.
+
 #### version 2.4.1
 - Fixed bug in `analyze_variant_counts` due to zero division error when a target only had counts for some samples.
 
