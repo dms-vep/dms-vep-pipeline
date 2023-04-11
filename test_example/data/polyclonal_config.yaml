@@ -4,6 +4,7 @@
 overall_default: &overall_default
   min_epitope_activity_to_include: 0.2
   plot_kwargs:
+    avg_type: min_magnitude
     addtl_slider_stats:
       times_seen: 3
       functional effect: -4
