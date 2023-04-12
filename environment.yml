@@ -40,4 +40,4 @@ dependencies:
     - alignparse==0.6.0
     - altair==5.0.0rc1
     - dms_variants==1.4.3
-    - polyclonal==5.2
+    - polyclonal==5.3

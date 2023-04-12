@@ -1,5 +1,8 @@
 # Change log
 
+### version 2.5.0
+- Upgrade to `polyclonal` 5.3 and enable using *min_magnitude* under the key *avg_type* in *plot_kwargs* for the average antibody escape plots. This shows the minimum magnitude escape value as the type of average shown in the plots.
+
 #### version 2.4.2
 - Upgrade to `poyclonal` 5.2, which fixes bug in interaction between hiding mutations based on functional scores and then selecting sites with max escape.
 
