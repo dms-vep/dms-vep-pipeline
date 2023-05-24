@@ -56,5 +56,7 @@ Interactive plots of mutation functional effects
 Interactive plots of mutation antibody escape
 ---------------------------------------------
 - `REGN10933 escape plot <REGN10933_escape_plot.html>`_
+- `REGN10933 icXX plot <REGN10933_icXX_plot.html>`_
 - `S2M11 escape plot <S2M11_escape_plot.html>`_
+- `S2M11 icXX plot <S2M11_icXX_plot.html>`_
 
