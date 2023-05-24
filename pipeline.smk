@@ -341,7 +341,7 @@ rule fit_polyclonal:
         config["site_numbering_map"],
         **(
             {"spatial_distances": config["spatial_distances"]}
-            if "spatial_distances" in config
+            if ("spatial_distances" in config) and config["spatial_distances"]
             else {}
         ),
         prob_escape_csv=rules.prob_escape.output.prob_escape,
@@ -389,6 +389,12 @@ rule avg_antibody_escape:
             config["escape_dir"],
             "{antibody}_escape_plot_unformatted.html",
         ),
+        avg_icXX=os.path.join(config["escape_dir"], "{antibody}_icXX_avg.csv"),
+        rep_icXX=os.path.join(config["escape_dir"], "{antibody}_icXX_rep.csv"),
+        icXX_plot=os.path.join(
+            config["escape_dir"],
+            "{antibody}_icXX_plot_unformatted.html",
+        ),
         nb="results/notebooks/avg_antibody_escape_{antibody}.ipynb",
     params:
         escape_avg_method=config["escape_avg_method"],
@@ -435,6 +441,9 @@ rule avg_antibody_escape:
             -p avg_escape {output.avg_escape} \
             -p rep_escape {output.rep_escape} \
             -p escape_plot {output.escape_plot} \
+            -p avg_icXX {output.avg_icXX} \
+            -p rep_icXX {output.rep_icXX} \
+            -p icXX_plot {output.icXX_plot} \
             -y "{params.selection_groups_yaml}" \
             &> {log}
         """
