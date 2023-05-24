@@ -3,7 +3,7 @@
 # overall default (contains some shared options)
 overall_default: &overall_default
   min_epitope_activity_to_include: 0.2
-  plot_kwargs:
+  plot_kwargs: &plot_kwargs
     avg_type: min_magnitude
     addtl_slider_stats:
       times_seen: 3
@@ -17,6 +17,8 @@ overall_default: &overall_default
         max: 25
     heatmap_max_at_least: 2
     heatmap_min_at_least: -2
+  icXX_plot_kwargs:
+    <<: *plot_kwargs
 
 # default configuration for monoclonal antibodies (mAbs)
 mAb_default: &mAb_default
