@@ -1,5 +1,8 @@
 # Change log
 
+### version 2.6.0
+- Start testing with GitHub actions rather than on Travis CI
+
 #### version 2.5.1
 - Upgrade to `polyclonal` 6.0
 - Upgrade to `altair` 5.0.0

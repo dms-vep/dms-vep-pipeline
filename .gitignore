@@ -2,6 +2,7 @@
 _*
 *.out
 
+!.github
 !.gitignore
 !.gitattributes
 !.gitmodules
