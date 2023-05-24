@@ -64,8 +64,8 @@ print(f"Writing valid barcode counts to {counts_csv}")
 counts_valid = counts.query("valid").drop(columns="valid")
 missing_valid_barcodes = list(valid_barcodes - set(counts_valid["barcode"]))
 # add zero counts for missing valid barcodes
-counts_valid = counts_valid.append(
-    pd.DataFrame({"barcode": missing_valid_barcodes, "count": 0})
+counts_valid = counts_valid = pd.concat(
+    [counts_valid, pd.DataFrame({"barcode": missing_valid_barcodes, "count": 0})]
 ).assign(library=library, sample=sample)
 counts_valid.to_csv(counts_csv, index=False)
 
@@ -78,16 +78,18 @@ counts_invalid = (
 counts_invalid.to_csv(counts_invalid_csv, index=False)
 
 print(f"Writing barcode fates to {fates_csv}")
-fates = (
-    fates.query("fate not in ['valid barcode', 'invalid barcode']")
-    .append(
+fates = pd.concat(
+    [
+        fates.query("fate not in ['valid barcode', 'invalid barcode']"),
         pd.DataFrame(
             {
                 "fate": ["valid barcode", "invalid barcode"],
-                "count": [counts_valid["count"].sum(), counts_invalid["count"].sum()],
+                "count": [
+                    counts_valid["count"].sum(),
+                    counts_invalid["count"].sum(),
+                ],
             }
-        )
-    )
-    .assign(library=library, sample=sample)
-)
+        ),
+    ]
+).assign(library=library, sample=sample)
 fates.to_csv(fates_csv, index=False)

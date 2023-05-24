@@ -1,5 +1,10 @@
 # Change log
 
+#### version 2.5.1
+- Upgrade to `polyclonal` 6.0
+- Upgrade to `altair` 5.0.0
+- Upgrade `pandas`, `snakemake`, `biopython`
+
 ### version 2.5.0
 - Upgrade to `polyclonal` 5.3 and enable using *min_magnitude* under the key *avg_type* in *plot_kwargs* for the average antibody escape plots. This shows the minimum magnitude escape value as the type of average shown in the plots.
 
