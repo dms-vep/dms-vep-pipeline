@@ -92,7 +92,11 @@ else:
         log:
             os.path.join(config["logdir"], "analyze_pacbio_ccs.txt"),
         shell:
-            "papermill {input.nb} {output.nb} &> {log}"
+            """
+            papermill {input.nb} {output.nb} &> {log}
+            head {output[0]}
+            cat results/process_ccs/LibA_211105/readstats.csv
+            """
 
 
     rule build_pacbio_consensus:
