@@ -46,7 +46,7 @@ jobs:
 
       - name: run pipeline with default config
         shell: bash -el {0}
-        run: rm -rf docs && cd test_example && rm -rf results && snakemake --use-conda -j 2 && cd ..
+        run: rm -rf docs && cd test_example && rm -rf results && snakemake --use-conda -j 1 && cd ..
 
       - name: run pipeline with no barcode runs
         shell: bash -el {0}
