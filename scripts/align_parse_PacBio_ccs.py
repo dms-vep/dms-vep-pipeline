@@ -9,7 +9,7 @@ import alignparse.targets
 import pandas as pd
 
 
-#sys.stderr = sys.stdout = open(snakemake.log[0], "w")
+sys.stderr = sys.stdout = open(snakemake.log[0], "w")
 
 os.makedirs(snakemake.output.outdir, exist_ok=True)
 
