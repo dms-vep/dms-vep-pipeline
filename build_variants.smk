@@ -114,7 +114,7 @@ else:
         log:
             os.path.join(config["logdir"], "build_pacbio_consensus.txt"),
         shell:
-            "papermill {input.nb} {output.nb} &> {log}"
+            "papermill {input.nb} {output.nb}"
 
 
     rule build_codon_variants:
