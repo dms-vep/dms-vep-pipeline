@@ -24,6 +24,7 @@ jobs:
           environment-file: environment.yml
           auto-activate-base: false
           auto-update-conda: true
+          channel-priority: strict
 
       - name: lint code with flake8_nb
         # NOTE: must specify the shell so that conda init updates bashrc see:
