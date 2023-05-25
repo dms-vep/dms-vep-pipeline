@@ -1,15 +1,12 @@
 """Implements ``snakemake`` rule `align_parse_PacBio_ccs`."""
 
 import os
-import sys
 
 import alignparse.minimap2
 import alignparse.targets
 
 import pandas as pd
 
-
-#sys.stderr = sys.stdout = open(snakemake.log[0], "w")
 
 os.makedirs(snakemake.output.outdir, exist_ok=True)
 
