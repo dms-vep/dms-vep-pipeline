@@ -124,6 +124,7 @@ data_files.update(extra_data_files)
 
 # Rules ---------------------------------------------------------------------
 
+
 rule make_nblink:
     """Make sphinx ``*.nblink`` file."""
     input:
