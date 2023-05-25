@@ -34,7 +34,7 @@ dependencies:
   - pip
   - python=3.11
   - snakefmt>=0.8
-  - snakemake=7.25
+  - snakemake=7.26
   - sphinx=6.1
   - upsetplot=0.7
   - pip:

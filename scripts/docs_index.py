@@ -46,14 +46,6 @@ For the actual code, see {github_url}
 
 Study by {authors}.
 
-Workflow
---------
-Below is the rulegraph for the `snakemake <https://snakemake.readthedocs.io/>`_ workflow.
-Click :download:`here <{filegraph}>` for the more detailed filegraph.
-
-.. image:: {rulegraph}
-   :width: 800
-
 Analysis notebooks
 ------------------
 Many of the plots in these notebooks are interactive, so try mousing over points for

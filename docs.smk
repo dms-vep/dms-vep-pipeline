@@ -124,28 +124,6 @@ data_files.update(extra_data_files)
 
 # Rules ---------------------------------------------------------------------
 
-
-rule make_graphs:
-    """Build ``snakemake`` rulegraph and filegraph."""
-    input:
-        glob.glob("Snakefile*"),
-        glob.glob("*.smk"),
-        glob.glob(os.path.join(config["pipeline_path"], "Snakefile*")),
-        glob.glob(os.path.join(config["pipeline_path"], "*.smk")),
-    output:
-        rulegraph=os.path.join(config["docs_source_dir"], "rulegraph.svg"),
-        filegraph=os.path.join(config["docs_source_dir"], "filegraph.svg"),
-    log:
-        os.path.join(config["logdir"], "make_graphs.txt"),
-    conda:
-        "environment.yml"
-    shell:
-        """
-        snakemake -F --rulegraph | dot -Tsvg > {output.rulegraph} 2> {log}
-        snakemake -F --filegraph | dot -Tsvg > {output.filegraph} 2>> {log}
-        """
-
-
 rule make_nblink:
     """Make sphinx ``*.nblink`` file."""
     input:
@@ -201,8 +179,6 @@ rule docs_index:
         nb_subindices,
         nblinks,
         **muteffects_plots,
-        rulegraph=rules.make_graphs.output.rulegraph,
-        filegraph=rules.make_graphs.output.filegraph,
         antibody_escape_plots=antibody_escape_plots,
         extra_html_docs=extra_html_docs.values(),
     output:
