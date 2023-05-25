@@ -96,6 +96,8 @@ else:
             papermill {input.nb} {output.nb} &> {log}
             head {output[0]}
             cat results/process_ccs/LibA_211105/readstats.csv
+            gzip -cd test_example/sequencing_data/211105_demultiplex.bc1001_BAK8A_OA--bc1001_BAK8A_OA.hifi_reads.fastq.gz | wc -l
+            wc -l results/process_ccs/LibA_211105/alignments.sam
             """
 
 
