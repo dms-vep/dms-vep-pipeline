@@ -70,7 +70,7 @@ else:
         output:
             outdir=directory(os.path.join(config["process_ccs_dir"], "{pacbioRun}")),
         conda:
-            "environment.yml"
+            "environment_align_parse_PacBio_ccs.yml"
         log:
             os.path.join(config["logdir"], "align_parse_PacBio_ccs_{pacbioRun}.txt"),
         script:
