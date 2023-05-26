@@ -88,12 +88,13 @@ prob_escape_files = [
 antibody_escape_files = [
     os.path.join(config["escape_dir"], f"{antibody}_{suffix}")
     for antibody in antibody_selections["antibody"].unique()
-    for suffix in ["avg.csv", "rep.csv"]
+    for suffix in ["avg.csv", "rep.csv", "icXX_avg.csv", "icXX_rep.csv"]
 ]
 
 antibody_escape_plots = [
-    os.path.join(config["escape_dir"], f"{antibody}_escape_plot.html")
+    os.path.join(config["escape_dir"], f"{antibody}_{plottype}_plot.html")
     for antibody in antibody_selections["antibody"].unique()
+    for plottype in ["escape", "icXX"]
 ]
 
 
@@ -341,7 +342,7 @@ rule fit_polyclonal:
         config["site_numbering_map"],
         **(
             {"spatial_distances": config["spatial_distances"]}
-            if "spatial_distances" in config
+            if ("spatial_distances" in config) and config["spatial_distances"]
             else {}
         ),
         prob_escape_csv=rules.prob_escape.output.prob_escape,
@@ -389,6 +390,12 @@ rule avg_antibody_escape:
             config["escape_dir"],
             "{antibody}_escape_plot_unformatted.html",
         ),
+        avg_icXX=os.path.join(config["escape_dir"], "{antibody}_icXX_avg.csv"),
+        rep_icXX=os.path.join(config["escape_dir"], "{antibody}_icXX_rep.csv"),
+        icXX_plot=os.path.join(
+            config["escape_dir"],
+            "{antibody}_icXX_plot_unformatted.html",
+        ),
         nb="results/notebooks/avg_antibody_escape_{antibody}.ipynb",
     params:
         escape_avg_method=config["escape_avg_method"],
@@ -435,6 +442,9 @@ rule avg_antibody_escape:
             -p avg_escape {output.avg_escape} \
             -p rep_escape {output.rep_escape} \
             -p escape_plot {output.escape_plot} \
+            -p avg_icXX {output.avg_icXX} \
+            -p rep_icXX {output.rep_icXX} \
+            -p icXX_plot {output.icXX_plot} \
             -y "{params.selection_groups_yaml}" \
             &> {log}
         """
@@ -443,7 +453,10 @@ rule avg_antibody_escape:
 rule format_antibody_escape_plot:
     """Add formatting to antibody escape plots."""
     input:
-        chart=rules.avg_antibody_escape.output.escape_plot,
+        chart=os.path.join(
+            config["escape_dir"],
+            "{antibody_plottype}_plot_unformatted.html",
+        ),
         md=(
             config["antibody_escape_legend"]
             if "antibody_escape_legend" in config and config["antibody_escape_legend"]
@@ -455,7 +468,7 @@ rule format_antibody_escape_plot:
     output:
         chart=os.path.join(
             config["escape_dir"],
-            "{antibody}_escape_plot.html",
+            "{antibody_plottype}_plot.html",
         ),
     params:
         format_plot=int(
@@ -466,11 +479,14 @@ rule format_antibody_escape_plot:
             github_pages_url,
             os.path.basename(output.chart),
         ),
-        title=lambda wc: f"{wc.antibody} for {config['github_repo']}",
+        title=lambda wc: f"{wc.antibody_plottype} for {config['github_repo']}",
     conda:
         "environment.yml"
     log:
-        os.path.join(config["logdir"], "format_antibody_escape_plot_{antibody}.txt"),
+        os.path.join(
+            config["logdir"],
+            "format_antibody_escape_plot_{antibody_plottype}.txt",
+        ),
     shell:
         """
         if [[ {params.format_plot} -eq 1 ]]; then

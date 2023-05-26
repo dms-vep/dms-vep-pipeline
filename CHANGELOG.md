@@ -3,6 +3,7 @@
 ### version 2.6.0
 - Start testing with GitHub actions rather than on Travis CI
 - Remove rulegraph from docs as it is causing bug of some type in GitHub Actions testing.
+- Calculate and plot mutation-induced IC90 values as an indication of escape.
 
 #### version 2.5.1
 - Upgrade to `polyclonal` 6.0
