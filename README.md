@@ -1,5 +1,6 @@
 # Pipeline for analyzing deep mutational scanning (DMS) of viral entry proteins (VEPs)
-[![Build Status](https://app.travis-ci.com/dms-vep/dms-vep-pipeline.svg?token=b5RuRE5XisC9B9t9EFqB&branch=main)](https://app.travis-ci.com/dms-vep/dms-vep-pipeline) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Build Status](https://github.com/dms-vep/dms-vep-pipeline/actions/workflows/test.yml/badge.svg)](https://github.com/dms-vep/dms-vep-pipeline/actions/workflows/test.yml)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
 ## Overview
@@ -93,7 +94,7 @@ Here are the different contents of this repo:
  - [.flake8_nb](.flake8_nb): configuration for [flake8_nb](https://flake8-nb.readthedocs.io/) linting.
  - [.gitattributes](.gitattributes)
  - [.gitignore](.gitignore): files to ignore in GitHub tracking
- - [.travis.yml](.travis.yml): file specifying how [Travis CI](https://travis-ci.com/) testing is done.
+ - [.github/workflows/test.yaml](.github/workflows/test.yaml): specifying how testing on GitHub Actions is done.
 
 ### `conda` environment
 The [conda](https://docs.conda.io/) environment for the pipeline is in [environment.yml](environment.yml).
@@ -106,9 +107,9 @@ The overall `snakemake` pipeline is linted by going to [./test_example](test_exa
 
 The code and Jupyter notebooks are linted with [flake8_nb](https://flake8-nb.readthedocs.io/) by running `flake8_nb`.
 
-### Testing of pipeline on Travis CI
-The pipeline is tested on Travis CI by checking all the formatting and linting above, and then also running the pipeline on the example in [./test_example](test_example).
-See [.travis.yml](.travis.yml).
+### Testing of pipeline with GitHub Actions
+The pipeline is tested with GitHub Actions by checking all the formatting and linting above, and then also running the pipeline on the example in [./test_example](test_example).
+See [.github/workflows/test.yaml](.github/workflows/test.yaml) for details.
 
 ### Stripping of Jupyter notebook output
 The repo was configured to strip output from Jupyter notebooks as described [here](http://mateos.io/blog/jupyter-notebook-in-git/) by running:

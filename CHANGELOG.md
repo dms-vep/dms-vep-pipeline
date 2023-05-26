@@ -1,5 +1,9 @@
 # Change log
 
+### version 2.6.0
+- Start testing with GitHub actions rather than on Travis CI
+- Remove rulegraph from docs as it is causing bug of some type in GitHub Actions testing.
+
 #### version 2.5.1
 - Upgrade to `polyclonal` 6.0
 - Upgrade to `altair` 5.0.0

@@ -15,8 +15,6 @@ github_url = f"https://github.com/{github_user}/{github_repo}"
 blob_path = f"{github_url}/blob/{github_branch}"
 
 docs_source_relpath = snakemake.params.docs_source_relpath
-rulegraph = os.path.join(docs_source_relpath, snakemake.input.rulegraph)
-filegraph = os.path.join(docs_source_relpath, snakemake.input.filegraph)
 
 nbs_for_index = snakemake.params.nbs_for_index
 analysis_nbs = "\n   ".join(nbs_for_index)
@@ -45,14 +43,6 @@ This page documents the data analysis.
 For the actual code, see {github_url}
 
 Study by {authors}.
-
-Workflow
---------
-Below is the rulegraph for the `snakemake <https://snakemake.readthedocs.io/>`_ workflow.
-Click :download:`here <{filegraph}>` for the more detailed filegraph.
-
-.. image:: {rulegraph}
-   :width: 800
 
 Analysis notebooks
 ------------------
