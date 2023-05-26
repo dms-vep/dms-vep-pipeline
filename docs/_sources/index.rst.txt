@@ -6,14 +6,6 @@ For the actual code, see https://github.com/dms-vep/dms-vep-pipeline
 
 Study by Jesse Bloom.
 
-Workflow
---------
-Below is the rulegraph for the `snakemake <https://snakemake.readthedocs.io/>`_ workflow.
-Click :download:`here <../../results/docs_source/filegraph.svg>` for the more detailed filegraph.
-
-.. image:: ../../results/docs_source/rulegraph.svg
-   :width: 800
-
 Analysis notebooks
 ------------------
 Many of the plots in these notebooks are interactive, so try mousing over points for
