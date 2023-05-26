@@ -42,9 +42,9 @@ jobs:
         shell: bash -el {0}
         run: snakefmt --check .
 
-#      - name: lint snakemake files with snakemake --lint
-#        shell: bash -el {0}
-#        run: cd test_example && snakemake --lint && cd ..
+      - name: lint snakemake files with snakemake --lint
+        shell: bash -el {0}
+        run: cd test_example && snakemake --lint && cd ..
 
       - name: run pipeline with default config
         shell: bash -el {0}

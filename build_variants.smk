@@ -92,13 +92,7 @@ else:
         log:
             os.path.join(config["logdir"], "analyze_pacbio_ccs.txt"),
         shell:
-            """
-            papermill {input.nb} {output.nb} &> {log}
-            head {output[0]}
-            cat results/process_ccs/LibA_211105/readstats.csv
-            gzip -cd sequencing_data/211105_demultiplex.bc1001_BAK8A_OA--bc1001_BAK8A_OA.hifi_reads.fastq.gz | wc -l
-            wc -l results/process_ccs/LibA_211105/alignments.sam
-            """
+            "papermill {input.nb} {output.nb} &> {log}"
 
 
     rule build_pacbio_consensus:
@@ -120,7 +114,7 @@ else:
         log:
             os.path.join(config["logdir"], "build_pacbio_consensus.txt"),
         shell:
-            "papermill {input.nb} {output.nb}"
+            "papermill {input.nb} {output.nb} &> {log}"
 
 
     rule build_codon_variants:
