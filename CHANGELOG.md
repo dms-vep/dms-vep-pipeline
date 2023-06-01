@@ -1,5 +1,8 @@
 # Change log
 
+#### version 2.6.1
+- Fix type error in `avg_muteffects` when sites are str.
+
 ### version 2.6.0
 - Start testing with GitHub actions rather than on Travis CI
 - Remove rulegraph from docs as it is causing bug of some type in GitHub Actions testing.
