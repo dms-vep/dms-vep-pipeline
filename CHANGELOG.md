@@ -1,5 +1,8 @@
 # Change log
 
+#### version 2.6.2
+- Upgrade `polyclonal` to 6.1
+
 #### version 2.6.1
 - Fix type error in `avg_muteffects` when sites are str.
 
