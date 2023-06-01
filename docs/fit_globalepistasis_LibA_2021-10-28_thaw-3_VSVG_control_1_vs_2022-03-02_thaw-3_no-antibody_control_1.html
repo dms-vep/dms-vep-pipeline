@@ -459,7 +459,7 @@ div.rendered_html tbody tr:hover {
       <td>21706.2</td>
       <td>5144</td>
       <td>-5709.1</td>
-      <td>16.6</td>
+      <td>15.3</td>
     </tr>
     <tr>
       <th>1</th>
@@ -467,7 +467,7 @@ div.rendered_html tbody tr:hover {
       <td>21941.3</td>
       <td>5138</td>
       <td>-5832.7</td>
-      <td>2.9</td>
+      <td>2.6</td>
     </tr>
   </tbody>
 </table>
@@ -486,7 +486,7 @@ div.rendered_html tbody tr:hover {
 <section id="Examine-global-epistasis-fit">
 <h2>Examine global epistasis fit<a class="headerlink" href="#Examine-global-epistasis-fit" title="Permalink to this heading">¶</a></h2>
 <p>Plot the relationships among the latent phenotypes from the model, the observed phenotypes from the model, and the measured functional scores for all variants used to fit the model:</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
@@ -498,8 +498,29 @@ div.rendered_html tbody tr:hover {
         <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">geom_point</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
         <span class="o">+</span> <span class="n">p9</span><span class="o">.</span><span class="n">theme</span><span class="p">(</span><span class="n">figure_size</span><span class="o">=</span><span class="p">(</span><span class="mf">2.25</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">))</span>
     <span class="p">)</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1_17_0.png" class="no-scaled-link" src="_images/fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1_17_0.png" style="width: 225px; height: 225px;" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1_17_1.png" class="no-scaled-link" src="_images/fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1_17_1.png" style="width: 225px; height: 225px;" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1_17_2.png" class="no-scaled-link" src="_images/fit_globalepistasis_LibA_2021-10-28_thaw-3_VSVG_control_1_vs_2022-03-02_thaw-3_no-antibody_control_1_17_2.png" style="width: 225px; height: 225px;" />
 </div>
 </div>
 </section>
@@ -621,23 +642,23 @@ latent phenotype
 </div>
 <div class="output_area rendered_html docutils container">
 <style>
-  #altair-viz-c47b2a89133d43278475e6ca96dbe437.vega-embed {
+  #altair-viz-3dc20e4c53844326a282498f26db860f.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-c47b2a89133d43278475e6ca96dbe437.vega-embed details,
-  #altair-viz-c47b2a89133d43278475e6ca96dbe437.vega-embed details summary {
+  #altair-viz-3dc20e4c53844326a282498f26db860f.vega-embed details,
+  #altair-viz-3dc20e4c53844326a282498f26db860f.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-c47b2a89133d43278475e6ca96dbe437"></div>
+<div id="altair-viz-3dc20e4c53844326a282498f26db860f"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-c47b2a89133d43278475e6ca96dbe437") {
-      outputDiv = document.getElementById("altair-viz-c47b2a89133d43278475e6ca96dbe437");
+    if (outputDiv.id !== "altair-viz-3dc20e4c53844326a282498f26db860f") {
+      outputDiv = document.getElementById("altair-viz-3dc20e4c53844326a282498f26db860f");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
@@ -701,23 +722,23 @@ observed phenotype
 </div>
 <div class="output_area rendered_html docutils container">
 <style>
-  #altair-viz-5495a91668a845459d9b9e13fb4d5a81.vega-embed {
+  #altair-viz-886cbf0fe33244ed8ced0ca8b2d0733f.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-5495a91668a845459d9b9e13fb4d5a81.vega-embed details,
-  #altair-viz-5495a91668a845459d9b9e13fb4d5a81.vega-embed details summary {
+  #altair-viz-886cbf0fe33244ed8ced0ca8b2d0733f.vega-embed details,
+  #altair-viz-886cbf0fe33244ed8ced0ca8b2d0733f.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-5495a91668a845459d9b9e13fb4d5a81"></div>
+<div id="altair-viz-886cbf0fe33244ed8ced0ca8b2d0733f"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-5495a91668a845459d9b9e13fb4d5a81") {
-      outputDiv = document.getElementById("altair-viz-5495a91668a845459d9b9e13fb4d5a81");
+    if (outputDiv.id !== "altair-viz-886cbf0fe33244ed8ced0ca8b2d0733f") {
+      outputDiv = document.getElementById("altair-viz-886cbf0fe33244ed8ced0ca8b2d0733f");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",

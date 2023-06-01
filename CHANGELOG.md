@@ -1,5 +1,8 @@
 # Change log
 
+#### version 2.6.3
+- Show `plotnine` plots by updating command for newer `plotnine` version, which is also now pinned.
+
 #### version 2.6.2
 - Upgrade `polyclonal` to 6.1
 

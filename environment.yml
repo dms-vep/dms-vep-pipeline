@@ -32,6 +32,7 @@ dependencies:
   - pandas=2.0.1
   - papermill=2.3
   - pip
+  - plotnine=0.12.1
   - python=3.11
   - snakefmt>=0.8
   - snakemake=7.26
