@@ -2,6 +2,10 @@
 [![Build Status](https://github.com/dms-vep/dms-vep-pipeline/actions/workflows/test.yaml/badge.svg)](https://github.com/dms-vep/dms-vep-pipeline/actions/workflows/test.yaml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+## Use the new version of the pipeline!
+This repo contains versions 1 and 2 of the pipeline.
+The pipeline has been entirely re-written in a non-backward compatible way for newer versions (3+), and you are suggested to use those newer versions instead.
+See [https://github.com/dms-vep/dms-vep-pipeline-3](https://github.com/dms-vep/dms-vep-pipeline-3) for the newer versions.
 
 ## Overview
 This repository contains a [snakemake](https://snakemake.readthedocs.io/) pipeline for analysis of deep mutational scanning of barcoded viral entry proteins.

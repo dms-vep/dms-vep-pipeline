@@ -1,5 +1,8 @@
 # Change log
 
+## version 3.0+
+**The newer versions of this pipeline are available in a new repo at [https://github.com/dms-vep/dms-vep-pipeline-3](https://github.com/dms-vep/dms-vep-pipeline-3). These newer version represent a complete re-write, and we recommend you use them instead.**
+
 #### version 2.6.4
 - Upgrade `polyclonal` to 6.2
 
