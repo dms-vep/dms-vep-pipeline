@@ -94,7 +94,14 @@ antibody_escape_files = [
 antibody_escape_plots = [
     os.path.join(config["escape_dir"], f"{antibody}_{plottype}_plot.html")
     for antibody in antibody_selections["antibody"].unique()
-    for plottype in ["escape", "icXX"]
+    for plottype in (
+        ["escape", "icXX"]
+        if (
+            "show_antibody_escape_icXX_plots" not in config
+            or config["show_antibody_escape_icXX_plots"]
+        )
+        else ["escape"]
+    )
 ]
 
 
