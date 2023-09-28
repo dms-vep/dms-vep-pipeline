@@ -131,6 +131,9 @@ format_muteffects_plots: true  # if option missing defaults to true
 antibody_escape_legend: null
 muteffects_legend: null
 
+# do we show antibody escape icXX plots?
+show_antibody_escape_icXX_plots: false
+
 # ----------------------------------------------------------------------------
 # Input data
 # ----------------------------------------------------------------------------
